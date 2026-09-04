@@ -16,16 +16,32 @@ function defaultProgress(): GameProgress {
     errorScroll: [],
     combosUnlocked: [],
     calibration: [],
-    weather: 'TREND'
+    weather: 'TREND',
+    taskCounter: 0
   };
 }
 
 export class GameState {
   progress: GameProgress;
   constructor(){
-    const saved = typeof localStorage!=='undefined' ? localStorage.getItem(STORAGE_KEY) : null;
-    this.progress = saved ? { ...defaultProgress(), ...JSON.parse(saved)} : defaultProgress();
+    // повреждённый JSON в localStorage не должен ронять приложение — тихий откат к дефолту
+    let parsed: Partial<GameProgress> | null = null;
+    try {
+      const saved = typeof localStorage!=='undefined' ? localStorage.getItem(STORAGE_KEY) : null;
+      if (saved) {
+        const p = JSON.parse(saved);
+        if (p && typeof p === 'object' && !Array.isArray(p)) parsed = p;
+      }
+    } catch { parsed = null; }
+    this.progress = parsed ? { ...defaultProgress(), ...parsed } : defaultProgress();
     this.refreshEpoch();
+  }
+  /** выдача нового задания — инкремент счётчика для детерминированного seed (M11) */
+  nextTaskSeedCounter(): number {
+    const c = this.progress.taskCounter ?? 0;
+    this.progress.taskCounter = c + 1;
+    this.save();
+    return c;
   }
   refreshEpoch(){
     this.progress.epoch = getEpochForLevel(this.progress.level) as any;

@@ -4,6 +4,7 @@ import { cards } from '../data/cards';
 import { enemies, enemyById } from '../data/enemies';
 import { epochOf } from '../config/epochConfig';
 import { enemyAvatarKey, enemyRenderKey } from '../engine/assetKeys';
+import { renderBottomNav, navForEpoch } from '../engine/shell';
 
 const COLORS={ bg:0x070B14, surface:0x0C1323, elevated:0x111B2E, border:0x22304A, cyan:0x31D6C4, good:0x3BDE8A, bad:0xFF596D, muted:0x62708A, strong:0x344563, text:0xE9F2FF };
 
@@ -29,15 +30,15 @@ export class CollectionScene extends Phaser.Scene {
       const bg = !unlocked? 0x060A12 : 0x0C1323;
       this.add.rectangle(cx,cy,114,68, bg).setStrokeStyle(unlocked && rank>=2?2:1, col).setOrigin(0).setInteractive().on('pointerdown', ()=>{
         if(!unlocked){ this.cameras.main.flash(60,255,89,109); return; }
-        const sheet=this.add.rectangle(0,0,390,844, 0x070B14, 0.92).setOrigin(0).setInteractive();
-        this.add.text(195, 260, c.name, { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#E9F2FF'}).setOrigin(0.5);
-        this.add.text(195, 280, `РАНГ ${rank||1}/3 · пороги ${c.rankThresholds.join('/') } атомов`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color: toHex(col)}).setOrigin(0.5);
-        this.add.text(195, 310, c.atoms.map(a=>a.desc).join(' · '), { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#93A3BC', wordWrap:{width:340}, align:'center'}).setOrigin(0.5);
-        this.add.text(195, 360, 'ОБЯЗАТЕЛЬНЫЕ ИСТОЧНИКИ: '+c.mandatorySources.join(', '), { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A'}).setOrigin(0.5);
-        this.add.text(195, 380, 'ATOM ОБЯЗАН ИСПОЛЬЗОВАТЬСЯ В АРЕНЕ — иначе декоративный и удаляется', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#FF596D', wordWrap:{width:340}, align:'center'}).setOrigin(0.5);
-        this.add.text(195, 520,'✕ закрыть', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#93A3BC'}).setOrigin(0.5).setInteractive().on('pointerdown', ()=> sheet.destroy());
-        // clickable atoms close
-        this.input.once('pointerdown', ()=> sheet.destroy());
+        // модалка целиком в контейнере — закрытие убирает всё, а не только затемнение
+        const sheet=this.add.container(0,0);
+        sheet.add(this.add.rectangle(0,0,390,844, 0x070B14, 0.92).setOrigin(0).setInteractive());
+        sheet.add(this.add.text(195, 260, c.name, { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#E9F2FF'}).setOrigin(0.5));
+        sheet.add(this.add.text(195, 280, `РАНГ ${rank||1}/3 · пороги ${c.rankThresholds.join('/') } атомов`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color: toHex(col)}).setOrigin(0.5));
+        sheet.add(this.add.text(195, 310, c.atoms.map(a=>a.desc).join(' · '), { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#93A3BC', wordWrap:{width:340}, align:'center'}).setOrigin(0.5));
+        sheet.add(this.add.text(195, 360, 'ОБЯЗАТЕЛЬНЫЕ ИСТОЧНИКИ: '+c.mandatorySources.join(', '), { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A'}).setOrigin(0.5));
+        sheet.add(this.add.text(195, 380, 'АТОМ ОБЯЗАН ИСПОЛЬЗОВАТЬСЯ В АРЕНЕ — иначе декоративный и удаляется', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#FF596D', wordWrap:{width:340}, align:'center'}).setOrigin(0.5));
+        sheet.add(this.add.text(195, 520,'✕ закрыть', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#93A3BC'}).setOrigin(0.5).setInteractive().on('pointerdown', ()=> sheet.destroy()));
       });
       this.add.text(cx+57, cy+22, c.icon, { fontSize:'16px', color: toHex(col)}).setOrigin(0.5);
       this.add.text(cx+57, cy+38, unlocked? c.short:'?', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color: unlocked?'#93A3BC':'#62708A'}).setOrigin(0.5);
@@ -53,26 +54,28 @@ export class CollectionScene extends Phaser.Scene {
       const mastered = stage>=3;
       const col = stage===0? 0x22304A : mastered? 0xFFB341 : 0xB783FF;
       this.add.rectangle(cx,cy,86,86, 0x0C1323).setStrokeStyle(1, col).setOrigin(0).setInteractive().on('pointerdown', ()=>{
-        const sheet=this.add.rectangle(0,0,390,844, 0x070B14, 0.94).setOrigin(0).setInteractive();
-        this.add.text(195, 248, e.name, { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#E9F2FF'}).setOrigin(0.5);
-        this.add.text(195, 266, `${e.domain} · ранг ${e.rankDanger} · ${e.mode}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#93A3BC'}).setOrigin(0.5);
+        // модалка целиком в контейнере — закрытие убирает всё
+        const sheet=this.add.container(0,0);
+        sheet.add(this.add.rectangle(0,0,390,844, 0x070B14, 0.94).setOrigin(0).setInteractive());
+        sheet.add(this.add.text(195, 248, e.name, { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#E9F2FF'}).setOrigin(0.5));
+        sheet.add(this.add.text(195, 266, `${e.domain} · ранг ${e.rankDanger} · ${e.mode}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#93A3BC'}).setOrigin(0.5));
         // заглушка-рендер достигнутой стадии (SVG → текстура)
         const reachedStage = e.stages.find(s=> stage>=s.stage) ?? e.stages[0];
         const renderKey = enemyRenderKey(e.id, reachedStage.stage);
         if(this.textures.exists(renderKey)){
-          this.add.rectangle(195, 288, 92, 92, 0x060A12).setStrokeStyle(1, col).setOrigin(0.5,0);
-          this.add.image(195, 334, renderKey).setDisplaySize(80,80);
+          sheet.add(this.add.rectangle(195, 288, 92, 92, 0x060A12).setStrokeStyle(1, col).setOrigin(0.5,0));
+          sheet.add(this.add.image(195, 334, renderKey).setDisplaySize(80,80));
         }
         e.stages.forEach((s,j)=>{
           const yy=388+j*36;
           const reached = stage>=s.stage;
-          this.add.rectangle(20,yy,350,34, reached? 0x0C1323:0x060A12).setStrokeStyle(1, reached? 0x344563:0x22304A).setOrigin(0);
-          this.add.text(28, yy+6, `S${s.stage} · L${s.level} · ${s.requiredCards.map(c=>c.cardId+'r'+c.rank).join(' + ')}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color: reached?'#E9F2FF':'#62708A'}).setOrigin(0);
-          this.add.text(28, yy+18, s.factor, { fontFamily:'Inter, sans-serif', fontSize:'8px', color: reached?'#93A3BC':'#62708A', wordWrap:{width:334}}).setOrigin(0);
-          if(s.secondDomain) this.add.text(322, yy+6, s.secondDomain.slice(0,3), { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#FFB341'}).setOrigin(0);
+          sheet.add(this.add.rectangle(20,yy,350,34, reached? 0x0C1323:0x060A12).setStrokeStyle(1, reached? 0x344563:0x22304A).setOrigin(0));
+          sheet.add(this.add.text(28, yy+6, `S${s.stage} · L${s.level} · ${s.requiredCards.map(c=>c.cardId+'r'+c.rank).join(' + ')}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color: reached?'#E9F2FF':'#62708A'}).setOrigin(0));
+          sheet.add(this.add.text(28, yy+18, s.factor, { fontFamily:'Inter, sans-serif', fontSize:'8px', color: reached?'#93A3BC':'#62708A', wordWrap:{width:334}}).setOrigin(0));
+          if(s.secondDomain) sheet.add(this.add.text(322, yy+6, s.secondDomain.slice(0,3), { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#FFB341'}).setOrigin(0));
         });
-        this.add.text(195, 560, 'Слои S2–S4 — одна поза мастера + альфа-слои. Пресеты собираются скриптом.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A', wordWrap:{width:340}}).setOrigin(0.5);
-        this.add.text(195, 606,'✕ закрыть', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#93A3BC'}).setOrigin(0.5).setInteractive().on('pointerdown', ()=> sheet.destroy());
+        sheet.add(this.add.text(195, 560, 'Слои S2–S4 — одна поза мастера + альфа-слои. Пресеты собираются скриптом.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A', wordWrap:{width:340}}).setOrigin(0.5));
+        sheet.add(this.add.text(195, 606,'✕ закрыть', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#93A3BC'}).setOrigin(0.5).setInteractive().on('pointerdown', ()=> sheet.destroy()));
       });
       // аватар — тизер 5-8% rim до раскрытия (SVG-заглушка)
       this.add.circle(cx+43, cy+28, 20, 0x060A12).setStrokeStyle(1, col);
@@ -120,17 +123,8 @@ export class CollectionScene extends Phaser.Scene {
     this.createBottomNav();
   }
   private createBottomNav(){
-    const items=[
-      {label:'ACADEMY', go:'AcademyScene'},
-      {label:'ARENA', go:'ArenaScene'},
-      {label:'COLLECTION', active:true},
-      {label:'MORE', go:'MoreScene'},
-    ] as any[];
-    items.forEach((it,i)=>{
-      const nx=i*(390/4);
-      this.add.rectangle(nx,784,390/4,60, COLORS.elevated).setStrokeStyle(1, COLORS.border).setOrigin(0).setInteractive().on('pointerdown', ()=>{ if(it.go) this.scene.start(it.go); });
-      this.add.text(nx+390/8,814,it.label, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color: it.active?'#31D6C4':'#62708A'}).setOrigin(0.5);
-    });
+    // единая навигация скелета — с ограничениями эпох (ТЗ Часть 2 §2)
+    renderBottomNav(this, 'CollectionScene', navForEpoch(gameState.progress.level));
   }
 }
 function toHex(n:number){ return '#'+n.toString(16).padStart(6,'0'); }

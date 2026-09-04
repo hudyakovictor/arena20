@@ -45,5 +45,42 @@ export class MoreScene extends Phaser.Scene {
 
     renderBottomNav(this, 'MoreScene', navForEpoch(p.level));
   }
-  private openSheet(kind:string){ /* детальный профиль — заглушка */ }
+  private openSheet(kind:string){
+    if(kind!=='profile') return;
+    const p = gameState.progress;
+    const ep = epochOf(p.level);
+    // профиль — модалка целиком в контейнере
+    const sheet = this.add.container(0,0);
+    sheet.add(this.add.rectangle(0,0,W,H, 0x070B14, 0.94).setOrigin(0).setInteractive());
+    sheet.add(this.add.text(195, 150, 'ПРОФИЛЬ', { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:'#93A3BC' }).setOrigin(0.5));
+    sheet.add(this.add.text(195, 176, `УРОВЕНЬ ${p.level} · ${ep.name}`, { fontFamily:'Inter, sans-serif', fontSize:'18px', color:'#E9F2FF' }).setOrigin(0.5));
+    // ключевые показатели
+    const closedErrors = p.errorScroll.filter(e=>e.closed).length;
+    const openErrors = p.errorScroll.filter(e=>!e.closed).length;
+    const trophies = Object.keys(p.enemyStagesReached).length;
+    const rows: [string,string][] = [
+      ['XP', `${p.xp} / ${p.xpMax}`],
+      ['SIG', String(p.coins)],
+      ['БЮДЖЕТ РИСКА', `${p.riskBudget} / ${p.maxBudget}`],
+      ['СТРИК', `×${p.streak}`],
+      ['ТРОФЕИ', `${trophies} врагов`],
+      ['СВИТОК ОШИБОК', `${openErrors} открыто · ${closedErrors} закрыто`],
+      ['ПОГОДА РЫНКА', p.weather],
+    ];
+    rows.forEach((r,i)=>{
+      const y = 210 + i*44;
+      sheet.add(this.add.rectangle(20, y, 350, 38, S.surface).setStrokeStyle(1, S.border).setOrigin(0));
+      sheet.add(this.add.text(32, y+13, r[0], { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#62708A' }));
+      sheet.add(this.add.text(358, y+13, r[1], { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#E9F2FF' }).setOrigin(1,0));
+    });
+    // калибровка M3 — если есть данные
+    if(p.calibration.length>2){
+      const last = p.calibration.slice(-10);
+      const avgPred = last.reduce((a,b)=>a+b.predicted,0)/last.length;
+      const avgActual = last.reduce((a,b)=>a+b.actual,0)/last.length;
+      const gap = avgPred-avgActual;
+      sheet.add(this.add.text(195, 530, `M3 КАЛИБРОВКА: уверенность ${avgPred.toFixed(2)} · факт ${avgActual.toFixed(2)} · разрыв ${gap>0?'+':''}${gap.toFixed(2)}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color: gap>0.15?'#FF596D':'#93A3BC' }).setOrigin(0.5));
+    }
+    sheet.add(this.add.text(195, 600, '✕ закрыть', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#93A3BC' }).setOrigin(0.5).setInteractive().on('pointerdown', ()=> sheet.destroy()));
+  }
 }

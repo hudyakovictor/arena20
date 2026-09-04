@@ -47,16 +47,29 @@ export class ArenaScene extends Phaser.Scene {
   private get epoch(){ return epochOf(this.progress.level); }
   private get isStoneEpoch(){ return this.epoch.id==='street'; }
 
+  // true — перерисовка UI без сброса задания (вкладки, карты, вердикт);
+  // false — новое задание (новый seed, полный сброс выбора).
+  private preserveTask = false;
+
   constructor(){ super({ key:'ArenaScene' }); }
 
+  init(data?: { preserve?: boolean }): void {
+    this.preserveTask = !!data?.preserve;
+  }
+
   create(): void {
-    this.selectedEvidence.clear(); this.confidence=null; this.selectedAnswer=null; this.selectedSequence=[]; this.verdictFactor=null; this.blindOpened=false;
-    // M11 — детерминированный seed: уровень + счётчик + время
-    const seed = (this.progress.level*100000 + this.progress.xp + Date.now())>>>0;
-    // M12 кампания: выбираем шаблон по уровню и не закрытым стадиям
-    const tpl = this.pickTemplate();
-    this.encounter = mutate(tpl, seed);
-    this.activeSource = this.encounter.sources[0] as SourceId;
+    if(!this.preserveTask || !this.encounter){
+      // новое задание — полный сброс выбора
+      this.selectedEvidence.clear(); this.confidence=null; this.selectedAnswer=null; this.selectedSequence=[]; this.verdictFactor=null; this.blindOpened=false;
+      // M11 — детерминированный seed: уровень + счётчик заданий (воспроизводимо, без Date.now)
+      const counter = gameState.nextTaskSeedCounter();
+      const seed = (this.progress.level*1000003 + counter*7919 + this.progress.xp)>>>0;
+      // M12 кампания: выбираем шаблон по уровню и не закрытым стадиям
+      const tpl = this.pickTemplate();
+      this.encounter = mutate(tpl, seed);
+      this.activeSource = this.encounter.sources[0] as SourceId;
+    }
+    this.preserveTask = false;
     this.evidenceHighlights = balanceConfig.evidence.highlightInEpoch[this.progress.epoch as 'street'|'cabinet'|'terminal'|'system'];
 
     this.P = buildPalette(this.epoch.id);
@@ -190,10 +203,10 @@ export class ArenaScene extends Phaser.Scene {
           }
           gameState.changeBudget(-balanceConfig.riskBudget.blindSourceCost);
           this.blindOpened=true;
-          this.scene.restart();
+          this.scene.restart({ preserve: true });
           return;
         }
-        this.activeSource=sid; this.scene.restart();
+        this.activeSource=sid; this.scene.restart({ preserve: true });
       });
       const sdef = sourceById[sid];
       const label = isBlind ? '◉ ЗАКРЫТО' : `${sdef.icon} ${sdef.short}`;
@@ -236,7 +249,7 @@ export class ArenaScene extends Phaser.Scene {
       });
       // ярлыки-костыли
       if(crutch==='all'){
-        this.add.text(x+10, y+76, 'ЯРЛЫК: ПАМP БЕЗ ОБЪЁМА ★', { ...FONT_MONO, fontSize:'7px', color:this.COLORS.warnS, backgroundColor:'#14223A'}).setOrigin(0);
+        this.add.text(x+10, y+76, 'ЯРЛЫК: ПАМП БЕЗ ОБЪЁМА ★', { ...FONT_MONO, fontSize:'7px', color:this.COLORS.warnS, backgroundColor:'#14223A'}).setOrigin(0);
       } else if(crutch==='partial'){
         this.add.text(x+10, y+76, 'объём -38% к среднему', { ...FONT_MONO, fontSize:'7px', color:this.COLORS.mutedS});
       } else if(crutch==='false'){
@@ -393,11 +406,11 @@ export class ArenaScene extends Phaser.Scene {
           else {
             if(this.selectedSequence.length < ((balanceConfig.sequence.slotsByEpoch as any)[this.progress.epoch as any] ?? 2)) this.selectedSequence.push(s.id);
           }
-          this.scene.restart();
+          this.scene.restart({ preserve: true });
         } else {
           // одиночный выбор подсвечивает
           this.selectedSequence=[s.id];
-          this.scene.restart();
+          this.scene.restart({ preserve: true });
         }
       });
       const iconCol = !unlocked ? this.COLORS.mutedS : (s as any).rank>=2 ? this.COLORS.goodS : this.COLORS.accentS;
@@ -449,7 +462,7 @@ export class ArenaScene extends Phaser.Scene {
       opts.forEach((o,i)=>{
         const ay=492+i*40;
         this.add.rectangle(14,ay,362,36, this.COLORS.surface).setStrokeStyle(1, this.COLORS.border).setOrigin(0).setInteractive().on('pointerdown', ()=>{
-          this.verdictFactor=o.k as any; this.scene.restart();
+          this.verdictFactor=o.k as any; this.scene.restart({ preserve: true });
         });
         this.add.text(28,ay+12, o.k, { ...FONT_MONO, fontSize:'11px', color:this.COLORS.accentS});
         this.add.text(50,ay+12, o.t, { ...FONT_UI, fontSize:'11px', color:this.COLORS.textS, wordWrap:{width:300}});
@@ -716,7 +729,7 @@ export class ArenaScene extends Phaser.Scene {
     const overlay=this.add.rectangle(0,0,390,844, 0x05070D, 0.96).setOrigin(0).setInteractive();
     this.add.text(195, 260, 'BUDGET = 0', { ...FONT_MONO, fontSize:'28px', color:this.COLORS.badS}).setOrigin(0.5);
     this.add.text(195, 300, 'DRAWDOWN LEVIATHAN', { ...FONT_UI, fontSize:'18px', color:this.COLORS.textS}).setOrigin(0.5);
-    this.add.text(195, 330, 'СБЫТИЕ С БЮДЖЕТОМ · СОБЫТИЙНАЯ ВСТРЕЧА E31 S1', { ...FONT_MONO, fontSize:'9px', color:this.COLORS.subS}).setOrigin(0.5);
+    this.add.text(195, 330, 'СОБЫТИЕ С БЮДЖЕТОМ · СОБЫТИЙНАЯ ВСТРЕЧА E31 S1', { ...FONT_MONO, fontSize:'9px', color:this.COLORS.subS}).setOrigin(0.5);
     this.add.text(195, 360, 'Твой риск-менеджмент привёл к обнулению.\nРазбор структуры потерь — без трофея, но с восстановлением 40 бюджета.', { ...FONT_UI, fontSize:'11px', color:this.COLORS.subS, align:'center', wordWrap:{width:320}}).setOrigin(0.5);
     this.add.rectangle(70, 440, 250, 44, this.COLORS.elevated).setStrokeStyle(1, this.COLORS.border).setOrigin(0).setInteractive().on('pointerdown', ()=>{
       gameState.changeBudget(40);

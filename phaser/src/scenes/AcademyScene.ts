@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { gameState } from '../state/GameState';
 import { cards } from '../data/cards';
 import { epochOf } from '../config/epochConfig';
+import { renderBottomNav, navForEpoch } from '../engine/shell';
 
 // Академия — теория, без врагов и без заданий Арены (ТЗ Часть 1 §4.3)
 // Единственное допустимое присутствие врага — тизер-силуэт на обложке главы
@@ -70,66 +71,61 @@ export class AcademyScene extends Phaser.Scene {
 
   private showLesson(card: typeof cards[number]){
     // микро-проверка — не содержит врагов, источников, выбора торгового действия (ТЗ §4.2)
-    const overlay=this.add.rectangle(0,0,390,844, 0x070B14, 0.94).setOrigin(0).setInteractive();
-    this.add.text(195, 180, card.name, { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#E9F2FF'}).setOrigin(0.5);
-    this.add.text(195, 200, `ГЛАВА ${card.cid} · КАРТА «${card.short}»`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#31D6C4'}).setOrigin(0.5);
-    this.add.text(20, 230, 'АТОМ НАВЫКА — умение, а не термин:', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#93A3BC'});
-    const atom = card.atoms[0];
-    this.add.rectangle(20, 246, 350, 44, 0x0C1323).setStrokeStyle(1, COLORS.border).setOrigin(0);
-    this.add.text(28, 256, atom.desc.toUpperCase(), { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#E7DFD0', wordWrap:{width:334}}).setOrigin(0);
-    this.add.text(28, 278, `атом ${atom.id} — проверяется действием в Арене`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A'}).setOrigin(0);
+    // все элементы — в контейнере: закрытие модалки уничтожает ВСЁ, а не только затемнение
+    const modal = this.add.container(0, 0);
+    const dim = this.add.rectangle(0,0,390,844, 0x070B14, 0.94).setOrigin(0).setInteractive();
+    modal.add(dim);
+    const M = <T extends Phaser.GameObjects.GameObject>(obj: T): T => { modal.add(obj as any); return obj; };
 
-    this.add.text(20, 310, 'МИКРО-ПРОВЕРКА (без врага и без награды Арены):', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#93A3BC'});
-    this.add.rectangle(20, 326, 350, 54, COLORS.paper).setOrigin(0).setStrokeStyle(1, COLORS.cyan);
-    this.add.text(28, 334, 'Что делает «длинная тень» свечи?', { fontFamily:'Inter, sans-serif', fontSize:'11px', color:'#1C1916', wordWrap:{width:334}}).setOrigin(0);
+    M(this.add.text(195, 180, card.name, { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#E9F2FF'}).setOrigin(0.5));
+    M(this.add.text(195, 200, `ГЛАВА ${card.cid} · КАРТА «${card.short}»`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#31D6C4'}).setOrigin(0.5));
+    M(this.add.text(20, 230, 'АТОМ НАВЫКА — умение, а не термин:', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#93A3BC'}));
+    const atom = card.atoms[0];
+    M(this.add.rectangle(20, 246, 350, 44, 0x0C1323).setStrokeStyle(1, COLORS.border).setOrigin(0));
+    M(this.add.text(28, 256, atom.desc.toUpperCase(), { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#E7DFD0', wordWrap:{width:334}}).setOrigin(0));
+    M(this.add.text(28, 278, `атом ${atom.id} — проверяется действием в Арене`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A'}).setOrigin(0));
+
+    M(this.add.text(20, 310, 'МИКРО-ПРОВЕРКА (без врага и без награды Арены):', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#93A3BC'}));
+    M(this.add.rectangle(20, 326, 350, 54, COLORS.paper).setOrigin(0).setStrokeStyle(1, COLORS.cyan));
+    M(this.add.text(28, 334, 'Что делает «длинная тень» свечи?', { fontFamily:'Inter, sans-serif', fontSize:'11px', color:'#1C1916', wordWrap:{width:334}}).setOrigin(0));
     const opts=[
       {t:'Сигнал направления — надо входить', ok:false},
       {t:'Неопределённость, а не сигнал', ok:true},
       {t:'Всегда разворот', ok:false},
     ];
-    let picked: number|null=null;
-    opts.forEach((o,i)=>{
-      const y=386+i*42;
-      const r=this.add.rectangle(20,y,350,36, 0x0C1323).setStrokeStyle(1, COLORS.border).setOrigin(0).setInteractive();
-      const t=this.add.text(32,y+12, o.t, { fontFamily:'Inter, sans-serif', fontSize:'11px', color:'#E9F2FF'}).setOrigin(0);
+    let resultMsg: Phaser.GameObjects.Text | null = null;
+    let answered = false;
+    opts.forEach((o)=>{
+      const y=386+opts.indexOf(o)*42;
+      const r=M(this.add.rectangle(20,y,350,36, 0x0C1323).setStrokeStyle(1, COLORS.border).setOrigin(0).setInteractive());
+      M(this.add.text(32,y+12, o.t, { fontFamily:'Inter, sans-serif', fontSize:'11px', color:'#E9F2FF'}).setOrigin(0));
       r.on('pointerdown', ()=>{
-        picked=i;
-        // подсветить
-        opts.forEach((_,j)=>{
-          // reset handled by overlay destroy cycle — просто перезапуск
-        });
+        if(answered) return;
+        resultMsg?.destroy();
         if(o.ok){
-          this.add.text(195, 520, '✓ атом освоен — карта ранга +1', { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#3BDE8A'}).setOrigin(0.5);
+          answered = true;
+          r.setStrokeStyle(2, 0x3BDE8A);
+          resultMsg = M(this.add.text(195, 520, '✓ атом освоен — карта ранга +1', { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#3BDE8A'}).setOrigin(0.5));
           const cur = gameState.progress.cardRanks[card.id] ?? (gameState.isCardUnlocked(card.id)?1:0);
           gameState.progress.cardRanks[card.id]= Math.min(3, cur+1);
           gameState.save();
           this.time.delayedCall(900, ()=>{
-            overlay.destroy(); // close and stay
+            modal.destroy();
             this.scene.start('ArenaScene');
           });
         } else {
-          this.add.text(195, 520, '✗ это декоративный атом — в Арене он не используется. Пробуй ещё.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#FF596D'}).setOrigin(0.5);
+          r.setStrokeStyle(2, 0xFF596D);
+          resultMsg = M(this.add.text(195, 520, '✗ мимо — вернись к атому и попробуй ещё раз', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#FF596D'}).setOrigin(0.5));
           this.cameras.main.shake(80,0.004);
         }
       });
     });
-    this.add.text(195, 720, 'закрыть ✕', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#62708A'}).setOrigin(0.5).setInteractive().on('pointerdown', ()=> overlay.destroy());
+    M(this.add.text(195, 720, 'закрыть ✕', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#62708A'}).setOrigin(0.5).setInteractive().on('pointerdown', ()=> modal.destroy()));
   }
 
   private createBottomNav(){
-    const items=[
-      {label:'ACADEMY', active:true},
-      {label:'ARENA', active:false, go:'ArenaScene'},
-      {label:'COLLECTION', active:false, go:'CollectionScene'},
-      {label:'MORE', active:false, go:'MoreScene'},
-    ] as any[];
-    items.forEach((it,i)=>{
-      const nx=i*(390/4);
-      this.add.rectangle(nx,784,390/4,60, COLORS.elevated).setStrokeStyle(1, COLORS.border).setOrigin(0).setInteractive().on('pointerdown', ()=>{
-        if(it.go) this.scene.start(it.go);
-      });
-      this.add.text(nx+390/8,814, it.label, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color: it.active?'#31D6C4':'#62708A'}).setOrigin(0.5);
-    });
+    // единая навигация скелета — с ограничениями эпох (ТЗ Часть 2 §2)
+    renderBottomNav(this, 'AcademyScene', navForEpoch(gameState.progress.level));
   }
 }
 function toHex(n:number){ return '#'+n.toString(16).padStart(6,'0'); }

@@ -42,15 +42,17 @@ export class ErrorJournalScene extends Phaser.Scene {
   private openEntry(id:string, y:number){
     const e = gameState.progress.errorScroll.find(x=>x.id===id);
     if(!e) return;
-    const overlay=this.add.rectangle(0,0,W,H, 0x070B14, 0.94).setOrigin(0).setInteractive();
-    this.add.text(20, 180, 'FIX MISSION', { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:'#FFB341' });
-    this.add.rectangle(20, 200, 350, 44, 0x0C1323).setStrokeStyle(1, 0xFF596D).setOrigin(0);
-    this.add.text(28, 212, `${enemyById[e.enemy]?.name ?? e.enemy}: ${e.missedEvidence||'нет улики'}`, { fontFamily:'Inter, sans-serif', fontSize:'11px', color:'#E9F2FF', wordWrap:{width:330} });
+    // модалка целиком в контейнере — закрытие убирает всё, а не только затемнение
+    const overlay=this.add.container(0,0);
+    overlay.add(this.add.rectangle(0,0,W,H, 0x070B14, 0.94).setOrigin(0).setInteractive());
+    overlay.add(this.add.text(20, 180, 'FIX MISSION', { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:'#FFB341' }));
+    overlay.add(this.add.rectangle(20, 200, 350, 44, 0x0C1323).setStrokeStyle(1, 0xFF596D).setOrigin(0));
+    overlay.add(this.add.text(28, 212, `${enemyById[e.enemy]?.name ?? e.enemy}: ${e.missedEvidence||'нет улики'}`, { fontFamily:'Inter, sans-serif', fontSize:'11px', color:'#E9F2FF', wordWrap:{width:330} }));
     const rootCard = cardById[e.atom.split('.')[0]];
-    this.add.text(20, 260, 'КОРЕНЬ: ' + (rootCard ? rootCard.name : e.atom), { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#93A3BC' });
-    this.add.text(20, 282, 'КОНТР-КАРТЫ: ' + (rootCard ? `${rootCard.id} + ${rootCard.short}` : '—'), { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#31D6C4' });
-    this.add.text(20, 320, 'Разминка будет мутирована и на ступень сложнее.\nЗакрыть запись можно, только верно решив её в разминке.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#62708A', wordWrap:{width:340} });
-    this.add.rectangle(20, 400, 350, 44, 0x31D6C4).setOrigin(0).setInteractive().on('pointerdown', ()=> overlay.destroy());
-    this.add.text(195, 422, 'ЗАКРЫТЬ', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#03110f' }).setOrigin(0.5);
+    overlay.add(this.add.text(20, 260, 'КОРЕНЬ: ' + (rootCard ? rootCard.name : e.atom), { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#93A3BC' }));
+    overlay.add(this.add.text(20, 282, 'КОНТР-КАРТЫ: ' + (rootCard ? `${rootCard.id} + ${rootCard.short}` : '—'), { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#31D6C4' }));
+    overlay.add(this.add.text(20, 320, 'Разминка будет мутирована и на ступень сложнее.\nЗакрыть запись можно, только верно решив её в разминке.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#62708A', wordWrap:{width:340} }));
+    overlay.add(this.add.rectangle(20, 400, 350, 44, 0x31D6C4).setOrigin(0).setInteractive().on('pointerdown', ()=> overlay.destroy()));
+    overlay.add(this.add.text(195, 422, 'ЗАКРЫТЬ', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#03110f' }).setOrigin(0.5));
   }
 }

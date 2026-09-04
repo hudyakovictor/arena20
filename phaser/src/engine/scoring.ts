@@ -44,6 +44,6 @@ export function scoreEncounter(opts:{
     xp = 0; coins = 0;
     enemyDefeated = false;
   }
-  // лев��тран на низкой уверенности мягче, на высокой — дороже
+  // левиафан на низкой уверенности мягче, на высокой — дороже
   return { isCorrect: opts.isCorrect, isJustified: opts.isJustified, xp, coins, budgetDelta, enemyDefeated };
 }

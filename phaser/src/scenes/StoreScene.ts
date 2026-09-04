@@ -26,7 +26,7 @@ export class StoreScene extends Phaser.Scene {
     items.forEach((it,i)=>{
       const y = 120 + i*86;
       this.add.rectangle(14, y, 362, 78, 0x0C1323).setStrokeStyle(1, 0x22304A).setOrigin(0).setInteractive()
-        .on('pointerdown', ()=> this.buy(it.name));
+        .on('pointerdown', ()=> this.buy(it.name, it.price));
       const k = iconKey(it.icon);
       if(this.textures.exists(k)) this.add.image(44, y+39, k).setTint(0x31D6C4).setScale(2);
       this.add.text(78, y+12, it.name, { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#E9F2FF' });
@@ -37,10 +37,16 @@ export class StoreScene extends Phaser.Scene {
     this.add.text(14, 476, 'Только косметика. Ничто из магазина не меняет данные, карты, ответы или бюджет.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A', wordWrap:{width:340} });
     renderBottomNav(this, 'MoreScene', navForEpoch(p.level));
   }
-  private buy(name:string){
+  private lastMsg?: Phaser.GameObjects.Text;
+  private buy(name:string, price:number){
     const p = gameState.progress;
-    if(p.coins < 100){ this.cameras.main.flash(100,255,89,109); this.add.text(195, 520, 'недостаточно SIG — заработай в Арене', { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#FF596D' }).setOrigin(0.5); return; }
-    p.coins -= 100; gameState.save();
-    this.add.text(195, 520, `✓ «${name}» — применено (демо-списание 100 SIG)`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#3BDE8A' }).setOrigin(0.5);
+    this.lastMsg?.destroy();
+    if(p.coins < price){
+      this.cameras.main.flash(100,255,89,109);
+      this.lastMsg = this.add.text(195, 520, 'недостаточно SIG — заработай в Арене', { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#FF596D' }).setOrigin(0.5);
+      return;
+    }
+    p.coins -= price; gameState.save();
+    this.lastMsg = this.add.text(195, 520, `✓ «${name}» — применено (−${price} SIG)`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#3BDE8A' }).setOrigin(0.5);
   }
 }

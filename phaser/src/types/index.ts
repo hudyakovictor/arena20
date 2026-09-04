@@ -90,6 +90,8 @@ export interface GameProgress {
   combosUnlocked: string[];
   calibration: { predicted: number; actual: number }[];
   weather: string;
+  /** счётчик выданных заданий — часть детерминированного seed (M11), вместо Date.now() */
+  taskCounter?: number;
 }
 export interface ErrorScrollEntry {
   id: string;
