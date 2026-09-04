@@ -15,19 +15,26 @@ export class OnboardingScene extends Phaser.Scene {
   private P = buildPalette('street');
 
   create(){
-    this.step = 0;
-    this.P = buildPalette('street');
-    this.cameras.main.setBackgroundColor(this.P.bgN);
-    if (this.textures.exists('bg-wall')) {
-      this.add.image(0, 0, 'bg-wall').setOrigin(0).setDisplaySize(390, 844).setAlpha(0.5);
-      this.add.rectangle(0, 0, 390, 844, 0x000000, 0.55).setOrigin(0);
+    try {
+      this.step = 0;
+      this.P = buildPalette('street');
+      this.cameras.main.setBackgroundColor(this.P.bgN);
+      if (this.textures.exists('bg-wall')) {
+        this.add.image(0, 0, 'bg-wall').setOrigin(0).setDisplaySize(390, 844).setAlpha(0.5);
+        this.add.rectangle(0, 0, 390, 844, 0x000000, 0.55).setOrigin(0);
+      }
+      this.showStep();
+    } catch (e:any) {
+      console.error('[Onboarding] create failed', e);
+      this.cameras.main.setBackgroundColor(0x330000);
+      this.add.text(195, 400, 'ONBOARDING ERROR: ' + (e?.message||e), { fontFamily:'monospace', fontSize:'12px', color:'#fff', wordWrap:{width:340} }).setOrigin(0.5);
     }
-    this.showStep();
   }
 
   private showStep(){
-    this.children.removeAll(true);
-    const ep = epochOf(1);
+    try {
+      this.children.removeAll(true);
+      const ep = epochOf(1);
     this.add.rectangle(0, 0, W, H, 0x070B14).setOrigin(0);
     // бренд
     this.add.text(W/2, 60, 'SIGNAL ARENA', { fontFamily:'Inter, system-ui, sans-serif', fontSize:'26px', color:'#f2f3f5', fontStyle:'italic' }).setOrigin(0.5);
@@ -83,5 +90,10 @@ export class OnboardingScene extends Phaser.Scene {
     // скип
     const skip = this.add.text(W/2, 760, 'пропустить (демо)', { fontFamily:'IBM Plex Mono, monospace', fontSize:'11px', color:'#7d838d' }).setOrigin(0.5).setInteractive();
     skip.on('pointerdown', ()=>{ gameState.setFlag('onboarding_done'); this.scene.start('AcademyScene'); });
+    } catch (e:any) {
+      console.error('[Onboarding] showStep failed', e);
+      this.cameras.main.setBackgroundColor(0x330000);
+      this.add.text(195, 400, 'STEP ERROR: ' + (e?.message||e), { fontFamily:'monospace', fontSize:'12px', color:'#fff', wordWrap:{width:340} }).setOrigin(0.5);
+    }
   }
 }

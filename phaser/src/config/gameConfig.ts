@@ -20,7 +20,28 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   width: 390,
   height: 844,
   backgroundColor: '#070B14',
-  scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
+  // Phaser 4: parent и размеры дублируем внутри scale для совместимости
+  scale: {
+    parent: 'game',
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 390,
+    height: 844,
+    // чтобы canvas не был 0x0 если parent еще не отрендерился
+    min: { width: 320, height: 600 },
+    // zoom 1 — без дополнительного масштаба
+    zoom: 1
+  },
+  render: {
+    antialias: true,
+    pixelArt: false,
+    // Phaser 4: roundPixels теперь false по умолчанию, но явно укажем false для четкости текста
+    antialiasGL: true,
+  },
+  // отключаем баннер в консоли для чистоты
+  banner: false as any,
+  // важно: dom нужен для возможных input, но не обязателен
+  dom: { createContainer: false } as any,
   scene: [
     BootScene, OnboardingScene, ArenaScene, AcademyScene, CollectionScene,
     MoreScene, ErrorJournalScene, SettingsScene, StoreScene, TournamentScene,

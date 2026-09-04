@@ -23,9 +23,24 @@ function defaultProgress(): GameProgress {
 export class GameState {
   progress: GameProgress;
   constructor(){
-    const saved = typeof localStorage!=='undefined' ? localStorage.getItem(STORAGE_KEY) : null;
-    this.progress = saved ? { ...defaultProgress(), ...JSON.parse(saved)} : defaultProgress();
+    let saved: string | null = null;
+    try {
+      if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+        saved = window.localStorage.getItem(STORAGE_KEY);
+      }
+    } catch (e) {
+      console.warn('[GameState] localStorage read failed', e);
+      saved = null;
+    }
+    try {
+      this.progress = saved ? { ...defaultProgress(), ...JSON.parse(saved)} : defaultProgress();
+    } catch (e) {
+      console.warn('[GameState] parse failed, using default', e);
+      this.progress = defaultProgress();
+    }
     this.refreshEpoch();
+    // ensure epoch is valid
+    if (!this.progress.level || isNaN(this.progress.level)) this.progress.level = 4;
   }
   refreshEpoch(){
     this.progress.epoch = getEpochForLevel(this.progress.level) as any;
@@ -65,18 +80,35 @@ export class GameState {
   // ── флаги юзерфлоу (онбординг, разминка дня, переход эпохи и т.д.) ──
   getFlag(key:string): boolean {
     let f: Record<string, boolean> = {};
-    try { f = JSON.parse(localStorage.getItem(FLAGS_KEY) ?? '{}'); } catch {}
+    try {
+      if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+        f = JSON.parse(window.localStorage.getItem(FLAGS_KEY) ?? '{}');
+      }
+    } catch {}
     return !!f[key];
   }
   setFlag(key:string, val:boolean = true): void {
     let f: Record<string, boolean> = {};
-    try { f = JSON.parse(localStorage.getItem(FLAGS_KEY) ?? '{}'); } catch {}
+    try {
+      if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+        f = JSON.parse(window.localStorage.getItem(FLAGS_KEY) ?? '{}');
+      }
+    } catch {}
     f[key]=val;
-    try { localStorage.setItem(FLAGS_KEY, JSON.stringify(f)); } catch {}
+    try {
+      if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+        window.localStorage.setItem(FLAGS_KEY, JSON.stringify(f));
+      }
+    } catch {}
   }
   // сброс для демо: вернуть флаги и прогресс к первому входу
   resetAll(): void {
-    try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(FLAGS_KEY); } catch {}
+    try {
+      if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+        window.localStorage.removeItem(STORAGE_KEY);
+        window.localStorage.removeItem(FLAGS_KEY);
+      }
+    } catch {}
     this.progress = defaultProgress();
     this.refreshEpoch();
     this.save();

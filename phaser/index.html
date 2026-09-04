@@ -7,10 +7,76 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap&subset=cyrillic" rel="stylesheet" />
-  <style>body{margin:0;background:#070B14;overflow:hidden}#game{width:100vw;height:100vh}</style>
+  <style>
+  body{margin:0;background:#070B14;overflow:hidden;color:#e9f2ff;font-family:Inter,system-ui,sans-serif}
+  #game{width:100vw;height:100vh;position:relative;z-index:1}
+  #debug{position:fixed;left:0;top:0;right:0;z-index:9999;padding:10px 14px;font-family:monospace;font-size:11px;background:rgba(20,0,0,0.92);color:#ffcc66;max-height:45vh;overflow:auto;display:none;white-space:pre-wrap;word-break:break-all;border-bottom:1px solid #ff4d5e}
+  #fallback{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:2;background:#070B14;color:#62708A;transition:opacity 0.4s}
+  #fallback-bar-wrap{width:200px;height:4px;background:#16181d;margin-top:16px;border:1px solid #33383f;position:relative;overflow:hidden}
+  #fallback-bar{position:absolute;left:0;top:0;bottom:0;width:0%;background:#c8ff00;transition:width 0.3s}
+  </style>
 </head>
 <body>
+  <div id="debug"></div>
+  <div id="fallback">
+    <div style="font-size:32px;color:#c8ff00;font-family:Oswald,Inter,sans-serif;letter-spacing:1px">SIGNAL ARENA</div>
+    <div style="font-size:11px;margin-top:10px;font-family:'IBM Plex Mono',monospace;color:#93A3BC">загрузка движка…</div>
+    <div id="fallback-bar-wrap"><div id="fallback-bar"></div></div>
+    <div id="fallback-log" style="font-size:9px;margin-top:12px;font-family:monospace;color:#62708A;max-width:340px;text-align:center"></div>
+  </div>
   <div id="game"></div>
+  <script>
+    (function(){
+      const dbg = document.getElementById('debug');
+      const flog = document.getElementById('fallback-log');
+      const bar = document.getElementById('fallback-bar');
+      let pct = 0;
+      function showError(msg){
+        if(!dbg) return;
+        dbg.style.display='block';
+        dbg.textContent += msg + '\n';
+        if(flog) flog.textContent = msg.slice(0,600);
+      }
+      window.addEventListener('error', e=>{
+        showError('ERR: '+(e.message||'')+' @ '+(e.filename||'')+':'+(e.lineno||''));
+        if(e.error && e.error.stack) showError(e.error.stack.slice(0,2500));
+      });
+      window.addEventListener('unhandledrejection', e=>{
+        showError('PROMISE: '+(e.reason && e.reason.message ? e.reason.message : String(e.reason)));
+        if(e.reason && e.reason.stack) showError(String(e.reason.stack).slice(0,2500));
+      });
+      const progIv = setInterval(()=>{
+        pct = Math.min(90, pct + Math.random()*7);
+        if(bar) bar.style.width = pct + '%';
+        const c = document.querySelector('#game canvas');
+        if(c){
+          if(bar) bar.style.width = '100%';
+          const fb=document.getElementById('fallback');
+          if(fb) setTimeout(()=>{ fb.style.opacity='0'; setTimeout(()=>fb.style.display='none',420); }, 250);
+          clearInterval(progIv);
+          clearInterval(checkIv);
+        }
+      },280);
+      let tries=0;
+      const checkIv=setInterval(()=>{
+        tries++;
+        const c = document.querySelector('#game canvas');
+        if(c){
+          if(bar) bar.style.width='100%';
+          const fb=document.getElementById('fallback');
+          if(fb){ fb.style.opacity='0'; setTimeout(()=>fb.style.display='none',420); }
+          clearInterval(checkIv);
+          clearInterval(progIv);
+        }
+        if(tries>80){
+          clearInterval(checkIv);
+          if(!document.querySelector('#game canvas')){
+            showError('Canvas не появился за 20с — открой F12 Console. Возможна ошибка в BootScene, блокировка localStorage или WebGL недоступен.');
+          }
+        }
+      },250);
+    })();
+  </script>
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

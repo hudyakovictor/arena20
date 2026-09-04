@@ -50,33 +50,57 @@ export class ArenaScene extends Phaser.Scene {
   constructor(){ super({ key:'ArenaScene' }); }
 
   create(): void {
-    this.selectedEvidence.clear(); this.confidence=null; this.selectedAnswer=null; this.selectedSequence=[]; this.verdictFactor=null; this.blindOpened=false;
-    // M11 — детерминированный seed: уровень + счётчик + время
-    const seed = (this.progress.level*100000 + this.progress.xp + Date.now())>>>0;
-    // M12 кампания: выбираем шаблон по уровню и не закрытым стадиям
-    const tpl = this.pickTemplate();
-    this.encounter = mutate(tpl, seed);
-    this.activeSource = this.encounter.sources[0] as SourceId;
-    this.evidenceHighlights = balanceConfig.evidence.highlightInEpoch[this.progress.epoch as 'street'|'cabinet'|'terminal'|'system'];
+    try {
+      this.selectedEvidence.clear(); this.confidence=null; this.selectedAnswer=null; this.selectedSequence=[]; this.verdictFactor=null; this.blindOpened=false;
+      // M11 — детерминированный seed: уровень + счётчик + время
+      const seed = (this.progress.level*100000 + this.progress.xp + Date.now())>>>0;
+      // M12 кампания: выбираем шаблон по уровню и не закрытым стадиям
+      const tpl = this.pickTemplate();
+      if (!tpl) throw new Error('pickTemplate returned null');
+      this.encounter = mutate(tpl, seed);
+      if (!this.encounter) throw new Error('mutate returned null');
+      this.activeSource = (this.encounter.sources[0] as SourceId) || 'chart';
+      this.evidenceHighlights = (balanceConfig.evidence.highlightInEpoch as any)[this.progress.epoch as any] ?? true;
 
-    this.P = buildPalette(this.epoch.id);
-    this.cameras.main.setBackgroundColor(this.P.bgN);
-    // Эпоха I «Улица» — согласованный фон: кирпич + виньетка (ui/prototype_style_*.png)
-    if (this.P.brick && this.textures.exists('bg-wall')) {
-      this.add.image(0, 0, 'bg-wall').setOrigin(0).setDisplaySize(390, 844).setAlpha(0.85);
-      this.add.rectangle(0, 0, 390, 844, 0x000000, 0.38).setOrigin(0);
+      this.P = buildPalette(this.epoch.id);
+      this.cameras.main.setBackgroundColor(this.P.bgN);
+      if (this.P.brick && this.textures.exists('bg-wall')) {
+        this.add.image(0, 0, 'bg-wall').setOrigin(0).setDisplaySize(390, 844).setAlpha(0.85);
+        this.add.rectangle(0, 0, 390, 844, 0x000000, 0.38).setOrigin(0);
+      } else {
+        // fallback фон если нет кирпича
+        this.add.rectangle(0,0,390,844,this.P.bgN).setOrigin(0);
+      }
+
+      this.createTopBar();
+      this.createWeatherStrip();
+      this.createQuestion();
+      this.createThreat();
+      this.createBrowser();
+      this.createEvidenceStrip();
+      this.createSkills();
+      this.createAnswerBlock();
+      this.createBottomNav();
+      this.createDebugEpochSwitcher();
+      console.log('[Arena] create OK', this.encounter.id);
+    } catch (e:any) {
+      console.error('[Arena] create failed', e);
+      this.cameras.main.setBackgroundColor(0x330000);
+      this.add.text(195, 200, 'ARENA ERROR', { fontFamily:'Inter, sans-serif', fontSize:'20px', color:'#ff4d5e' }).setOrigin(0.5);
+      this.add.text(195, 240, (e?.message||String(e)).slice(0,300), { fontFamily:'monospace', fontSize:'10px', color:'#ffffff', wordWrap:{width:340}, align:'center' }).setOrigin(0.5);
+      this.add.text(195, 320, (e?.stack||'').slice(0,800), { fontFamily:'monospace', fontSize:'8px', color:'#93A3BC', wordWrap:{width:340} }).setOrigin(0.5);
+      const btn = this.add.rectangle(95, 500, 200, 44, 0xc8ff00).setOrigin(0).setInteractive();
+      this.add.text(195, 522, 'СБРОС И ПЕРЕЗАПУСК', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#0a0b0d' }).setOrigin(0.5);
+      btn.on('pointerdown', ()=>{
+        try { gameState.resetAll(); } catch {}
+        this.scene.start('BootScene');
+      });
+      const dbg = document.getElementById('debug');
+      if (dbg) {
+        dbg.style.display='block';
+        dbg.textContent += '\n[Arena] FATAL: ' + (e?.message||e) + '\n' + (e?.stack||'');
+      }
     }
-
-    this.createTopBar();
-    this.createWeatherStrip();
-    this.createQuestion();
-    this.createThreat();
-    this.createBrowser();
-    this.createEvidenceStrip();
-    this.createSkills();
-    this.createAnswerBlock();
-    this.createBottomNav();
-    this.createDebugEpochSwitcher(); // dev — показать взросление
   }
 
   private pickTemplate(){

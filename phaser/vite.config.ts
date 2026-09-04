@@ -1,13 +1,15 @@
 import { defineConfig } from 'vite';
 export default defineConfig({
-  base: './',
+  // base '/' для dev, './' для prod — но dev с './' ломает абсолютные /src/main.ts в некоторых прокси
+  // поэтому ставим '/' и позволяем preview работать через allowedHosts
+  base: '/',
   server: {
     host: '0.0.0.0',
     port: 3000,
-    // Публикация через превью-прокси Arena (e2b.app): разрешаем любой host, чтобы dev-сервер
-    // принимал запросы к {port}-{sandboxId}.e2b.app и не возвращал 403.
     allowedHosts: true,
     fs: { allow: ['..'] }
   },
-  build: { target: 'es2020' }
+  build: { target: 'es2020' },
+  // чтобы SVG грузились как есть, без оптимизации
+  assetsInclude: ['**/*.svg']
 });
