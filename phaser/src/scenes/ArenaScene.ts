@@ -13,6 +13,7 @@ import type { EncounterInstance, Confidence, SourceId, SkillDomain, AnswerOption
 import { buildPalette } from '../ui/palette';
 import { api, type AttemptPayload, type AttemptResponse, type ServerTask, type NextTaskResponse } from '../net/api';
 import { takeServerTask, prefetchTask } from '../net/taskBridge';
+import { CandleChart } from '../ui/CandleChart';
 
 // Токены — Terminal Design System, меняются эпохой без новой сцены (ТЗ Часть 2 §4)
 const FONT_UI = { fontFamily: 'Inter, system-ui, sans-serif' };
@@ -33,6 +34,7 @@ export class ArenaScene extends Phaser.Scene {
   private serverTask: ServerTask | null = null;
   private taskStartedAt = 0;
   private lastShadow: AttemptResponse['shadow'] | null = null;
+  private lastPlayForward: AttemptResponse['reveal']['playForward'] | null = null;
 
   // Токены эпохи (ТЗ Часть 2): скелет один — взрослеют токены.
   private P = buildPalette('street');
@@ -273,27 +275,31 @@ export class ArenaScene extends Phaser.Scene {
     const zoneList = this.encounter.mutatedEvidence.filter(z=> z.source===sid);
     if(sid==='chart'){
       this.add.text(x+10,y+6, `${this.encounter.ticker} · ${this.encounter.timeframe} · свечи + объём`, { ...FONT_MONO, fontSize:'8px', color:this.COLORS.subS});
-      // мини-график из прямоугольников (без чисел-подсказок в поздних эпохах)
-      const candles = this.fakeCandles();
-      candles.forEach((c,i)=>{
-        const cx = x+10 + i*22, cy = y+30;
-        const col = c.dir==='up' ? this.COLORS.good : this.COLORS.bad;
-        this.add.rectangle(cx, cy + (c.dir==='up'? 6:10), 12, 18, col, 0.9).setOrigin(0,0);
-        this.add.rectangle(cx+5, cy, 2, 30, col, 0.45).setOrigin(0,0);
-        if(c.isEvidence){
-          // M1 улика — зона, тап собирается в evidence strip
-          const isSelected = this.selectedEvidence.has(c.id);
-          const hl = this.evidenceHighlights;
-          this.add.rectangle(cx, cy-2, 16, 34, hl ? this.COLORS.accentN : this.COLORS.border, hl?0.12:0).setStrokeStyle(hl?1:1, hl? this.COLORS.accentN : this.COLORS.strong).setOrigin(0,0).setInteractive().on('pointerdown', ()=> this.toggleEvidence(c.id));
-          if(hl){
-            this.add.text(cx+8, cy+32, 'УЛИКА', { ...FONT_MONO, fontSize:'6px', color: isSelected? this.COLORS.goodS:this.COLORS.accentS, backgroundColor: isSelected? 'rgba(59,222,138,0.15)':'rgba(49,214,196,0.12)'}).setOrigin(0.5);
-          } else {
-            // без подсветки — игрок классифицирует сам
-            this.add.rectangle(cx+8, cy+32, 8,8, isSelected? this.COLORS.good:this.COLORS.border).setStrokeStyle(1, isSelected? this.COLORS.good:0x62708A).setOrigin(0.5).setInteractive().on('pointerdown', ()=> this.toggleEvidence(c.id));
-          }
-          if(isSelected) this.add.circle(cx+14, cy-4, 5, this.COLORS.good).setStrokeStyle(1,this.COLORS.bg);
+      // CandleChart на Graphics — часть игрового кадра (детерминирован по seed задания)
+      const chart = new CandleChart(this, {
+        x: x+10, y: y+20, w: w-20, h: 52,
+        seed: this.encounter.seed,
+        count: 18,
+        mirrored: this.encounter.isMirrored,
+        colors: {
+          up: this.COLORS.good, down: this.COLORS.bad,
+          grid: this.COLORS.border, frame: this.COLORS.strong,
+          volUp: this.COLORS.good, volDown: this.COLORS.bad,
+          anomaly: this.COLORS.warn,
         }
       });
+      // M1 улика — интерактивная зона поверх свечи-аномалии («памп без объёма»)
+      const evRect = chart.candleRect(chart.evidenceIndex);
+      const evId = 'ev-vol';
+      const isSelected = this.selectedEvidence.has(evId);
+      const hl = this.evidenceHighlights;
+      this.add.rectangle(evRect.x, evRect.y-2, evRect.width, evRect.height+4, hl ? this.COLORS.accentN : this.COLORS.border, hl?0.12:0.01)
+        .setStrokeStyle(1, hl ? this.COLORS.accentN : this.COLORS.strong)
+        .setOrigin(0,0).setInteractive().on('pointerdown', ()=> this.toggleEvidence(evId));
+      if(hl){
+        this.add.text(evRect.centerX, evRect.bottom+6, 'УЛИКА', { ...FONT_MONO, fontSize:'6px', color: isSelected? this.COLORS.goodS:this.COLORS.accentS, backgroundColor: isSelected? 'rgba(59,222,138,0.15)':'rgba(49,214,196,0.12)'}).setOrigin(0.5);
+      }
+      if(isSelected) this.add.circle(evRect.right-2, evRect.y, 5, this.COLORS.good).setStrokeStyle(1,this.COLORS.bg);
       // ярлыки-костыли
       if(crutch==='all'){
         this.add.text(x+10, y+76, 'ЯРЛЫК: ПАМП БЕЗ ОБЪЁМА ★', { ...FONT_MONO, fontSize:'7px', color:this.COLORS.warnS, backgroundColor:'#14223A'}).setOrigin(0);
@@ -376,12 +382,6 @@ export class ArenaScene extends Phaser.Scene {
         this.add.text(x+16, zzY+4,(sel?'✓ ':'○ ')+z.label, { ...FONT_MONO, fontSize:'7px', color: sel?this.COLORS.textS:this.COLORS.subS, wordWrap:{width:w-36}}).setOrigin(0);
       });
     }
-  }
-
-  private fakeCandles(): {id:string, dir:'up'|'down', isEvidence:boolean}[]{
-    const arr=[];
-    for(let i=0;i<12;i++) arr.push({id: i===7?'ev-vol':'c'+i, dir: i%2===0?'up':'down' as any, isEvidence: i===7});
-    return arr;
   }
 
   private toggleEvidence(id:string){
@@ -700,6 +700,7 @@ export class ArenaScene extends Phaser.Scene {
       if(res.progress.stageWon.stage>cur) p.enemyStagesReached[res.progress.stageWon.enemyId]=res.progress.stageWon.stage;
     }
     this.lastShadow = res.shadow;
+    this.lastPlayForward = res.reveal.playForward;
     gameState.save();
     if(res.progress.leviathan){ this.showLeviathan(); return; }
     const v = { isCorrect, isJustified, xp: res.reward.xp, coins: res.reward.coins, budgetDelta: res.reward.budgetDelta, enemyDefeated: res.reward.enemyDefeated };
@@ -738,21 +739,23 @@ export class ArenaScene extends Phaser.Scene {
   private showFeedback(v:ReturnType<typeof scoreEncounter>, isCorrect:boolean, isJustified:boolean){
     const overlay = this.add.rectangle(0,0,390,844, this.COLORS.bg, 0.92).setOrigin(0).setInteractive();
     const topY=110;
-    // M6 проигрыш вперёд — график доигрывает 6 свечей
+    // M6 проигрыш вперёд — тот же CandleChart доигрывает свечи (параметры с сервера или дефолт)
     this.add.rectangle(20, topY, 350, 70, this.COLORS.inset).setStrokeStyle(1, this.COLORS.border).setOrigin(0);
-    this.add.text(28, topY+8, 'M6 ПРОИГРЫШ ВПЕРЁД — график доигрывает...', { ...FONT_MONO, fontSize:'7px', color:this.COLORS.mutedS});
-    // анимируем свечи
-    const g = this.add.graphics();
-    g.lineStyle(1, isCorrect? this.COLORS.good:this.COLORS.bad, 0.9);
-    for(let i=0;i<6;i++){
-      this.time.delayedCall(i*280, ()=>{
-        const cx=28+i*54, cy=topY+26;
-        g.strokeRect(cx, cy, 44, isCorrect? 18: 26);
-        if(i===5) g.fillStyle(isCorrect?this.COLORS.good:this.COLORS.bad,0.2).fillRect(cx,cy,44, isCorrect?18:26);
-      });
-    }
-    this.time.delayedCall(1800, ()=>{
-      this.add.text(195, topY+62, isCorrect? 'твоя линия vs верная — разница в результате видна' : 'цена пошла против тебя — смотри, где была улика', { ...FONT_MONO, fontSize:'7px', color:this.COLORS.subS, wordWrap:{width:330}}).setOrigin(0.5);
+    this.add.text(28, topY+6, 'M6 ПРОИГРЫШ ВПЕРЁД — график доигрывает...', { ...FONT_MONO, fontSize:'7px', color:this.COLORS.mutedS});
+    const pf = this.lastPlayForward ?? { candles: 6, direction: (isCorrect?'up':'down') as 'up'|'down', outcomePct: isCorrect? 3.2 : -4.1, durationMs: 1600 };
+    const fbChart = new CandleChart(this, {
+      x: 28, y: topY+16, w: 334, h: 46,
+      seed: this.encounter.seed, count: 18, mirrored: this.encounter.isMirrored,
+      colors: {
+        up: this.COLORS.good, down: this.COLORS.bad,
+        grid: this.COLORS.border, frame: this.COLORS.strong,
+        volUp: this.COLORS.good, volDown: this.COLORS.bad,
+        anomaly: this.COLORS.warn,
+      }
+    });
+    const stepMs = Math.max(120, Math.round(pf.durationMs / Math.max(1, pf.candles)));
+    fbChart.playForward(pf.candles, pf.direction, Math.abs(pf.outcomePct), stepMs, ()=>{
+      this.add.text(195, topY+62, isCorrect? `цена прошла ${Math.abs(pf.outcomePct).toFixed(1)}% — улика отработала` : `цена пошла против тебя на ${Math.abs(pf.outcomePct).toFixed(1)}% — смотри, где была улика`, { ...FONT_MONO, fontSize:'7px', color:this.COLORS.subS, wordWrap:{width:330}}).setOrigin(0.5);
     });
 
     // заголовок результата
