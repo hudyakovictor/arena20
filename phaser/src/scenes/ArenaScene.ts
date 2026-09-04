@@ -16,7 +16,7 @@ import { encounterSeed, localUserId } from '../engine/seed';
 import { buildScenario, type Scenario } from '../engine/scenarioGen';
 import type { EncounterInstance, Confidence, SourceId, EpochId } from '../types';
 import { buildPalette, type Palette } from '../ui/palette';
-import { CANVAS, CHROME, DUR, GUTTER, HIT, RADIUS, SP } from '../ui/tokens';
+import { CANVAS, CHROME, GUTTER, HIT, RADIUS, SP } from '../ui/tokens';
 import * as TX from '../ui/text';
 import { T, weatherLabel } from '../ui/copy';
 import { button, panel } from '../ui/widgets';
@@ -28,11 +28,12 @@ import {
   renderBackground,
   bottomNavHeight,
 } from '../ui/shell';
-import { sceneEnter, enterPanel, transitionTo } from '../ui/motion';
-import { haptic, playSfx } from '../ui/feedbackFx';
+import { sceneEnter, enterPanel } from '../ui/motion';
+import { haptic } from '../ui/feedbackFx';
 import { SourceBrowser } from './arena/SourceBrowser';
 import { AnswerGrid, CardRail, ConfidencePicker, VerdictRow, buildCardViews } from './arena/DecisionPanel';
 import { FeedbackOverlay } from './arena/FeedbackOverlay';
+import { showDrawdown, showEpochTransition } from './arena/StatusOverlays';
 import { SOURCE_TITLES } from '../engine/scenarioGen';
 
 /** Шаги встречи: сначала разбор источников, затем решение. */
@@ -159,16 +160,16 @@ export class ArenaScene extends Phaser.Scene {
     renderBottomNav(this, 'ArenaScene', navForEpoch(this.progress.level));
 
     const flow = new Flow(CHROME.topBar + SP.md, SP.md);
-    this.renderWeather(flow);
-    this.renderQuestion(flow);
-    this.renderThreat(flow);
-
     const bottomLimit = CANVAS.h - bottomNavHeight() - SP.md;
     // Место под нижний блок действия
     const ctaH = HIT.comfortable + SP.md;
     const evidenceH = 34;
 
     if (this.step === 'investigate') {
+      // Разбор: видно всё окружение задачи.
+      this.renderWeather(flow);
+      this.renderQuestion(flow, bottomLimit - flow.y - 200 - ctaH - evidenceH);
+      this.renderThreat(flow);
       const browserH = Math.max(
         200,
         bottomLimit - flow.y - ctaH - evidenceH - SP.md * 2,
@@ -177,6 +178,10 @@ export class ArenaScene extends Phaser.Scene {
       this.renderEvidenceStrip(flow);
       this.renderInvestigateCta(bottomLimit - ctaH);
     } else {
+      // Решение: на экране только то, что нужно для выбора.
+      // Погоду и карточку врага не повторяем — игрок их уже видел, а высоты
+      // не хватало: нижний ряд ответов уезжал под навигацию.
+      this.renderQuestion(flow, 132);
       this.renderEvidenceSummary(flow);
       this.renderDecision(flow, bottomLimit);
     }
@@ -189,16 +194,31 @@ export class ArenaScene extends Phaser.Scene {
     this.add.text(GUTTER, y, label, TX.caption(p, { color: p.sub, wrap: CANVAS.w - GUTTER * 2 }));
   }
 
-  private renderQuestion(flow: Flow): void {
+  /**
+   * Карточка ситуации. maxH ограничивает блок сверху: без него длинный вопрос
+   * растягивал панель и выдавливал нижние блоки за пределы экрана.
+   */
+  private renderQuestion(flow: Flow, maxH = 220): void {
     const p = this.P;
     const q = this.encounter;
     const w = CANVAS.w - GUTTER * 2;
     const style = TX.bodyLg(p, { color: p.text, wrap: w - SP.lg * 2 });
     const probe = this.add.text(0, 0, q.question, style).setVisible(false);
-    const textH = probe.height;
+    let textH = probe.height;
     probe.destroy();
 
-    const boxH = textH + SP.lg * 2 + 18;
+    const limit = Math.max(72, maxH);
+    // Текст не влезает — уменьшаем кегль в пределах читаемой шкалы (>= 14px).
+    if (textH + SP.lg * 2 + 18 > limit) {
+      const smaller = TX.body(p, { color: p.text, wrap: w - SP.lg * 2 });
+      const probe2 = this.add.text(0, 0, q.question, smaller).setVisible(false);
+      textH = probe2.height;
+      probe2.destroy();
+      style.fontSize = smaller.fontSize;
+      style.lineSpacing = smaller.lineSpacing;
+    }
+
+    const boxH = Math.min(limit, textH + SP.lg * 2 + 18);
     const y = flow.take(boxH);
     const box = panel(this, GUTTER, y, w, boxH, p, {
       fill: p.paperN,
@@ -328,7 +348,8 @@ export class ArenaScene extends Phaser.Scene {
       .join(' · ');
     const style = TX.caption(p, { color: p.sub, wrap: w - SP.md * 2 - 80 });
     const probe = this.add.text(0, 0, labels, style).setVisible(false);
-    const h = Math.max(44, probe.height + SP.md * 2);
+    // Сводка — вспомогательный блок: максимум две строки, дальше многоточие.
+    const h = Phaser.Math.Clamp(probe.height + SP.md * 2, 44, 62);
     probe.destroy();
 
     const y = flow.take(h);
@@ -409,9 +430,12 @@ export class ArenaScene extends Phaser.Scene {
       return;
     }
 
-    // Обычные варианты ответа
+    // Обычные варианты ответа. Прижимаем сетку к нижней границе, если
+    // предыдущие блоки заняли слишком много: кнопки должны оставаться
+    // доступными, а не уезжать под навигацию.
     const gridH = AnswerGrid.heightFor(this.encounter.mutatedAnswers.length);
-    const gy = flow.take(gridH);
+    const wanted = flow.take(gridH);
+    const gy = Math.min(wanted, bottomLimit - gridH);
     this.answerGrid = new AnswerGrid(this, gy, p, this.encounter, (i) => this.pickAnswer(i));
   }
 
@@ -651,7 +675,7 @@ export class ArenaScene extends Phaser.Scene {
     const budget = gameState.changeBudget(v.budgetDelta);
 
     if (budget <= 0) {
-      this.showDrawdown();
+      showDrawdown(this, this.P, 40, () => this.restartEncounter());
       return;
     }
     this.showFeedback(v, isCorrect, isJustified);
@@ -677,7 +701,7 @@ export class ArenaScene extends Phaser.Scene {
       onNext: () => {
         const before = this.epoch.id;
         const after = getEpochForLevel(this.progress.level);
-        if (before !== after) this.showEpochTransition(after);
+        if (before !== after) showEpochTransition(this, after, () => this.restartEncounter());
         else this.restartEncounter();
       },
     });
@@ -703,116 +727,4 @@ export class ArenaScene extends Phaser.Scene {
     this.rebuild();
   }
 
-  private showDrawdown(): void {
-    const p = this.P;
-    const layer = this.add.container(0, 0).setDepth(1200);
-    const shade = this.add
-      .rectangle(0, 0, CANVAS.w, CANVAS.h, p.bgN, 0.98)
-      .setOrigin(0)
-      .setInteractive();
-    layer.add(shade);
-    playSfx('wrong');
-    haptic('heavy');
-
-    const w = CANVAS.w - GUTTER * 2;
-    const flow = new Flow(CANVAS.h / 2 - 160, SP.md);
-    layer.add(
-      this.add
-        .text(CANVAS.w / 2, flow.take(40), T.drawdown.title, {
-          ...TX.display(p, { color: p.bad, align: 'center', wrap: w }),
-        })
-        .setOrigin(0.5, 0),
-    );
-    layer.add(
-      this.add
-        .text(CANVAS.w / 2, flow.take(28), T.drawdown.sub, {
-          ...TX.body(p, { color: p.sub, align: 'center', wrap: w }),
-        })
-        .setOrigin(0.5, 0),
-    );
-    layer.add(
-      this.add
-        .text(CANVAS.w / 2, flow.take(80), T.drawdown.body, {
-          ...TX.body(p, { color: p.muted, align: 'center', wrap: w }),
-        })
-        .setOrigin(0.5, 0),
-    );
-    const restore = 40;
-    layer.add(
-      button(
-        this,
-        GUTTER,
-        flow.take(HIT.comfortable),
-        T.drawdown.cta(restore),
-        p,
-        () => {
-          gameState.changeBudget(restore);
-          layer.destroy();
-          this.restartEncounter();
-        },
-        { width: w },
-      ),
-    );
-  }
-
-  private showEpochTransition(to: EpochId): void {
-    const p = this.P;
-    const nextPal = buildPalette(to);
-    const layer = this.add.container(0, 0).setDepth(1200);
-    const shade = this.add
-      .rectangle(0, 0, CANVAS.w, CANVAS.h, nextPal.bgN, 0.99)
-      .setOrigin(0)
-      .setInteractive();
-    layer.add(shade);
-    playSfx('epoch');
-    haptic('success');
-
-    const w = CANVAS.w - GUTTER * 2;
-    const flow = new Flow(CANVAS.h / 2 - 140, SP.md);
-    layer.add(
-      this.add
-        .text(CANVAS.w / 2, flow.take(24), T.epoch.changed, {
-          ...TX.caption(nextPal, { color: nextPal.sub, align: 'center' }),
-        })
-        .setOrigin(0.5, 0),
-    );
-    layer.add(
-      this.add
-        .text(CANVAS.w / 2, flow.take(40), epochOf(this.progress.level).name, {
-          ...TX.display(nextPal, { color: nextPal.accent, align: 'center' }),
-        })
-        .setOrigin(0.5, 0),
-    );
-    layer.add(
-      this.add
-        .text(CANVAS.w / 2, flow.take(60), epochOf(this.progress.level).motto, {
-          ...TX.body(nextPal, { color: nextPal.text, align: 'center', wrap: w }),
-        })
-        .setOrigin(0.5, 0),
-    );
-    layer.add(
-      this.add
-        .text(CANVAS.w / 2, flow.take(40), T.epoch.sub, {
-          ...TX.caption(nextPal, { color: nextPal.muted, align: 'center', wrap: w }),
-        })
-        .setOrigin(0.5, 0),
-    );
-    layer.add(
-      button(
-        this,
-        GUTTER,
-        flow.take(HIT.comfortable),
-        T.epoch.cta,
-        nextPal,
-        () => {
-          layer.destroy();
-          this.restartEncounter();
-        },
-        { width: w },
-      ),
-    );
-    void p;
-    void DUR;
-    void transitionTo;
-  }
 }

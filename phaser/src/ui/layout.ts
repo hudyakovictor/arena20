@@ -42,7 +42,20 @@ export class Flow {
 }
 
 /** Безопасные отступы устройства (вырез, home-indicator). */
+let insetsCache: { top: number; bottom: number } | null = null;
+
+/** Сбрасывает кэш безопасных отступов — например, при повороте экрана. */
+export function resetSafeAreaCache(): void {
+  insetsCache = null;
+}
+
+/**
+ * Безопасные отступы устройства. Результат кэшируется: функция вызывается
+ * при каждой раскладке (17 мест), а каждый вызов создавал элемент в DOM
+ * и дёргал getComputedStyle — это принудительный пересчёт стилей браузером.
+ */
 export function safeAreaInsets(): { top: number; bottom: number } {
+  if (insetsCache) return insetsCache;
   if (typeof window === 'undefined' || typeof getComputedStyle !== 'function') {
     return { top: 0, bottom: 0 };
   }
@@ -55,5 +68,6 @@ export function safeAreaInsets(): { top: number; bottom: number } {
   const top = parseFloat(cs.paddingTop) || 0;
   const bottom = parseFloat(cs.paddingBottom) || 0;
   probe.remove();
-  return { top, bottom };
+  insetsCache = { top, bottom };
+  return insetsCache;
 }
