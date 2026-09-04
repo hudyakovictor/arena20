@@ -21,7 +21,8 @@ import { cards } from '../content/cards';
 import { enemies } from '../content/enemies';
 import { combos } from '../content/combos';
 import { db } from '@/db';
-import { sql } from 'drizzle-orm';
+import { count } from 'drizzle-orm';
+import { users as usersT, attempts as attemptsT } from '../db/schema';
 
 interface Ctx { req: Request; params: Record<string, string>; query: URLSearchParams; claims: TokenClaims | null; ip: string; }
 type Handler = (c: Ctx) => Promise<unknown | Response>;
@@ -88,8 +89,8 @@ add('POST', '/billing/purchase', 'user', async c => { const b = await parseBody(
 // ─── admin: контент, конфиг, ИИ-конвейер, аналитика, турниры ───────────────
 add('GET', '/admin/status', 'admin', async () => {
   const pkg = await getContentPackage();
-  const [{ users }] = (await db.execute(sql`select count(*)::int as users from users`)).rows as { users: number }[];
-  const [{ attempts }] = (await db.execute(sql`select count(*)::int as attempts from attempts`)).rows as { attempts: number }[];
+  const [{ users }] = await db.select({ users: count() }).from(usersT);
+  const [{ attempts }] = await db.select({ attempts: count() }).from(attemptsT);
   return { contentVersion: pkg.version, config: (await getConfig()).version, ai: aiStatus(), stats: { users, attempts, templates: pkg.templates.length, cards: cards.length, enemies: enemies.length, combos: combos.length } };
 });
 add('GET', '/admin/autotest', 'admin', async () => { const pkg = await getContentPackage(); return autotestPackage({ cards, enemies, combos, templates: pkg.templates }); });

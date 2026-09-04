@@ -1,0 +1,71 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "meta": {
+    "name": "Signal Arena Terminal",
+    "version": "1.0.0",
+    "target": "Phaser 4.2.1",
+    "locale": "ru",
+    "mobileFirst": true
+  },
+  "color": {
+    "bg": "#070B14",
+    "inset": "#060A12",
+    "surface": "#0C1323",
+    "elevated": "#111B2E",
+    "hover": "#14223A",
+    "text": "#E9F2FF",
+    "sub": "#93A3BC",
+    "muted": "#62708A",
+    "disabled": "#46536A",
+    "border": "#22304A",
+    "strong": "#344563",
+    "primary": "#31D6C4",
+    "good": "#3BDE8A",
+    "bad": "#FF596D",
+    "warn": "#FFB341",
+    "paper": "#E7DFD0",
+    "ink": "#1C1916",
+    "info": "#59A7FF",
+    "domain": {
+      "technical": "#50C8FF",
+      "risk": "#FF5C70",
+      "context": "#F4B84B",
+      "crypto": "#B783FF",
+      "human": "#FF77BD",
+      "cognitive": "#9CA8FF"
+    }
+  },
+  "spacing": { "1": 4, "2": 8, "3": 12, "4": 16, "5": 24, "6": 32, "7": 48, "8": 64 },
+  "radius": { "control": 8, "component": 12, "surface": 16 },
+  "size": { "touchMin": 44, "icon": 24, "topBar": 56, "bottomNav": 64, "mobileDesignWidth": 390 },
+  "type": {
+    "ui": "Inter, system-ui, sans-serif",
+    "mono": "IBM Plex Mono, Consolas, monospace",
+    "display": { "size": 32, "line": 38, "weight": 750 },
+    "h2": { "size": 24, "line": 30, "weight": 700 },
+    "h3": { "size": 18, "line": 24, "weight": 700 },
+    "body": { "size": 14, "line": 20, "weight": 400 },
+    "label": { "size": 11, "line": 16, "weight": 700 }
+  },
+  "motion": {
+    "instant": 0,
+    "input": 80,
+    "fast": 120,
+    "normal": 220,
+    "slow": 420,
+    "dramaticMax": 700,
+    "easing": { "enter": "Cubic.Out", "exit": "Cubic.In", "standard": "Cubic.InOut" }
+  },
+  "layer": { "background": 0, "hud": 100, "encounter": 200, "overlay": 1000, "vfx": 2000 },
+  "states": ["default", "pressed", "selected", "disabled", "locked", "loading", "correct", "incorrect", "completed"],
+  "rules": {
+    "bottomNavItems": 4,
+    "answerOptions": 4,
+    "browserTabsMin": 1,
+    "browserTabsMax": 7,
+    "compactSkillCardsMax": 4,
+    "enemyHiddenBeforeDecision": true,
+    "reducedMotionRequired": true,
+    "rawHexOutsideTokens": false
+  }
+}

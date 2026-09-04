@@ -1,0 +1,246 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Signal Arena — Terminal Design System 1.0</title><style>
+:root{--bg:#070B14;--inset:#060A12;--surface:#0C1323;--elevated:#111B2E;--hover:#14223A;--text:#E9F2FF;--sub:#93A3BC;--muted:#62708A;--disabled:#46536A;--border:#22304A;--strong:#344563;--cyan:#31D6C4;--good:#3BDE8A;--bad:#FF596D;--warn:#FFB341;--paper:#E7DFD0;--ink:#1C1916;--info:#59A7FF;--technical:#50C8FF;--risk:#FF5C70;--context:#F4B84B;--crypto:#B783FF;--human:#FF77BD;--cognitive:#9CA8FF;--mono:"IBM Plex Mono",Consolas,monospace;--ui:Inter,system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg);color:var(--text);font:14px/1.5 var(--ui);padding:32px 24px;max-width:1200px;margin:0 auto}
+h1{font:700 32px/1.2 var(--ui);letter-spacing:-.02em;margin-bottom:4px}h2{font:700 24px/1.3 var(--ui);margin:48px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}h3{font:700 18px var(--ui);margin:24px 0 12px;color:var(--sub)}h4{font:700 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:16px 0 8px}
+.sub{font:12px var(--mono);color:var(--muted);margin-bottom:32px}.row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start}.card{border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:16px}
+.sw{width:120px;border:1px solid var(--border);border-radius:12px;overflow:hidden}.sw-c{height:64px}.sw-b{padding:8px 10px}.sw-b b{display:block;font:11px var(--mono)}.sw-b small{font:9px var(--mono);color:var(--muted)}
+.trow{display:flex;align-items:baseline;gap:16px;padding:8px 0;border-bottom:1px solid var(--border)}.trow:last-child{border:0}.tl{font:9px var(--mono);color:var(--muted);width:80px;flex-shrink:0}.ts{flex:1}
+.btn{appearance:none;border:1px solid var(--strong);min-height:44px;padding:0 16px;border-radius:11px;background:var(--elevated);color:var(--text);font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}.btn.primary{background:var(--cyan);border-color:var(--cyan);color:#03110f}.btn.ghost{background:transparent;border-color:var(--border);color:var(--sub)}.btn.danger{border-color:var(--bad);color:var(--bad);background:transparent}.btn:disabled{opacity:.4}
+.ib{width:44px;height:44px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--sub);display:grid;place-items:center;cursor:pointer;font-size:18px;position:relative}.ib .d{position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+.ans{display:flex;align-items:center;gap:8px;min-height:44px;width:100%;border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:6px 10px;font-size:13px;margin-bottom:6px}.ans-l{width:28px;height:28px;border:1px solid var(--strong);border-radius:7px;display:grid;place-items:center;color:var(--cyan);font:700 11px var(--mono);flex-shrink:0}.ans.sel{border:2px solid var(--cyan);background:var(--hover)}.ans.ok{border-color:var(--good);background:rgba(59,222,138,.08)}.ans.ok .ans-l{color:var(--good);border-color:var(--good)}.ans.no{border-color:var(--bad);background:rgba(255,89,109,.08)}.ans.no .ans-l{color:var(--bad);border-color:var(--bad)}
+.sk{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:360px}.sk-c{height:58px;padding:5px 4px;border:1px solid var(--border);border-radius:9px;background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center}.sk-i{width:26px;height:26px;border-radius:7px;background:rgba(49,214,196,.1);display:grid;place-items:center;color:var(--cyan);font-size:14px}.sk-n{font:700 8px var(--mono);color:var(--sub)}.sk-c.sel{border:2px solid var(--cyan);background:var(--hover)}.sk-c.m{border-color:rgba(59,222,138,.4)}.sk-c.m .sk-i{background:rgba(59,222,138,.1);color:var(--good)}.sk-c.l{opacity:.35}
+.nav{height:64px;display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:12px;overflow:hidden;max-width:390px}.nav-i{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--muted);font:8px var(--mono);background:var(--elevated);padding:8px 0;position:relative}.nav-i svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5}.nav-i.a{color:var(--cyan)}.nav-i.a::before{content:"";position:absolute;top:0;width:24px;height:2px;background:var(--cyan);border-radius:0 0 2px 2px}
+.tb{height:56px;display:flex;align-items:center;gap:10px;padding:0 14px;border:1px solid var(--border);border-radius:12px;background:var(--elevated);max-width:390px}.tb-s{width:34px;height:34px;border-radius:50%;border:1px solid var(--cyan);display:grid;place-items:center;color:var(--cyan);font:700 11px var(--mono);flex-shrink:0}.tb-x{flex:1;min-width:0}.tb-xl{display:flex;justify-content:space-between;color:var(--muted);font:9px var(--mono);margin-bottom:2px}.tb-xb{height:4px;background:var(--inset);border-radius:99px;overflow:hidden;border:1px solid var(--border)}.tb-xb>i{display:block;height:100%;width:68%;background:var(--cyan);border-radius:99px}.tb-c{font:700 11px var(--mono);color:var(--sub);white-space:nowrap}
+.brw{border:1px solid var(--strong);border-radius:12px;overflow:hidden;background:var(--inset);max-width:360px}.brw-h{display:flex;align-items:center;gap:6px;height:30px;padding:0 10px;background:var(--elevated);border-bottom:1px solid var(--border)}.brw-d{display:flex;gap:3px}.brw-d i{width:5px;height:5px;border-radius:50%;background:var(--muted)}.brw-a{flex:1;color:var(--muted);font:8px var(--mono)}.brw-s{font:7px var(--mono);color:var(--good);border:1px solid rgba(59,222,138,.3);padding:1px 5px;border-radius:3px}.brw-t{display:flex;border-bottom:1px solid var(--border)}.brw-ti{height:36px;flex:1;border:0;border-right:1px solid var(--border);background:var(--surface);color:var(--muted);font:9px var(--mono);display:flex;align-items:center;justify-content:center}.brw-ti:last-child{border-right:0}.brw-ti.a{color:var(--cyan);background:var(--hover);box-shadow:inset 0 -2px var(--cyan)}.brw-ti.l{opacity:.4}.brw-p{height:100px;background:linear-gradient(rgba(80,200,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(80,200,255,.05) 1px,transparent 1px);background-size:28px 28px}
+.qp{padding:10px 14px;background:var(--paper);color:var(--ink);border-radius:10px;border-left:4px solid var(--cyan);max-width:360px}.qp .k{font:700 9px var(--mono);color:rgba(28,25,22,.5);letter-spacing:.1em}.qp h3{color:var(--ink);font-size:14px;margin-top:3px;text-transform:none;letter-spacing:0}
+.thr{padding:7px 12px;border:1px dashed var(--strong);background:var(--surface);border-radius:10px;display:flex;align-items:center;gap:8px;max-width:360px;margin-top:4px}.thr-q{width:28px;height:28px;border-radius:50%;border:1px solid var(--strong);display:grid;place-items:center;color:var(--cyan);font:700 15px var(--mono);flex-shrink:0}.thr-t{font:9px var(--mono);color:var(--muted)}.thr-t b{display:block;color:var(--sub);font-size:10px}
+.bg{display:inline-flex;align-items:center;height:22px;padding:0 8px;border:1px solid var(--border);border-radius:99px;color:var(--sub);font:9px var(--mono)}.bg.c{border-color:var(--cyan);color:var(--cyan)}.bg.g{border-color:var(--good);color:var(--good)}.bg.w{border-color:var(--warn);color:var(--warn)}.bg.b{border-color:var(--bad);color:var(--bad)}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:400px}.sg-i{border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:10px;text-align:center}.sg-i b{display:block;font:10px var(--mono);margin-bottom:4px}.sg-i small{font:8px var(--mono);color:var(--muted)}
+.dg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:400px}.dg-i{border:1px solid var(--border);border-radius:10px;padding:10px;display:flex;align-items:center;gap:8px}.dg-d{width:16px;height:16px;border-radius:50%;flex-shrink:0}.dg-i b{font:10px var(--mono)}.dg-i small{font:8px var(--mono);color:var(--muted);display:block}
+.sp-r{display:flex;align-items:end;gap:4px;margin:8px 0}.sp-b{background:var(--cyan);border-radius:2px;opacity:.6}.sp-l{font:9px var(--mono);color:var(--muted);margin-top:4px;text-align:center}
+.mr{display:flex;align-items:center;gap:12px;padding:6px 0;border-bottom:1px solid var(--border)}.mr:last-child{border:0}.mn{font:11px var(--mono);color:var(--text);width:120px;flex-shrink:0}.mv{font:10px var(--mono);color:var(--muted)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<h1>Signal Arena — Terminal Design System</h1>
+<div class="sub">v1.0.0 · Phaser 4.2.1 · TypeScript · Vite · Mobile-first · RU-first · PWA-ready</div>
+<h2>1 · Color</h2>
+<h4>Core</h4><div class="row">
+<div class="sw"><div class="sw-c" style="background:#070B14"></div><div class="sw-b"><b>bg</b><small>#070B14</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#060A12"></div><div class="sw-b"><b>inset</b><small>#060A12</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#0C1323"></div><div class="sw-b"><b>surface</b><small>#0C1323</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#111B2E"></div><div class="sw-b"><b>elevated</b><small>#111B2E</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#14223A"></div><div class="sw-b"><b>hover</b><small>#14223A</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#22304A"></div><div class="sw-b"><b>border</b><small>#22304A</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#344563"></div><div class="sw-b"><b>strong</b><small>#344563</small></div></div>
+</div>
+<h4>Text</h4><div class="row">
+<div class="sw"><div class="sw-c" style="background:#E9F2FF"></div><div class="sw-b"><b>text</b><small>#E9F2FF</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#93A3BC"></div><div class="sw-b"><b>sub</b><small>#93A3BC</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#62708A"></div><div class="sw-b"><b>muted</b><small>#62708A</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#46536A"></div><div class="sw-b"><b>disabled</b><small>#46536A</small></div></div>
+</div>
+<h4>Semantic</h4><div class="row">
+<div class="sw"><div class="sw-c" style="background:#31D6C4"></div><div class="sw-b"><b>primary</b><small>#31D6C4</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#3BDE8A"></div><div class="sw-b"><b>good</b><small>#3BDE8A</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#FF596D"></div><div class="sw-b"><b>bad</b><small>#FF596D</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#FFB341"></div><div class="sw-b"><b>warn</b><small>#FFB341</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#59A7FF"></div><div class="sw-b"><b>info</b><small>#59A7FF</small></div></div>
+</div>
+<h4>Paper</h4><div class="row">
+<div class="sw"><div class="sw-c" style="background:#E7DFD0"></div><div class="sw-b"><b>paper</b><small>#E7DFD0</small></div></div>
+<div class="sw"><div class="sw-c" style="background:#1C1916"></div><div class="sw-b"><b>ink</b><small>#1C1916</small></div></div>
+</div>
+<h4>Domain</h4><div class="dg">
+<div class="dg-i"><div class="dg-d" style="background:#50C8FF"></div><div><b>technical</b><small>#50C8FF</small></div></div>
+<div class="dg-i"><div class="dg-d" style="background:#FF5C70"></div><div><b>risk</b><small>#FF5C70</small></div></div>
+<div class="dg-i"><div class="dg-d" style="background:#F4B84B"></div><div><b>context</b><small>#F4B84B</small></div></div>
+<div class="dg-i"><div class="dg-d" style="background:#B783FF"></div><div><b>crypto</b><small>#B783FF</small></div></div>
+<div class="dg-i"><div class="dg-d" style="background:#FF77BD"></div><div><b>human</b><small>#FF77BD</small></div></div>
+<div class="dg-i"><div class="dg-d" style="background:#9CA8FF"></div><div><b>cognitive</b><small>#9CA8FF</small></div></div>
+</div>
+<h2>2 · Typography</h2>
+<div class="card">
+<div class="trow"><span class="tl">display</span><span class="ts" style="font:700 32px/1.2 var(--ui);letter-spacing:-.02em">Signal Arena</span></div>
+<div class="trow"><span class="tl">h2</span><span class="ts" style="font:700 24px/1.3 var(--ui)">Заголовок раздела</span></div>
+<div class="trow"><span class="tl">h3</span><span class="ts" style="font:700 18px var(--ui)">Подзаголовок</span></div>
+<div class="trow"><span class="tl">body</span><span class="ts" style="font:400 14px/1.5 var(--ui)">Основной текст интерфейса. Inter — UI семейство.</span></div>
+<div class="trow"><span class="tl">label</span><span class="ts" style="font:700 11px/1.4 var(--mono);letter-spacing:.06em">СИСТЕМНАЯ МЕТКА</span></div>
+<div class="trow"><span class="tl">mono</span><span class="ts" style="font:400 14px var(--mono)">IBM Plex Mono — код, данные, метки</span></div>
+</div>
+<h2>3 · Spacing &amp; Radius</h2>
+<h4>Spacing scale: 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64</h4>
+<div class="sp-r">
+<div style="text-align:center"><div class="sp-b" style="width:4px;height:8px"></div><div class="sp-l">4</div></div>
+<div style="text-align:center"><div class="sp-b" style="width:8px;height:16px"></div><div class="sp-l">8</div></div>
+<div style="text-align:center"><div class="sp-b" style="width:12px;height:24px"></div><div class="sp-l">12</div></div>
+<div style="text-align:center"><div class="sp-b" style="width:16px;height:32px"></div><div class="sp-l">16</div></div>
+<div style="text-align:center"><div class="sp-b" style="width:24px;height:48px"></div><div class="sp-l">24</div></div>
+<div style="text-align:center"><div class="sp-b" style="width:32px;height:64px"></div><div class="sp-l">32</div></div>
+<div style="text-align:center"><div class="sp-b" style="width:48px;height:96px"></div><div class="sp-l">48</div></div>
+<div style="text-align:center"><div class="sp-b" style="width:64px;height:128px"></div><div class="sp-l">64</div></div>
+</div>
+<h4>Radius: 8px control · 12px component · 16px surface</h4>
+<div class="row">
+<div class="card" style="border-radius:8px;text-align:center;width:100px"><b style="font:11px var(--mono)">8px</b><br><small style="font:9px var(--mono);color:var(--muted)">control</small></div>
+<div class="card" style="border-radius:12px;text-align:center;width:100px"><b style="font:11px var(--mono)">12px</b><br><small style="font:9px var(--mono);color:var(--muted)">component</small></div>
+<div class="card" style="border-radius:16px;text-align:center;width:100px"><b style="font:11px var(--mono)">16px</b><br><small style="font:9px var(--mono);color:var(--muted)">surface</small></div>
+</div>
+<h2>4 · Controls</h2>
+<h4>Buttons</h4><div class="row">
+<button class="btn primary">Primary CTA</button>
+<button class="btn">Secondary</button>
+<button class="btn ghost">Ghost</button>
+<button class="btn danger">Danger</button>
+<button class="btn" disabled>Disabled</button>
+</div>
+<h4>Icon buttons</h4><div class="row">
+<button class="ib">⌁<span class="d"></span></button>
+<button class="ib">⚙</button>
+<button class="ib">❓</button>
+<button class="ib">←</button>
+</div>
+<h4>Badges</h4><div class="row">
+<span class="bg c">ACTIVE</span>
+<span class="bg g">ГОТОВО</span>
+<span class="bg w">ВНИМАНИЕ</span>
+<span class="bg b">ОШИБКА</span>
+<span class="bg">DEFAULT</span>
+</div>
+<h2>5 · Arena Components</h2>
+<h4>Question paper</h4>
+<div class="qp"><div class="k">СИТУАЦИЯ · ENCOUNTER 04</div><h3>Цена пробила уровень. Объём отказывается подписывать признание.</h3></div>
+<h4>Unknown threat</h4>
+<div class="thr"><div class="thr-q">?</div><div class="thr-t"><b>UNKNOWN THREAT</b>Враг раскроется после решения</div></div>
+<h4>Browser widget</h4>
+<div class="brw">
+<div class="brw-h"><span class="brw-d"><i></i><i></i><i></i></span><span class="brw-a">arena://sandbox/encounter-04</span><span class="brw-s">SAFE</span></div>
+<div class="brw-t"><button class="brw-ti a">▥ CHART</button><button class="brw-ti">▤ NEWS</button><button class="brw-ti">≋ BOOK</button><button class="brw-ti l">◇</button></div>
+<div class="brw-p"></div>
+</div>
+<h4>Skill cards</h4>
+<div class="sk">
+<div class="sk-c"><div class="sk-i">↗</div><div class="sk-n">ТРЕНД</div></div>
+<div class="sk-c sel"><div class="sk-i">▥</div><div class="sk-n">ОБЪЁМ</div></div>
+<div class="sk-c m"><div class="sk-i">◈</div><div class="sk-n">РИСК</div></div>
+<div class="sk-c l"><div class="sk-i">◷</div><div class="sk-n">ЖДАТЬ</div></div>
+</div>
+<h4>Answer options</h4>
+<div style="max-width:360px">
+<div class="ans"><span class="ans-l">A</span>Войти сразу — движение уже началось</div>
+<div class="ans sel"><span class="ans-l">B</span>Подождать ретест и подтверждение объёмом</div>
+<div class="ans ok"><span class="ans-l">C</span>Снизить риск, проверить старшие таймфреймы</div>
+<div class="ans no"><span class="ans-l">D</span>Увеличить позицию — сигнал сильный</div>
+</div>
+<h2>6 · Persistent Chrome</h2>
+<h4>TopBar (56px)</h4>
+<div class="tb"><div class="tb-s">L4</div><div class="tb-x"><div class="tb-xl"><span>УРОВЕНЬ 4</span><span>680 / 1000</span></div><div class="tb-xb"><i></i></div></div><div class="tb-c">◉ 1240</div><button class="ib">⌁<span class="d"></span></button><button class="ib">⚙</button></div>
+<h4>BottomNav (64px) — 4 equal items</h4>
+<div class="nav">
+<div class="nav-i a"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>ACADEMY</div>
+<div class="nav-i"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 4-3.5 7-8 9-4.5-2-8-5-8-9V7l8-4z"/></svg>ARENA</div>
+<div class="nav-i"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>COLLECTION</div>
+<div class="nav-i"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>MORE</div>
+</div>
+<h2>7 · Motion</h2>
+<div class="card">
+<div class="mr"><span class="mn">input</span><span class="mv">80 ms · Cubic.Out</span></div>
+<div class="mr"><span class="mn">fast</span><span class="mv">120 ms · Cubic.Out</span></div>
+<div class="mr"><span class="mn">normal</span><span class="mv">220 ms · Cubic.InOut</span></div>
+<div class="mr"><span class="mn">slow</span><span class="mv">420 ms · Cubic.InOut</span></div>
+<div class="mr"><span class="mn">dramatic max</span><span class="mv">700 ms · enemy reveal only</span></div>
+<div class="mr"><span class="mn">reduced-motion</span><span class="mv">mandatory fallback · static reveal</span></div>
+</div>
+<h2>8 · States</h2>
+<div class="sg">
+<div class="sg-i"><b>default</b><small>базовое</small></div>
+<div class="sg-i"><b>pressed</b><small>нажатие</small></div>
+<div class="sg-i"><b>selected</b><small>выбран</small></div>
+<div class="sg-i"><b>disabled</b><small>недоступен</small></div>
+<div class="sg-i"><b>locked</b><small>заблокирован</small></div>
+<div class="sg-i"><b>loading</b><small>загрузка</small></div>
+<div class="sg-i" style="border-color:var(--good)"><b style="color:var(--good)">correct</b><small>верный ответ</small></div>
+<div class="sg-i" style="border-color:var(--bad)"><b style="color:var(--bad)">incorrect</b><small>неверный ответ</small></div>
+<div class="sg-i" style="border-color:rgba(59,222,138,.3)"><b style="color:var(--good)">completed</b><small>завершён</small></div>
+</div>
+<h2>9 · Rules</h2>
+<div class="card" style="font:12px/1.6 var(--mono);color:var(--sub)">
+<b style="color:var(--text)">Canonical constraints:</b><br>
+• BottomNav: 4 equal items, no enlarged center<br>
+• Browser Widget: largest Arena object, 1–7 source tabs<br>
+• Answer options: exactly 4, equal visual weight<br>
+• Skill cards: max 4 compact, no combat power<br>
+• Enemy hidden until decision — ? / UNKNOWN THREAT<br>
+• No HP bar, FOMO meter, Attention Points, fake P&L<br>
+• No pay-to-win: boosters, XP accelerators, skill power<br>
+• Skin changes chrome only — never enemy/card master art<br>
+• Reduced motion is mandatory, not optional<br>
+• Touch minimum: 44×44 px · TopBar: 56px · BottomNav: 64px<br>
+• Mobile design: 390×844 px · RU-first, i18n from day one<br>
+• Raw hex values outside tokens: forbidden<br>
+</div>
+<h2>10 · Iconography</h2>
+<p style="font:11px/1.5 var(--mono);color:var(--sub);margin-bottom:12px">One stroke family · 24×24 viewBox · stroke=currentColor · stroke-width=1.5 · round caps/joins · <code>assets/icons.svg</code></p>
+<div class="sg" style="grid-template-columns:repeat(6,1fr);gap:8px">
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg><small>nav-academy</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 4-3.5 7-8 9-4.5-2-8-5-8-9V7l8-4z"/></svg><small>nav-arena</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><small>nav-collection</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg><small>nav-more</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><small>act-back</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M6 18L18 6"/></svg><small>act-close</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg><small>act-settings</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg><small>act-search</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><small>act-lock</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--good)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg><small>act-check</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l10 16H2z"/><path d="M12 10v4M12 17v.5"/></svg><small>act-alert</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><small>chevron-right</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg><small>chevron-down</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></svg><small>act-archive</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 4v4h-4M21 12a9 9 0 0 1-15 6.7L3 16M3 20v-4h4"/></svg><small>act-refresh</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg><small>act-plus</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/></svg><small>act-coin</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c0 4-5 5-5 10a5 5 0 0 0 10 0c0-3-2-4-2-7 0 0-3 1-3-3z"/></svg><small>act-flame</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v6a5 5 0 0 1-10 0z"/><path d="M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3M9 16h6M10 20h4M12 16v4"/></svg><small>act-trophy</small></div>
+</div>
+
+<h3 style="font:700 12px var(--mono);color:var(--muted);margin:16px 0 8px;letter-spacing:.08em">SOURCES</h3>
+<div class="sg" style="grid-template-columns:repeat(6,1fr);gap:8px">
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5M4 15v5M12 3v7M12 17v4M20 7v4M20 16v4"/><path d="M2 9h4M10 3h4M18 7h4M2 15h4M10 17h4M18 16h4"/></svg><small>src-chart</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><small>src-news</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h2v12H4zM8 5h2v6H8zM8 13h2v6H8zM12 7h2v10h-2zM16 5h2v7h-2zM16 14h2v5h-2zM20 8h0v8"/></svg><small>src-orderbook</small></div>
+</div>
+
+<h3 style="font:700 12px var(--mono);color:var(--muted);margin:16px 0 8px;letter-spacing:.08em">DOMAINS</h3>
+<div class="sg" style="grid-template-columns:repeat(6,1fr);gap:8px">
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px;border-color:rgba(80,200,255,.3)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#50C8FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 4 8-9"/><path d="M3 21h18"/></svg><small style="color:#50C8FF">technical</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px;border-color:rgba(255,92,112,.3)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5C70" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 4-3.5 7-8 9-4.5-2-8-5-8-9V7l8-4z"/><path d="M12 9v4M12 16v.5"/></svg><small style="color:#FF5C70">risk</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px;border-color:rgba(244,184,75,.3)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F4B84B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg><small style="color:#F4B84B">context</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px;border-color:rgba(183,131,255,.3)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B783FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M9 10v4M9 10l4-1v2M13 9l4-1v2M9 14l4-1v2M13 13l4-1v2"/></svg><small style="color:#B783FF">crypto</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px;border-color:rgba(255,119,189,.3)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF77BD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg><small style="color:#FF77BD">human</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px;border-color:rgba(156,168,255,.3)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA8FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6a3 3 0 0 0-3 3v1a3 3 0 0 0-1 5 3 3 0 0 0 2 4 3 3 0 0 0 5 1V6a3 3 0 0 0-3 0z"/><path d="M15 6a3 3 0 0 1 3 3v1a3 3 0 0 1 1 5 3 3 0 0 1-2 4 3 3 0 0 1-5 1V6a3 3 0 0 1 3 0z"/></svg><small style="color:#9CA8FF">cognitive</small></div>
+</div>
+
+<h3 style="font:700 12px var(--mono);color:var(--muted);margin:16px 0 8px;letter-spacing:.08em">ENEMY / RARITY</h3>
+<div class="sg" style="grid-template-columns:repeat(6,1fr);gap:8px">
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 0 1 5 2c0 2-3 2-3 4M12 17v.5"/></svg><small>unknown</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3 0-5 2-5 5v3l-2 2v3h14v-3l-2-2V8c0-3-2-5-5-5z"/><path d="M10 18v1a2 2 0 0 0 4 0v-1"/></svg><small>revealed</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--good)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3 0-5 2-5 5v3l-2 2v3h14v-3l-2-2V8c0-3-2-5-5-5z"/><path d="M9 11l2 2-2 2M15 11l-2 2 2 2"/></svg><small>defeated</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="var(--muted)" stroke="none"><circle cx="12" cy="12" r="5"/></svg><small>common</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#50C8FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg><small style="color:#50C8FF">rare</small></div>
+<div class="sg-i" style="flex-direction:column;gap:6px;padding:10px 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B783FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg><small style="color:#B783FF">epic</small></div>
+</div>
+
+<h2>11 · Skill Card Metaphors</h2>
+<p style="font:11px/1.5 var(--mono);color:var(--sub);margin-bottom:12px">48×48 viewBox · stroke + fill · domain-colored · <code>assets/skill-cards.svg</code> · canon: «в бою используется SVG-метафора»</p>
+<div class="sg" style="grid-template-columns:repeat(3,1fr);gap:12px">
+<div class="sg-i" style="flex-direction:column;gap:8px;padding:14px;align-items:center"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#50C8FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 36l8-8 6 5 14-16"/><path d="M28 17h6v6"/><path d="M10 30v6M18 24v6M30 18v6" stroke-width="2" opacity="0.4"/></svg><b style="font:700 11px var(--mono);color:#50C8FF">ТРЕНД</b><small>technical</small></div>
+<div class="sg-i" style="flex-direction:column;gap:8px;padding:14px;align-items:center"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#50C8FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="28" width="6" height="12" rx="1"/><rect x="18" y="18" width="6" height="22" rx="1"/><rect x="28" y="22" width="6" height="18" rx="1"/><rect x="38" y="14" width="6" height="26" rx="1" opacity="0.5"/><path d="M6 14h36" stroke-width="1.5" opacity="0.3"/></svg><b style="font:700 11px var(--mono);color:#50C8FF">ОБЪЁМ</b><small>technical</small></div>
+<div class="sg-i" style="flex-direction:column;gap:8px;padding:14px;align-items:center"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#FF5C70" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6l14 7v9c0 7-6 13-14 16-8-3-14-9-14-16v-9z"/><path d="M24 18l8 12H16z" stroke-width="2"/><path d="M24 23v4M24 29v.5" stroke-width="2"/></svg><b style="font:700 11px var(--mono);color:#FF5C70">РИСК</b><small>risk</small></div>
+<div class="sg-i" style="flex-direction:column;gap:8px;padding:14px;align-items:center"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#9CA8FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="16"/><path d="M24 14v10l7 5"/><path d="M18 8l-4-3M30 8l4-3" stroke-width="2" opacity="0.5"/></svg><b style="font:700 11px var(--mono);color:#9CA8FF">ЖДАТЬ</b><small>cognitive</small></div>
+<div class="sg-i" style="flex-direction:column;gap:8px;padding:14px;align-items:center"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#F4B84B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="30" height="28" rx="2"/><path d="M14 14h18M14 19h18M14 24h12M14 29h8" stroke-width="2"/><path d="M38 14l4 2v22l-4-2z" stroke-width="2" opacity="0.5"/></svg><b style="font:700 11px var(--mono);color:#F4B84B">НОВОСТИ</b><small>context</small></div>
+<div class="sg-i" style="flex-direction:column;gap:8px;padding:14px;align-items:center"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#50C8FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="10" width="14" height="5" rx="1"/><rect x="6" y="17" width="10" height="5" rx="1" opacity="0.6"/><rect x="6" y="24" width="7" height="5" rx="1" opacity="0.4"/><rect x="28" y="10" width="14" height="5" rx="1" opacity="0.4"/><rect x="32" y="17" width="10" height="5" rx="1" opacity="0.6"/><rect x="35" y="24" width="7" height="5" rx="1"/><path d="M6 32h36" stroke-width="1.5" opacity="0.3"/></svg><b style="font:700 11px var(--mono);color:#50C8FF">СТАКАН</b><small>technical</small></div>
+<div class="sg-i" style="flex-direction:column;gap:8px;padding:14px;align-items:center;opacity:.5"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#50C8FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 40c0-20 8-28 32-28"/><path d="M8 32h36M8 24h36M8 16h36" stroke-width="1.5" opacity="0.4" stroke-dasharray="3 3"/><path d="M14 40V8M22 40V12M30 40V16M38 40V20" stroke-width="2" opacity="0.5"/></svg><b style="font:700 11px var(--mono);color:#50C8FF">ФИБО</b><small>locked</small></div>
+<div class="sg-i" style="flex-direction:column;gap:8px;padding:14px;align-items:center;opacity:.5"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#50C8FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30c8-2 12-8 16-14M8 34c8 2 12 8 16 14"/><path d="M24 16l4-4M24 34l4 4" stroke-width="2"/><path d="M6 32h36" stroke-width="1.5" opacity="0.3"/></svg><b style="font:700 11px var(--mono);color:#50C8FF">DIVERGENCE</b><small>locked</small></div>
+<div class="sg-i" style="flex-direction:column;gap:8px;padding:14px;align-items:center;opacity:.5"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#50C8FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20c4-4 8-4 12 0s8 4 12 0 8-4 12 0"/><path d="M6 28c4-4 8-4 12 0s8 4 12 0 8-4 12 0" opacity="0.6"/><path d="M6 36c4-4 8-4 12 0s8 4 12 0 8-4 12 0" opacity="0.3"/><circle cx="24" cy="12" r="3" stroke-width="2"/></svg><b style="font:700 11px var(--mono);color:#50C8FF">LIQUIDITY</b><small>locked</small></div>
+</div>
+
+</body></html>

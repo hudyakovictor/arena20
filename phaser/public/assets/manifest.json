@@ -1,0 +1,958 @@
+{
+  "schema": "signal-arena-assets/1",
+  "generated": "2026-09-03T23:57:47.452Z",
+  "sizes": {
+    "master": 1500,
+    "safeZonePct": 15,
+    "avatarCircle": 400,
+    "card": 900,
+    "trophy": 1000,
+    "banner": 1500,
+    "popupV": 1080,
+    "headerIcon": 96,
+    "placeholder": 512
+  },
+  "enemies": [
+    {
+      "id": "E01",
+      "name": "Wick Mimic",
+      "domain": "technical",
+      "rankDanger": 1,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E01_s1.svg",
+        "render/enemies/E01_s2.svg",
+        "render/enemies/E01_s3.svg",
+        "render/enemies/E01_s4.svg"
+      ],
+      "icon": "render/enemies/E01_icon.svg",
+      "avatar": "render/enemies/E01_avatar.svg"
+    },
+    {
+      "id": "E02",
+      "name": "Fake Breakout Phantom",
+      "domain": "technical",
+      "rankDanger": 1,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E02_s1.svg",
+        "render/enemies/E02_s2.svg",
+        "render/enemies/E02_s3.svg",
+        "render/enemies/E02_s4.svg"
+      ],
+      "icon": "render/enemies/E02_icon.svg",
+      "avatar": "render/enemies/E02_avatar.svg"
+    },
+    {
+      "id": "E03",
+      "name": "Indicator Cult",
+      "domain": "technical",
+      "rankDanger": 1,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E03_s1.svg",
+        "render/enemies/E03_s2.svg",
+        "render/enemies/E03_s3.svg",
+        "render/enemies/E03_s4.svg"
+      ],
+      "icon": "render/enemies/E03_icon.svg",
+      "avatar": "render/enemies/E03_avatar.svg"
+    },
+    {
+      "id": "E04",
+      "name": "Leverage Goblin",
+      "domain": "risk",
+      "rankDanger": 1,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E04_s1.svg",
+        "render/enemies/E04_s2.svg",
+        "render/enemies/E04_s3.svg",
+        "render/enemies/E04_s4.svg"
+      ],
+      "icon": "render/enemies/E04_icon.svg",
+      "avatar": "render/enemies/E04_avatar.svg"
+    },
+    {
+      "id": "E05",
+      "name": "FOMO Wraith",
+      "domain": "human",
+      "rankDanger": 1,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E05_s1.svg",
+        "render/enemies/E05_s2.svg",
+        "render/enemies/E05_s3.svg",
+        "render/enemies/E05_s4.svg"
+      ],
+      "icon": "render/enemies/E05_icon.svg",
+      "avatar": "render/enemies/E05_avatar.svg"
+    },
+    {
+      "id": "E06",
+      "name": "Loss Aversion Wraith",
+      "domain": "human",
+      "rankDanger": 1,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E06_s1.svg",
+        "render/enemies/E06_s2.svg",
+        "render/enemies/E06_s3.svg",
+        "render/enemies/E06_s4.svg"
+      ],
+      "icon": "render/enemies/E06_icon.svg",
+      "avatar": "render/enemies/E06_avatar.svg"
+    },
+    {
+      "id": "E07",
+      "name": "Meme Mirage",
+      "domain": "technical",
+      "rankDanger": 1,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E07_s1.svg",
+        "render/enemies/E07_s2.svg",
+        "render/enemies/E07_s3.svg"
+      ],
+      "icon": "render/enemies/E07_icon.svg",
+      "avatar": "render/enemies/E07_avatar.svg"
+    },
+    {
+      "id": "E08",
+      "name": "Headline Titan",
+      "domain": "context",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E08_s1.svg",
+        "render/enemies/E08_s2.svg",
+        "render/enemies/E08_s3.svg",
+        "render/enemies/E08_s4.svg"
+      ],
+      "icon": "render/enemies/E08_icon.svg",
+      "avatar": "render/enemies/E08_avatar.svg"
+    },
+    {
+      "id": "E09",
+      "name": "Revenge Wraith",
+      "domain": "human",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E09_s1.svg",
+        "render/enemies/E09_s2.svg",
+        "render/enemies/E09_s3.svg",
+        "render/enemies/E09_s4.svg"
+      ],
+      "icon": "render/enemies/E09_icon.svg",
+      "avatar": "render/enemies/E09_avatar.svg"
+    },
+    {
+      "id": "E10",
+      "name": "Dopamine Imp",
+      "domain": "human",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E10_s1.svg",
+        "render/enemies/E10_s2.svg",
+        "render/enemies/E10_s3.svg",
+        "render/enemies/E10_s4.svg"
+      ],
+      "icon": "render/enemies/E10_icon.svg",
+      "avatar": "render/enemies/E10_avatar.svg"
+    },
+    {
+      "id": "E11",
+      "name": "Unlock Titan",
+      "domain": "crypto",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E11_s1.svg",
+        "render/enemies/E11_s2.svg",
+        "render/enemies/E11_s3.svg"
+      ],
+      "icon": "render/enemies/E11_icon.svg",
+      "avatar": "render/enemies/E11_avatar.svg"
+    },
+    {
+      "id": "E12",
+      "name": "Token Parasite",
+      "domain": "crypto",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E12_s1.svg",
+        "render/enemies/E12_s2.svg",
+        "render/enemies/E12_s3.svg"
+      ],
+      "icon": "render/enemies/E12_icon.svg",
+      "avatar": "render/enemies/E12_avatar.svg"
+    },
+    {
+      "id": "E13",
+      "name": "Rug Pull Phantom",
+      "domain": "crypto",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E13_s1.svg",
+        "render/enemies/E13_s2.svg",
+        "render/enemies/E13_s3.svg",
+        "render/enemies/E13_s4.svg"
+      ],
+      "icon": "render/enemies/E13_icon.svg",
+      "avatar": "render/enemies/E13_avatar.svg"
+    },
+    {
+      "id": "E14",
+      "name": "Honeypot Mimic",
+      "domain": "crypto",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E14_s1.svg",
+        "render/enemies/E14_s2.svg",
+        "render/enemies/E14_s3.svg"
+      ],
+      "icon": "render/enemies/E14_icon.svg",
+      "avatar": "render/enemies/E14_avatar.svg"
+    },
+    {
+      "id": "E15",
+      "name": "Approval Leech",
+      "domain": "crypto",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E15_s1.svg",
+        "render/enemies/E15_s2.svg",
+        "render/enemies/E15_s3.svg"
+      ],
+      "icon": "render/enemies/E15_icon.svg",
+      "avatar": "render/enemies/E15_avatar.svg"
+    },
+    {
+      "id": "E16",
+      "name": "Whale Syndicate",
+      "domain": "context",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E16_s1.svg",
+        "render/enemies/E16_s2.svg",
+        "render/enemies/E16_s3.svg",
+        "render/enemies/E16_s4.svg"
+      ],
+      "icon": "render/enemies/E16_icon.svg",
+      "avatar": "render/enemies/E16_avatar.svg"
+    },
+    {
+      "id": "E17",
+      "name": "Insider Syndicate",
+      "domain": "context",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E17_s1.svg",
+        "render/enemies/E17_s2.svg",
+        "render/enemies/E17_s3.svg"
+      ],
+      "icon": "render/enemies/E17_icon.svg",
+      "avatar": "render/enemies/E17_avatar.svg"
+    },
+    {
+      "id": "E18",
+      "name": "Stop-Hunt Kraken",
+      "domain": "risk",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E18_s1.svg",
+        "render/enemies/E18_s2.svg",
+        "render/enemies/E18_s3.svg",
+        "render/enemies/E18_s4.svg"
+      ],
+      "icon": "render/enemies/E18_icon.svg",
+      "avatar": "render/enemies/E18_avatar.svg"
+    },
+    {
+      "id": "E19",
+      "name": "Liquidity Hydra",
+      "domain": "risk",
+      "rankDanger": 3,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E19_s1.svg",
+        "render/enemies/E19_s2.svg",
+        "render/enemies/E19_s3.svg",
+        "render/enemies/E19_s4.svg"
+      ],
+      "icon": "render/enemies/E19_icon.svg",
+      "avatar": "render/enemies/E19_avatar.svg"
+    },
+    {
+      "id": "E20",
+      "name": "Narrative Siren",
+      "domain": "human",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E20_s1.svg",
+        "render/enemies/E20_s2.svg",
+        "render/enemies/E20_s3.svg"
+      ],
+      "icon": "render/enemies/E20_icon.svg",
+      "avatar": "render/enemies/E20_avatar.svg"
+    },
+    {
+      "id": "E21",
+      "name": "Confirmation Bias Cult",
+      "domain": "cognitive",
+      "rankDanger": 2,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E21_s1.svg",
+        "render/enemies/E21_s2.svg",
+        "render/enemies/E21_s3.svg",
+        "render/enemies/E21_s4.svg"
+      ],
+      "icon": "render/enemies/E21_icon.svg",
+      "avatar": "render/enemies/E21_avatar.svg"
+    },
+    {
+      "id": "E22",
+      "name": "Routine Rot",
+      "domain": "human",
+      "rankDanger": 3,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E22_s1.svg",
+        "render/enemies/E22_s2.svg",
+        "render/enemies/E22_s3.svg"
+      ],
+      "icon": "render/enemies/E22_icon.svg",
+      "avatar": "render/enemies/E22_avatar.svg"
+    },
+    {
+      "id": "E23",
+      "name": "Paper-Hands Poltergeist",
+      "domain": "human",
+      "rankDanger": 3,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E23_s1.svg",
+        "render/enemies/E23_s2.svg",
+        "render/enemies/E23_s3.svg"
+      ],
+      "icon": "render/enemies/E23_icon.svg",
+      "avatar": "render/enemies/E23_avatar.svg"
+    },
+    {
+      "id": "E24",
+      "name": "Slippage Slime",
+      "domain": "risk",
+      "rankDanger": 3,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E24_s1.svg",
+        "render/enemies/E24_s2.svg",
+        "render/enemies/E24_s3.svg"
+      ],
+      "icon": "render/enemies/E24_icon.svg",
+      "avatar": "render/enemies/E24_avatar.svg"
+    },
+    {
+      "id": "E25",
+      "name": "Correlation Spider",
+      "domain": "context",
+      "rankDanger": 3,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E25_s1.svg",
+        "render/enemies/E25_s2.svg",
+        "render/enemies/E25_s3.svg"
+      ],
+      "icon": "render/enemies/E25_icon.svg",
+      "avatar": "render/enemies/E25_avatar.svg"
+    },
+    {
+      "id": "E26",
+      "name": "Expectancy Sphinx",
+      "domain": "cognitive",
+      "rankDanger": 3,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E26_s1.svg",
+        "render/enemies/E26_s2.svg",
+        "render/enemies/E26_s3.svg"
+      ],
+      "icon": "render/enemies/E26_icon.svg",
+      "avatar": "render/enemies/E26_avatar.svg"
+    },
+    {
+      "id": "E27",
+      "name": "Anchor Golem",
+      "domain": "cognitive",
+      "rankDanger": 3,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E27_s1.svg",
+        "render/enemies/E27_s2.svg",
+        "render/enemies/E27_s3.svg"
+      ],
+      "icon": "render/enemies/E27_icon.svg",
+      "avatar": "render/enemies/E27_avatar.svg"
+    },
+    {
+      "id": "E28",
+      "name": "Yield Chimera",
+      "domain": "crypto",
+      "rankDanger": 3,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E28_s1.svg",
+        "render/enemies/E28_s2.svg",
+        "render/enemies/E28_s3.svg"
+      ],
+      "icon": "render/enemies/E28_icon.svg",
+      "avatar": "render/enemies/E28_avatar.svg"
+    },
+    {
+      "id": "E29",
+      "name": "Governance Golem",
+      "domain": "crypto",
+      "rankDanger": 3,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E29_s1.svg",
+        "render/enemies/E29_s2.svg",
+        "render/enemies/E29_s3.svg"
+      ],
+      "icon": "render/enemies/E29_icon.svg",
+      "avatar": "render/enemies/E29_avatar.svg"
+    },
+    {
+      "id": "E30",
+      "name": "Cycle Ouroboros",
+      "domain": "context",
+      "rankDanger": 3,
+      "mode": "normal",
+      "stages": [
+        1,
+        2,
+        3
+      ],
+      "files": [
+        "render/enemies/E30_s1.svg",
+        "render/enemies/E30_s2.svg",
+        "render/enemies/E30_s3.svg"
+      ],
+      "icon": "render/enemies/E30_icon.svg",
+      "avatar": "render/enemies/E30_avatar.svg"
+    },
+    {
+      "id": "E31",
+      "name": "Drawdown Leviathan",
+      "domain": "risk",
+      "rankDanger": 4,
+      "mode": "event",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E31_s1.svg",
+        "render/enemies/E31_s2.svg",
+        "render/enemies/E31_s3.svg",
+        "render/enemies/E31_s4.svg"
+      ],
+      "icon": "render/enemies/E31_icon.svg",
+      "avatar": "render/enemies/E31_avatar.svg"
+    },
+    {
+      "id": "E32",
+      "name": "Hubris Dragon",
+      "domain": "human",
+      "rankDanger": 4,
+      "mode": "event",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E32_s1.svg",
+        "render/enemies/E32_s2.svg",
+        "render/enemies/E32_s3.svg",
+        "render/enemies/E32_s4.svg"
+      ],
+      "icon": "render/enemies/E32_icon.svg",
+      "avatar": "render/enemies/E32_avatar.svg"
+    },
+    {
+      "id": "E33",
+      "name": "System Breaker",
+      "domain": "cognitive",
+      "rankDanger": 4,
+      "mode": "boss",
+      "stages": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "files": [
+        "render/enemies/E33_s1.svg",
+        "render/enemies/E33_s2.svg",
+        "render/enemies/E33_s3.svg",
+        "render/enemies/E33_s4.svg"
+      ],
+      "icon": "render/enemies/E33_icon.svg",
+      "avatar": "render/enemies/E33_avatar.svg"
+    }
+  ],
+  "cards": [
+    {
+      "id": "C1",
+      "name": "ОСНОВЫ РЫНКА",
+      "short": "РЫНОК",
+      "domain": "technical",
+      "rank": 1,
+      "file": "render/cards/C1.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C2",
+      "name": "УРОВНИ И ОБЪЁМ",
+      "short": "УРОВНИ",
+      "domain": "technical",
+      "rank": 1,
+      "file": "render/cards/C2.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C3",
+      "name": "ИНДИКАТОРЫ",
+      "short": "ИНДИК",
+      "domain": "technical",
+      "rank": 1,
+      "file": "render/cards/C3.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C4",
+      "name": "РИСК-МЕНЕДЖМЕНТ",
+      "short": "РИСК",
+      "domain": "risk",
+      "rank": 1,
+      "file": "render/cards/C4.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C5",
+      "name": "ПСИХОЛОГИЯ",
+      "short": "ПСИХО",
+      "domain": "human",
+      "rank": 1,
+      "file": "render/cards/C5.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C6",
+      "name": "НОВОСТИ И МАКРО",
+      "short": "НОВОСТИ",
+      "domain": "context",
+      "rank": 1,
+      "file": "render/cards/C6.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C7",
+      "name": "ТОКЕНОМИКА",
+      "short": "ТОКЕН",
+      "domain": "crypto",
+      "rank": 1,
+      "file": "render/cards/C7.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C8",
+      "name": "БЕЗОПАСНОСТЬ",
+      "short": "СЕЙФ",
+      "domain": "crypto",
+      "rank": 1,
+      "file": "render/cards/C8.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C9",
+      "name": "ОНЧЕЙН-АНАЛИЗ",
+      "short": "ОНЧЕЙН",
+      "domain": "context",
+      "rank": 1,
+      "file": "render/cards/C9.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C10",
+      "name": "ДЕРИВАТИВЫ",
+      "short": "ДЕ-РИВ",
+      "domain": "risk",
+      "rank": 1,
+      "file": "render/cards/C10.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C11",
+      "name": "НАРРАТИВЫ",
+      "short": "НАРРА",
+      "domain": "cognitive",
+      "rank": 1,
+      "file": "render/cards/C11.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C12",
+      "name": "ДИСЦИПЛИНА",
+      "short": "ДИСЦ",
+      "domain": "human",
+      "rank": 1,
+      "file": "render/cards/C12.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C13",
+      "name": "ИСПОЛНЕНИЕ",
+      "short": "ИСПОЛН",
+      "domain": "risk",
+      "rank": 1,
+      "file": "render/cards/C13.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C14",
+      "name": "МАТЕМАТИКА",
+      "short": "МАТ",
+      "domain": "cognitive",
+      "rank": 1,
+      "file": "render/cards/C14.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C15",
+      "name": "DeFi",
+      "short": "DeFi",
+      "domain": "crypto",
+      "rank": 1,
+      "file": "render/cards/C15.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C16",
+      "name": "ПОРТФЕЛЬ И ЦИКЛЫ",
+      "short": "ЦИКЛ",
+      "domain": "context",
+      "rank": 1,
+      "file": "render/cards/C16.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "C17",
+      "name": "ТОРГОВАЯ СИСТЕМА",
+      "short": "СИСТЕМА",
+      "domain": "cognitive",
+      "rank": 1,
+      "file": "render/cards/C17.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    },
+    {
+      "id": "Cwait",
+      "name": "ЖДАТЬ",
+      "short": "ЖДАТЬ",
+      "domain": "human",
+      "rank": 1,
+      "file": "render/cards/Cwait.svg",
+      "size": {
+        "w": 220,
+        "h": 320
+      }
+    }
+  ],
+  "icons": [
+    {
+      "id": "nav-academy",
+      "file": "render/icons/nav-academy.svg",
+      "size": 24,
+      "role": "menu"
+    },
+    {
+      "id": "nav-arena",
+      "file": "render/icons/nav-arena.svg",
+      "size": 24,
+      "role": "menu"
+    },
+    {
+      "id": "nav-collection",
+      "file": "render/icons/nav-collection.svg",
+      "size": 24,
+      "role": "menu"
+    },
+    {
+      "id": "nav-more",
+      "file": "render/icons/nav-more.svg",
+      "size": 24,
+      "role": "menu"
+    },
+    {
+      "id": "dom-technical",
+      "file": "render/icons/dom-technical.svg",
+      "size": 24,
+      "role": "domain"
+    },
+    {
+      "id": "dom-risk",
+      "file": "render/icons/dom-risk.svg",
+      "size": 24,
+      "role": "domain"
+    },
+    {
+      "id": "dom-context",
+      "file": "render/icons/dom-context.svg",
+      "size": 24,
+      "role": "domain"
+    },
+    {
+      "id": "dom-crypto",
+      "file": "render/icons/dom-crypto.svg",
+      "size": 24,
+      "role": "domain"
+    },
+    {
+      "id": "dom-human",
+      "file": "render/icons/dom-human.svg",
+      "size": 24,
+      "role": "domain"
+    },
+    {
+      "id": "dom-cognitive",
+      "file": "render/icons/dom-cognitive.svg",
+      "size": 24,
+      "role": "domain"
+    }
+  ]
+}

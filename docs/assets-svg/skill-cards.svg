@@ -1,0 +1,80 @@
+<!-- Signal Arena — Skill Card SVG Metaphors v1.0 -->
+<!-- 48x48 viewBox, stroke + fill, domain-colored via CSS var or inline -->
+<!-- Usage: <svg class="skill-ic"><use href="skill-cards.svg#trend"/></svg> -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+
+<!-- ═══ MVP CARDS (6) ═══ -->
+
+<!-- ТРЕНД — upward line with arrow + candlesticks -->
+<symbol id="trend" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M6 36l8-8 6 5 14-16"/>
+  <path d="M28 17h6v6"/>
+  <path d="M10 30v6M10 36h0M18 24v6M18 30h0M30 18v6M30 24h0" stroke-width="2" opacity="0.4"/>
+</symbol>
+
+<!-- ОБЪЁМ — vertical bars of varying heights -->
+<symbol id="volume" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="8" y="28" width="6" height="12" rx="1"/>
+  <rect x="18" y="18" width="6" height="22" rx="1"/>
+  <rect x="28" y="22" width="6" height="18" rx="1"/>
+  <rect x="38" y="14" width="6" height="26" rx="1" opacity="0.5"/>
+  <path d="M6 14h36" stroke-width="1.5" opacity="0.3"/>
+</symbol>
+
+<!-- РИСК — shield with warning triangle -->
+<symbol id="risk" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M24 6l14 7v9c0 7-6 13-14 16-8-3-14-9-14-16v-9z"/>
+  <path d="M24 18l8 12H16z" stroke-width="2"/>
+  <path d="M24 23v4M24 29v.5" stroke-width="2"/>
+</symbol>
+
+<!-- ЖДАТЬ — clock with paused hands -->
+<symbol id="wait" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="24" cy="24" r="16"/>
+  <path d="M24 14v10l7 5"/>
+  <path d="M18 8l-4-3M30 8l4-3" stroke-width="2" opacity="0.5"/>
+</symbol>
+
+<!-- НОВОСТИ — newspaper with headline -->
+<symbol id="news" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="8" y="8" width="30" height="28" rx="2"/>
+  <path d="M14 14h18M14 19h18M14 24h12M14 29h8" stroke-width="2"/>
+  <path d="M38 14l4 2v22l-4-2z" stroke-width="2" opacity="0.5"/>
+</symbol>
+
+<!-- СТАКАН — stacked order book layers -->
+<symbol id="orderbook" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="6" y="10" width="14" height="5" rx="1"/>
+  <rect x="6" y="17" width="10" height="5" rx="1" opacity="0.6"/>
+  <rect x="6" y="24" width="7" height="5" rx="1" opacity="0.4"/>
+  <rect x="28" y="10" width="14" height="5" rx="1" opacity="0.4"/>
+  <rect x="32" y="17" width="10" height="5" rx="1" opacity="0.6"/>
+  <rect x="35" y="24" width="7" height="5" rx="1"/>
+  <path d="M6 32h36" stroke-width="1.5" opacity="0.3"/>
+</symbol>
+
+<!-- ═══ LOCKED CARDS (3) ═══ -->
+
+<!-- ФИБО — fibonacci retracement levels -->
+<symbol id="fibonacci" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 40c0-20 8-28 32-28"/>
+  <path d="M8 32h36M8 24h36M8 16h36" stroke-width="1.5" opacity="0.4" stroke-dasharray="3 3"/>
+  <path d="M14 40V8M22 40V12M30 40V16M38 40V20" stroke-width="2" opacity="0.5"/>
+</symbol>
+
+<!-- DIVERGENCE — two diverging lines -->
+<symbol id="divergence" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 30c8-2 12-8 16-14M8 34c8 2 12 8 16 14"/>
+  <path d="M24 16l4-4M24 34l4 4" stroke-width="2"/>
+  <path d="M6 32h36" stroke-width="1.5" opacity="0.3"/>
+</symbol>
+
+<!-- LIQUIDITY — pool/waves -->
+<symbol id="liquidity" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M6 20c4-4 8-4 12 0s8 4 12 0 8-4 12 0"/>
+  <path d="M6 28c4-4 8-4 12 0s8 4 12 0 8-4 12 0" opacity="0.6"/>
+  <path d="M6 36c4-4 8-4 12 0s8 4 12 0 8-4 12 0" opacity="0.3"/>
+  <circle cx="24" cy="12" r="3" stroke-width="2"/>
+</symbol>
+
+</svg>

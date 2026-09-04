@@ -1,0 +1,55 @@
+{
+  "menuIcons": [
+    [
+      "nav-academy",
+      "menu",
+      "Академия"
+    ],
+    [
+      "nav-arena",
+      "menu",
+      "Арена"
+    ],
+    [
+      "nav-collection",
+      "menu",
+      "Коллекция"
+    ],
+    [
+      "nav-more",
+      "menu",
+      "Ещё"
+    ],
+    [
+      "dom-technical",
+      "domain",
+      "Тех анализ"
+    ],
+    [
+      "dom-risk",
+      "domain",
+      "Риск"
+    ],
+    [
+      "dom-context",
+      "domain",
+      "Контекст"
+    ],
+    [
+      "dom-crypto",
+      "domain",
+      "Крипто"
+    ],
+    [
+      "dom-human",
+      "domain",
+      "Человек"
+    ],
+    [
+      "dom-cognitive",
+      "domain",
+      "Когнитивное"
+    ]
+  ],
+  "friendly": true
+}
