@@ -1,3 +1,7 @@
+// Загрузка ассетов и заставка.
+// Грузим только то, что нужно для первых экранов; тяжёлые рендеры врагов
+// подтягиваются по мере надобности (аудит P3).
+
 import Phaser from 'phaser';
 import { gameState } from '../state/GameState';
 import { epochOf } from '../config/epochConfig';
@@ -6,63 +10,103 @@ import { cards } from '../data/cards';
 import {
   enemyAvatarKey, enemyAvatarUrl, enemyIconKey, enemyIconUrl,
   enemyRenderKey, enemyRenderUrl, cardKey, cardUrl, iconKey, iconUrl,
-  MENU_ICONS
+  MENU_ICONS,
 } from '../engine/assetKeys';
+import { buildPalette } from '../ui/palette';
+import { CANVAS, GUTTER, SP } from '../ui/tokens';
+import * as TX from '../ui/text';
+import { T } from '../ui/copy';
+import { progressBar } from '../ui/widgets';
+import { initFx } from '../ui/feedbackFx';
+import { initMotion } from '../ui/motion';
 
 export class BootScene extends Phaser.Scene {
-  constructor(){ super({ key: 'BootScene' }); }
+  private barFill?: Phaser.GameObjects.Graphics;
+
+  constructor() {
+    super({ key: 'BootScene' });
+  }
 
   preload(): void {
-    // ── Заглушки-рендеры врагов (SVG как база → текстура Phaser) ──
-    // Прототип грузит все 33 врага + стадии + аватары + иконки сразу (сущности всегда собраны).
-    for (const e of enemies) {
-      const n = e.id.replace('E', '');
-      // мастер рендера по стадиям
-      for (const s of e.stages) {
-        this.load.svg(enemyRenderKey(e.id, s.stage), enemyRenderUrl(e.id, s.stage), { width: 512, height: 512 });
-      }
-      // аватар (круглый кроп 400) + icon (моно-силуэт 96)
-      this.load.svg(enemyAvatarKey(e.id), enemyAvatarUrl(e.id), { width: 400, height: 400 });
-      this.load.svg(enemyIconKey(e.id), enemyIconUrl(e.id), { width: 96, height: 96 });
-    }
-    // ── Карты навыков ──
-    for (const c of cards) {
-      this.load.svg(cardKey(c.id), cardUrl(c.id), { width: 220, height: 320 });
-    }
-    // карта ЖДАТЬ (M10)
-    this.load.svg(cardKey('Cwait'), cardUrl('Cwait'), { width: 220, height: 320 });
-    // ── Иконки меню / доменов ──
+    const p = buildPalette(gameState.progress.epoch);
+    // Индикатор загрузки — вместо пустого экрана
+    const w = CANVAS.w - GUTTER * 2;
+    const barY = CANVAS.h / 2 + 60;
+    progressBar(this, GUTTER, barY, w, 6, 0, p.accentN, p);
+    this.barFill = this.add.graphics();
+    this.load.on('progress', (v: number) => {
+      this.barFill?.clear();
+      this.barFill?.fillStyle(p.accentN, 1);
+      this.barFill?.fillRoundedRect(GUTTER, barY, Math.max(6, w * v), 6, 3);
+    });
+
+    // Иконки интерфейса — нужны сразу
     for (const m of MENU_ICONS) {
       this.load.svg(iconKey(m.id), iconUrl(m.id), { width: 24, height: 24 });
     }
-    // фон эпохи I «Улица» — согласованный кирпич (ui/prototype_style_*.png)
+    // Карты навыков — используются в Академии, Коллекции и на Арене
+    for (const c of cards) {
+      this.load.svg(cardKey(c.id), cardUrl(c.id), { width: 220, height: 320 });
+    }
+    this.load.svg(cardKey('Cwait'), cardUrl('Cwait'), { width: 220, height: 320 });
+
+    // Аватары и иконки врагов — лёгкие, нужны в Коллекции и опознании
+    for (const e of enemies) {
+      this.load.svg(enemyAvatarKey(e.id), enemyAvatarUrl(e.id), { width: 200, height: 200 });
+      this.load.svg(enemyIconKey(e.id), enemyIconUrl(e.id), { width: 96, height: 96 });
+    }
+
+    // Крупные рендеры стадий — только для уже встреченных противников.
+    const met = Object.keys(gameState.progress.enemyStagesReached);
+    for (const id of met) {
+      const enemy = enemies.find((e) => e.id === id);
+      if (!enemy) continue;
+      for (const s of enemy.stages) {
+        this.load.svg(enemyRenderKey(id, s.stage), enemyRenderUrl(id, s.stage), {
+          width: 512,
+          height: 512,
+        });
+      }
+    }
+
     this.load.image('bg-wall', 'assets/bg-wall.jpg');
   }
 
   create(): void {
-    const p = gameState.progress;
-    // реестр в Phaser registry для совместимости со старым прототипом + новый стейт
-    this.registry.set('level', p.level);
-    this.registry.set('xp', p.xp);
-    this.registry.set('xpMax', p.xpMax);
-    this.registry.set('coins', p.coins);
-    this.registry.set('riskBudget', p.riskBudget);
-    this.registry.set('epoch', p.epoch);
+    initFx();
+    initMotion();
 
-    // короткая заставка эпохи — токены меняются без новой сцены (ТЗ Часть 2 §4)
-    const ep = epochOf(p.level);
-    this.cameras.main.setBackgroundColor(ep.tokens.bg);
+    const prog = gameState.progress;
+    const p = buildPalette(prog.epoch);
+    const ep = epochOf(prog.level);
+
+    this.registry.set('epoch', prog.epoch);
+    this.cameras.main.setBackgroundColor(p.bgN);
     if (this.textures.exists('bg-wall')) {
-      this.add.image(0, 0, 'bg-wall').setOrigin(0).setDisplaySize(390, 844).setAlpha(0.5);
-      this.add.rectangle(0, 0, 390, 844, 0x000000, 0.55).setOrigin(0);
+      this.add.image(0, 0, 'bg-wall').setOrigin(0).setDisplaySize(CANVAS.w, CANVAS.h).setAlpha(0.5);
+      this.add.rectangle(0, 0, CANVAS.w, CANVAS.h, 0x000000, 0.6).setOrigin(0);
     }
-    const title = this.add.text(195, 340, 'SIGNAL ARENA', { fontFamily:'Oswald, Inter, sans-serif', fontSize:'30px', color:'#c8ff00', fontStyle:'normal' }).setOrigin(0.5);
-    const sub = this.add.text(195, 372, `${ep.name} · УРОВЕНЬ ${p.level}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:ep.tokens.accent }).setOrigin(0.5);
-    const motto = this.add.text(195, 400, ep.motto, { fontFamily:'Inter, sans-serif', fontSize:'10px', color:'#93A3BC', align:'center', wordWrap:{width:300}}).setOrigin(0.5);
-    this.add.text(195, 520, 'КОШЕЛЁК — НЕ ТЕРМИНАЛ. ТЕРМИНАЛ — НЕ КАЗИНО.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#62708A'}).setOrigin(0.5);
 
-    // Первый вход → онбординг, иначе сразу Арена (полный юзерфлоу)
-    const firstRun = gameState.getFlag('onboarding_done') ? false : true;
-    this.time.delayedCall(900, ()=> this.scene.start(firstRun ? 'OnboardingScene' : 'ArenaScene'));
+    const w = CANVAS.w - GUTTER * 2;
+    this.add
+      .text(CANVAS.w / 2, CANVAS.h / 2 - 80, T.onboarding.brand, {
+        ...TX.display(p, { color: p.accent, align: 'center' }),
+      })
+      .setOrigin(0.5);
+    this.add
+      .text(CANVAS.w / 2, CANVAS.h / 2 - 36, `${ep.name} · ${T.topBar.level(prog.level)}`, {
+        ...TX.body(p, { color: p.sub, align: 'center', wrap: w }),
+      })
+      .setOrigin(0.5);
+    this.add
+      .text(CANVAS.w / 2, CANVAS.h / 2 + SP.md, ep.motto, {
+        ...TX.caption(p, { color: p.muted, align: 'center', wrap: w }),
+      })
+      .setOrigin(0.5, 0);
+
+    const firstRun = !gameState.getFlag('onboarding_done');
+    this.time.delayedCall(700, () => {
+      this.scene.start(firstRun ? 'OnboardingScene' : 'ArenaScene');
+    });
   }
 }

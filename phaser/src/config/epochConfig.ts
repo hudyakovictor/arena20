@@ -1,5 +1,4 @@
-import type { EpochId, SourceId } from '../types';
-import { balanceConfig } from './balanceConfig';
+import type { EpochId } from '../types';
 
 export interface EpochDef {
   id: EpochId;

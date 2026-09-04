@@ -1,135 +1,292 @@
+// Академия — теория и карты навыков. Без врагов и торговых решений.
+// Список глав скроллится: раньше всё, что ниже 740px, просто не рисовалось.
+
 import Phaser from 'phaser';
 import { gameState } from '../state/GameState';
 import { cards } from '../data/cards';
-import { epochOf } from '../config/epochConfig';
+import type { SkillCard } from '../types';
+import { buildPalette, type Palette } from '../ui/palette';
+import { CANVAS, CHROME, GUTTER, HIT, RADIUS, SP } from '../ui/tokens';
+import * as TX from '../ui/text';
+import { T } from '../ui/copy';
+import { button, panel, progressBar } from '../ui/widgets';
+import { renderTopBar, renderBottomNav, navForEpoch, renderBackground, bottomNavHeight } from '../ui/shell';
+import { sceneEnter, enterPanel, transitionTo, fadeIn } from '../ui/motion';
+import { haptic, playSfx } from '../ui/feedbackFx';
+import { ScrollList } from '../ui/ScrollList';
 
-// Академия — теория, без врагов и без заданий Арены (ТЗ Часть 1 §4.3)
-// Единственное допустимое присутствие врага — тизер-силуэт на обложке главы
-const COLORS = { bg:0x070B14, surface:0x0C1323, elevated:0x111B2E, border:0x22304A, cyan:0x31D6C4, good:0x3BDE8A, bad:0xFF596D, muted:0x62708A, sub:0x93A3BC, text:0xE9F2FF, paper:0xE7DFD0 };
+const ROW_H = 84;
 
 export class AcademyScene extends Phaser.Scene {
-  constructor(){ super({ key:'AcademyScene'}); }
+  private P!: Palette;
+  private list?: ScrollList;
+
+  constructor() {
+    super({ key: 'AcademyScene' });
+  }
+
   create(): void {
-    const p=gameState.progress;
-    const ep=epochOf(p.level);
-    this.cameras.main.setBackgroundColor(ep.tokens.bg as any);
+    const p = gameState.progress;
+    this.P = buildPalette(p.epoch);
+    this.registry.set('epoch', p.epoch);
+    renderBackground(this, this.P);
+    sceneEnter(this);
+    renderTopBar(this, gameState);
 
-    this.add.text(14,14,'Академия', { fontFamily:'Inter, system-ui, sans-serif', fontSize:'22px', color:'#E9F2FF'});
-    this.add.text(14,40,`КУРС 17 ГЛАВ · ${p.level>=78?'ВСЕ КАРТЫ ОТКРЫТЫ':'L${p.level} · '+ep.name}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#62708A'});
-    this.add.text(14,52,'теория выдаёт карту → карта требуется для практики (ТЗ §3)', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A'});
+    const headY = CHROME.topBar + SP.md;
+    this.add.text(GUTTER, headY, T.academy.title, TX.title(this.P, { color: this.P.text }));
+    this.add.text(
+      GUTTER,
+      headY + 28,
+      T.academy.sub,
+      TX.caption(this.P, { color: this.P.muted, wrap: CANVAS.w - GUTTER * 2 }),
+    );
 
-    // путь глав — вертикальный слайс (по макету academy-path.html)
-    const startY=72;
-    const visibleCards = cards; // 17
-    // скролл — показываем 6-7 на экране, остальные уходят вниз (в прототипе — все)
-    visibleCards.forEach((c,i)=>{
-      const y=startY + i*62;
-      if(y> 740) return;
-      const unlocked = gameState.isCardUnlocked(c.id);
-      const rank = p.cardRanks[c.id] ?? (unlocked?1:0);
-      const isCurrent = unlocked && rank<3 && i=== visibleCards.findIndex(x=> gameState.isCardUnlocked(x.id) && (p.cardRanks[x.id]??0)<3);
-      const col = !unlocked ? 0x22304A : rank>=2 ? 0x3BDE8A : 0x31D6C4;
-      const bg = !unlocked ? 0x060A12 : isCurrent ? 0x14223A : 0x0C1323;
-      // карточка главы
-      this.add.rectangle(14,y,362,54, bg).setStrokeStyle(1, unlocked? col:0x22304A).setOrigin(0).setInteractive().on('pointerdown', ()=>{
-        if(!unlocked) { this.cameras.main.flash(80,255,89,109); return; }
-        this.showLesson(c);
-      });
-      // иконка
-      this.add.circle(38, y+27, 18, 0x060A12).setStrokeStyle(1, col);
-      this.add.text(38, y+27, c.icon, { fontFamily:'Inter, sans-serif', fontSize:'13px', color: toHex(col)}).setOrigin(0.5);
-      // текст
-      this.add.text(64, y+12, `ГЛ.${c.cid} · ${c.name}`, { fontFamily:'Inter, sans-serif', fontSize:'12px', color: unlocked?'#E9F2FF':'#62708A'});
-      const atomsDone = rank===0?0: rank===1?2: rank===2?4:6;
-      this.add.text(64, y+28, `${atomsDone}/~6 атомов · ранг ${rank||1}/3 · ${unlocked?'':'откроется L'+c.unlockLevel}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A'});
-      // рамка ранга — без новых элементов интерфейса, только рамка (ТЗ §5.2)
-      if(rank>=2) this.add.rectangle(14,y,362,54,0x000000,0).setStrokeStyle(2, rank>=3? 0xFFB341:0x3BDE8A).setOrigin(0);
-      // тизер-силуэт врага (допустимое единственное присутствие)
-      if(c.cid===1) this.add.text(330, y+20,'◐', { fontSize:'16px', color:'#B783FF'});
-      if(c.cid===4) this.add.text(330, y+20,'◈', { fontSize:'16px', color:'#FFB341'});
-      // прогресс атомов
-      const barW=120;
-      this.add.rectangle(64, y+42, barW, 3, 0x060A12).setStrokeStyle(1, 0x22304A).setOrigin(0);
-      this.add.rectangle(64, y+42, Math.round(barW*(atomsDone/6)),3, col).setOrigin(0);
-      // статус чип
-      const status = !unlocked?'LOCKED': rank>=3?'MASTERED': isCurrent?'CURRENT':'AVAILABLE';
-      this.add.text(300, y+8, status, { fontFamily:'IBM Plex Mono, monospace', fontSize:'6px', color: toHex(col), backgroundColor: unlocked?'rgba(49,214,196,0.10)':'rgba(98,112,138,0.12)'}).setOrigin(0);
+    const listTop = headY + 56;
+    const ctaH = HIT.comfortable + SP.md;
+    const listH = CANVAS.h - bottomNavHeight() - ctaH - listTop - SP.md;
+
+    this.list = new ScrollList(this, {
+      x: 0,
+      y: listTop,
+      width: CANVAS.w,
+      height: listH,
+      itemHeight: ROW_H + SP.sm,
+      itemCount: cards.length,
+      renderItem: (i, container, y) => this.renderChapter(cards[i], container, y),
     });
 
-    // CTA
-    this.add.rectangle(14,760,362,44, COLORS.cyan).setOrigin(0).setInteractive().on('pointerdown', ()=>{
-      // переход к текущему уроку — микро-проверка атома
-      const cur = cards.find(c=> gameState.isCardUnlocked(c.id) && (p.cardRanks[c.id]??0)<3) ?? cards[0];
-      this.showLesson(cur);
-    });
-    this.add.text(195,782,'Продолжить урок → Арена', { fontFamily:'Inter, sans-serif', fontSize:'13px', color:'#03110f'}).setOrigin(0.5);
+    const current = this.currentCard();
+    button(
+      this,
+      GUTTER,
+      CANVAS.h - bottomNavHeight() - ctaH,
+      T.academy.continue,
+      this.P,
+      () => this.openLesson(current),
+      { width: CANVAS.w - GUTTER * 2 },
+    );
 
-    // нижняя навигация — взросление (ТЗ Часть 2)
-    this.createBottomNav();
+    renderBottomNav(this, 'AcademyScene', navForEpoch(p.level));
   }
 
-  private showLesson(card: typeof cards[number]){
-    // микро-проверка — не содержит врагов, источников, выбора торгового действия (ТЗ §4.2)
-    const overlay=this.add.rectangle(0,0,390,844, 0x070B14, 0.94).setOrigin(0).setInteractive();
-    this.add.text(195, 180, card.name, { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#E9F2FF'}).setOrigin(0.5);
-    this.add.text(195, 200, `ГЛАВА ${card.cid} · КАРТА «${card.short}»`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#31D6C4'}).setOrigin(0.5);
-    this.add.text(20, 230, 'АТОМ НАВЫКА — умение, а не термин:', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#93A3BC'});
+  private currentCard(): SkillCard {
+    return (
+      cards.find((c) => gameState.isCardUnlocked(c.id) && (gameState.progress.cardRanks[c.id] ?? 0) < 3) ??
+      cards[0]
+    );
+  }
+
+  private renderChapter(c: SkillCard, container: Phaser.GameObjects.Container, y: number): void {
+    const p = this.P;
+    const prog = gameState.progress;
+    const unlocked = gameState.isCardUnlocked(c.id);
+    const rank = prog.cardRanks[c.id] ?? 0;
+    const isCurrent = unlocked && rank < 3 && c.id === this.currentCard().id;
+    const w = CANVAS.w - GUTTER * 2;
+
+    const accent = !unlocked ? p.borderN : rank >= 3 ? p.warnN : rank >= 2 ? p.goodN : p.accentN;
+    const accentS = !unlocked ? p.muted : rank >= 3 ? p.warn : rank >= 2 ? p.good : p.accent;
+
+    const g = this.add.graphics();
+    g.fillStyle(unlocked ? (isCurrent ? p.hoverN : p.surfaceN) : p.insetN, 1);
+    g.fillRoundedRect(GUTTER, y, w, ROW_H, RADIUS.md);
+    g.lineStyle(isCurrent ? 2 : 1, unlocked ? accent : p.borderN, 1);
+    g.strokeRoundedRect(GUTTER, y, w, ROW_H, RADIUS.md);
+    container.add(g);
+
+    // Номер главы
+    const badge = this.add.graphics();
+    badge.fillStyle(p.insetN, 1);
+    badge.fillRoundedRect(GUTTER + SP.md, y + SP.md, 40, 40, RADIUS.sm);
+    badge.lineStyle(1, accent, 1);
+    badge.strokeRoundedRect(GUTTER + SP.md, y + SP.md, 40, 40, RADIUS.sm);
+    container.add(badge);
+    container.add(
+      this.add
+        .text(GUTTER + SP.md + 20, y + SP.md + 20, String(c.cid), TX.numLg(p, { color: accentS }))
+        .setOrigin(0.5),
+    );
+
+    // Название и статус
+    const tx = GUTTER + SP.md + 40 + SP.md;
+    const textW = w - (tx - GUTTER) - SP.md - 70;
+    container.add(
+      this.add.text(tx, y + SP.md, c.name, {
+        ...TX.body(p, { color: unlocked ? p.text : p.muted, wrap: textW }),
+      }),
+    );
+
+    const total = c.atoms.length;
+    const done = rank === 0 ? 0 : Math.min(total, rank * 2);
+    container.add(
+      this.add.text(
+        tx,
+        y + SP.md + 22,
+        unlocked ? T.academy.progress(done, total) : T.academy.locked(c.unlockLevel),
+        TX.caption(p, { color: p.muted }),
+      ),
+    );
+    if (unlocked) {
+      container.add(progressBar(this, tx, y + ROW_H - 22, textW, 6, done / total, accent, p));
+    }
+
+    // Статус справа
+    const status = !unlocked
+      ? T.academy.status.locked
+      : rank >= 3
+        ? T.academy.status.mastered
+        : isCurrent
+          ? T.academy.status.current
+          : T.academy.status.available;
+    container.add(
+      this.add
+        .text(GUTTER + w - SP.md, y + SP.md, status, TX.caption(p, { color: accentS }))
+        .setOrigin(1, 0),
+    );
+
+    const zone = this.add
+      .rectangle(GUTTER, y, w, Math.max(ROW_H, HIT.min), 0x000000, 0)
+      .setOrigin(0)
+      .setInteractive();
+    zone.on('pointerup', () => {
+      if (this.list?.didDrag()) return;
+      if (!unlocked) {
+        haptic('warn');
+        return;
+      }
+      haptic('light');
+      playSfx('tap');
+      this.openLesson(c);
+    });
+    container.add(zone);
+  }
+
+  /** Короткий урок: чему учит карта + одна проверка. */
+  private openLesson(card: SkillCard): void {
+    const p = this.P;
+    const layer = this.add.container(0, 0).setDepth(800);
+    const shade = this.add
+      .rectangle(0, 0, CANVAS.w, CANVAS.h, p.bgN, 0.97)
+      .setOrigin(0)
+      .setInteractive();
+    layer.add(shade);
+    fadeIn(this, shade, { to: 0.97 });
+
+    const w = CANVAS.w - GUTTER * 2;
+    let y = 90;
+
+    layer.add(
+      this.add.text(GUTTER, y, T.academy.chapter(card.cid), TX.caption(p, { color: p.accent })),
+    );
+    y += 22;
+    layer.add(this.add.text(GUTTER, y, card.name, TX.title(p, { color: p.text, wrap: w })));
+    y += 44;
+
+    layer.add(this.add.text(GUTTER, y, T.academy.lessonSkill, TX.caption(p)));
+    y += 20;
     const atom = card.atoms[0];
-    this.add.rectangle(20, 246, 350, 44, 0x0C1323).setStrokeStyle(1, COLORS.border).setOrigin(0);
-    this.add.text(28, 256, atom.desc.toUpperCase(), { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#E7DFD0', wordWrap:{width:334}}).setOrigin(0);
-    this.add.text(28, 278, `атом ${atom.id} — проверяется действием в Арене`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A'}).setOrigin(0);
+    const box = panel(this, GUTTER, y, w, 64, p, { fill: p.surfaceN, stroke: p.accentN });
+    layer.add(box);
+    enterPanel(this, box as never);
+    layer.add(
+      this.add.text(GUTTER + SP.md, y + SP.md, atom.desc, {
+        ...TX.bodyLg(p, { color: p.text, wrap: w - SP.md * 2 }),
+      }),
+    );
+    y += 64 + SP.xl;
 
-    this.add.text(20, 310, 'МИКРО-ПРОВЕРКА (без врага и без награды Арены):', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#93A3BC'});
-    this.add.rectangle(20, 326, 350, 54, COLORS.paper).setOrigin(0).setStrokeStyle(1, COLORS.cyan);
-    this.add.text(28, 334, 'Что делает «длинная тень» свечи?', { fontFamily:'Inter, sans-serif', fontSize:'11px', color:'#1C1916', wordWrap:{width:334}}).setOrigin(0);
-    const opts=[
-      {t:'Сигнал направления — надо входить', ok:false},
-      {t:'Неопределённость, а не сигнал', ok:true},
-      {t:'Всегда разворот', ok:false},
-    ];
-    let picked: number|null=null;
-    opts.forEach((o,i)=>{
-      const y=386+i*42;
-      const r=this.add.rectangle(20,y,350,36, 0x0C1323).setStrokeStyle(1, COLORS.border).setOrigin(0).setInteractive();
-      const t=this.add.text(32,y+12, o.t, { fontFamily:'Inter, sans-serif', fontSize:'11px', color:'#E9F2FF'}).setOrigin(0);
-      r.on('pointerdown', ()=>{
-        picked=i;
-        // подсветить
-        opts.forEach((_,j)=>{
-          // reset handled by overlay destroy cycle — просто перезапуск
-        });
-        if(o.ok){
-          this.add.text(195, 520, '✓ атом освоен — карта ранга +1', { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#3BDE8A'}).setOrigin(0.5);
-          const cur = gameState.progress.cardRanks[card.id] ?? (gameState.isCardUnlocked(card.id)?1:0);
-          gameState.progress.cardRanks[card.id]= Math.min(3, cur+1);
-          gameState.save();
-          this.time.delayedCall(900, ()=>{
-            overlay.destroy(); // close and stay
-            this.scene.start('ArenaScene');
-          });
-        } else {
-          this.add.text(195, 520, '✗ это декоративный атом — в Арене он не используется. Пробуй ещё.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#FF596D'}).setOrigin(0.5);
-          this.cameras.main.shake(80,0.004);
-        }
+    layer.add(this.add.text(GUTTER, y, T.academy.lessonCheck, TX.caption(p)));
+    y += 22;
+    const question = this.lessonQuestion(card);
+    layer.add(
+      this.add.text(GUTTER, y, question.q, {
+        ...TX.bodyLg(p, { color: p.text, wrap: w }),
+      }),
+    );
+    y += Math.max(44, question.q.length > 40 ? 48 : 28);
+
+    let answered = false;
+    const resultY = y + question.options.length * (56 + SP.sm) + SP.sm;
+    question.options.forEach((o, i) => {
+      const oy = y + i * (56 + SP.sm);
+      const g = this.add.graphics();
+      g.fillStyle(p.surfaceN, 1);
+      g.fillRoundedRect(GUTTER, oy, w, 56, RADIUS.md);
+      g.lineStyle(1, p.borderN, 1);
+      g.strokeRoundedRect(GUTTER, oy, w, 56, RADIUS.md);
+      layer.add(g);
+      const label = this.add.text(GUTTER + SP.md, oy + SP.md, o.text, {
+        ...TX.body(p, { color: p.text, wrap: w - SP.md * 2 }),
       });
+      layer.add(label);
+
+      const zone = this.add
+        .rectangle(GUTTER, oy, w, Math.max(56, HIT.min), 0x000000, 0)
+        .setOrigin(0)
+        .setInteractive();
+      zone.on('pointerdown', () => {
+        if (answered) return;
+        haptic(o.ok ? 'success' : 'warn');
+        playSfx(o.ok ? 'correct' : 'wrong');
+        g.clear();
+        g.fillStyle(o.ok ? p.goodN : p.badN, 0.18);
+        g.fillRoundedRect(GUTTER, oy, w, 56, RADIUS.md);
+        g.lineStyle(2, o.ok ? p.goodN : p.badN, 1);
+        g.strokeRoundedRect(GUTTER, oy, w, 56, RADIUS.md);
+        if (!o.ok) {
+          layer.add(
+            this.add
+              .text(CANVAS.w / 2, resultY, T.academy.lessonWrong, {
+                ...TX.body(p, { color: p.bad, align: 'center', wrap: w }),
+              })
+              .setOrigin(0.5, 0),
+          );
+          return;
+        }
+        answered = true;
+        const cur = gameState.progress.cardRanks[card.id] ?? 1;
+        gameState.progress.cardRanks[card.id] = Math.min(3, cur + 1);
+        gameState.save();
+        const msg = this.add
+          .text(CANVAS.w / 2, resultY, T.academy.lessonRight, {
+            ...TX.body(p, { color: p.good, align: 'center', wrap: w }),
+          })
+          .setOrigin(0.5, 0);
+        layer.add(msg);
+        fadeIn(this, msg);
+        this.time.delayedCall(900, () => transitionTo(this, 'ArenaScene'));
+      });
+      layer.add(zone);
     });
-    this.add.text(195, 720, 'закрыть ✕', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#62708A'}).setOrigin(0.5).setInteractive().on('pointerdown', ()=> overlay.destroy());
+
+    const closeBtn = button(
+      this,
+      GUTTER,
+      CANVAS.h - bottomNavHeight() - HIT.comfortable - SP.md,
+      T.academy.close,
+      p,
+      () => layer.destroy(),
+      { width: w, variant: 'ghost' },
+    );
+    layer.add(closeBtn);
   }
 
-  private createBottomNav(){
-    const items=[
-      {label:'ACADEMY', active:true},
-      {label:'ARENA', active:false, go:'ArenaScene'},
-      {label:'COLLECTION', active:false, go:'CollectionScene'},
-      {label:'MORE', active:false, go:'MoreScene'},
-    ] as any[];
-    items.forEach((it,i)=>{
-      const nx=i*(390/4);
-      this.add.rectangle(nx,784,390/4,60, COLORS.elevated).setStrokeStyle(1, COLORS.border).setOrigin(0).setInteractive().on('pointerdown', ()=>{
-        if(it.go) this.scene.start(it.go);
-      });
-      this.add.text(nx+390/8,814, it.label, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color: it.active?'#31D6C4':'#62708A'}).setOrigin(0.5);
-    });
+  /** Проверка строится из атомов карты, а не захардкожена одним вопросом. */
+  private lessonQuestion(card: SkillCard): { q: string; options: { text: string; ok: boolean }[] } {
+    const right = card.atoms[0]?.desc ?? 'Применить навык осознанно';
+    const wrongPool = [
+      'Действовать по первому впечатлению',
+      'Ориентироваться на мнение из чата',
+      'Увеличить размер, чтобы отыграться',
+    ];
+    const options = [
+      { text: right, ok: true },
+      { text: wrongPool[card.cid % wrongPool.length], ok: false },
+      { text: wrongPool[(card.cid + 1) % wrongPool.length], ok: false },
+    ];
+    // детерминированно перемешиваем, чтобы верный не был всегда первым
+    if (card.cid % 2 === 0) options.reverse();
+    return { q: `Что относится к навыку «${card.short}»?`, options };
   }
 }
-function toHex(n:number){ return '#'+n.toString(16).padStart(6,'0'); }

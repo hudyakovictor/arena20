@@ -7,7 +7,18 @@
     "skipLibCheck": true,
     "outDir": "./dist",
     "sourceMap": true,
-    "lib": ["ES2020", "DOM"]
+    "lib": [
+      "ES2020",
+      "DOM"
+    ],
+    "types": [
+      "vitest/globals",
+      "node"
+    ],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

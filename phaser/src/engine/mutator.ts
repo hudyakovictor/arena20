@@ -4,9 +4,6 @@ import { SeededRng, hashString } from './rng';
 // Оси мутации — ТЗ Часть 6 §6.2
 const TICKERS = ['BTC/USDT','ETH/USDT','SOL/USDT','AVAX/USDT','ARB/USDT'];
 const TIMEFRAMES = ['5M','15M','1H','4H','1D'];
-const ASSETS_SCALE: Record<string, number> = {
-  'BTC/USDT': 68000, 'ETH/USDT': 3200, 'SOL/USDT': 145, 'AVAX/USDT': 32, 'ARB/USDT': 1.1
-};
 
 export function mutate(template: EncounterTemplate, seed: number): EncounterInstance {
   const rng = new SeededRng(seed ^ hashString(template.id));
