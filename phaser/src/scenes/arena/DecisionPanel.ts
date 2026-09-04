@@ -41,12 +41,15 @@ export class CardRail {
     st: EpochStructure,
     cards: CardView[],
     onChange: (active: string | null, stack: string[]) => void,
+    initial: { active?: string | null; stack?: string[] } = {},
   ) {
     this.scene = scene;
     this.p = p;
     this.st = st;
     this.cards = cards;
     this.onChange = onChange;
+    this.active = initial.active ?? null;
+    this.stack = [...(initial.stack ?? [])];
     this.root = scene.add.container(0, y);
     this.render();
     enterPanel(scene, this.root);
@@ -109,7 +112,9 @@ export class CardRail {
     }
 
     // Карты
-    const perRow = Math.min(this.cards.length, 4);
+    // В «Системе» нужны четыре шага и легитимная карта «Ждать».
+    // Ограничение в четыре карточки делало пятую механику невидимой.
+    const perRow = Math.min(this.cards.length, 5);
     const cardW = (w - SP.sm * (perRow - 1)) / perRow;
     const cardH = 76;
     this.cards.slice(0, perRow).forEach((c, i) => {
@@ -438,8 +443,17 @@ export function buildCardViews(
   isUnlocked: (id: string) => boolean,
   rankOf: (id: string) => number,
 ): CardView[] {
-  const required = new Set(enc.skills.slice(0, 2));
-  const ids = enc.skills.slice(0, Math.max(1, st.cards - 1));
+  const required = new Set(enc.skills);
+  const targetSkillCards = Math.max(1, st.cards - 1);
+  const ids = enc.skills.slice(0, targetSkillCards);
+  // Если в шаблоне меньше правильных карт, добираем доступные отвлекающие.
+  // Так поздняя эпоха действительно показывает «лишнюю карту», но длина
+  // правильного плана остаётся достижимой.
+  const decoys = Object.values(cardById)
+    .filter((c) => !ids.includes(c.id) && isUnlocked(c.id))
+    .map((c) => c.id);
+  while (ids.length < targetSkillCards && decoys.length > 0) ids.push(decoys.shift()!);
+
   const views: CardView[] = ids.map((id) => {
     const c = cardById[id];
     return {

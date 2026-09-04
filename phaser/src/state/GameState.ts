@@ -1,6 +1,7 @@
 import { balanceConfig } from '../config/balanceConfig';
 import { getEpochForLevel } from '../config/epochConfig';
 import type { GameProgress, EpochId } from '../types';
+import { dailyWeather } from '../engine/arenaFlow';
 
 const STORAGE_KEY = 'arena_v5_progress';
 const FLAGS_KEY = 'arena_v5_flags';
@@ -72,10 +73,15 @@ export class GameState {
     delete merged.schemaVersion;
     this.progress = merged;
     this.refreshEpoch();
+    this.refreshWeather();
   }
 
   refreshEpoch(): void {
     this.progress.epoch = getEpochForLevel(this.progress.level) as EpochId;
+  }
+
+  refreshWeather(now = new Date()): void {
+    this.progress.weather = dailyWeather(now);
   }
 
   save(): void {
@@ -135,15 +141,26 @@ export class GameState {
   }
 
   pushError(enemy: string, atom: string, missedEvidence: string): void {
-    this.progress.errorScroll.unshift({
-      id: 'e' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-      enemy,
-      atom,
-      missedEvidence,
-      createdAt: Date.now(),
-      closed: false,
-      mutationDepth: 0,
-    });
+    const existingIndex = this.progress.errorScroll.findIndex(
+      (e) => !e.closed && e.enemy === enemy && e.atom === atom,
+    );
+    if (existingIndex >= 0) {
+      const [existing] = this.progress.errorScroll.splice(existingIndex, 1);
+      existing.missedEvidence = missedEvidence;
+      existing.mutationDepth += 1;
+      existing.createdAt = Date.now();
+      this.progress.errorScroll.unshift(existing);
+    } else {
+      this.progress.errorScroll.unshift({
+        id: 'e' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+        enemy,
+        atom,
+        missedEvidence,
+        createdAt: Date.now(),
+        closed: false,
+        mutationDepth: 0,
+      });
+    }
     if (this.progress.errorScroll.length > balanceConfig.errorScroll.maxEntries) {
       this.progress.errorScroll.pop();
     }
@@ -202,6 +219,7 @@ export class GameState {
     this.progress = defaultProgress();
     this.taskIndex = 0;
     this.refreshEpoch();
+    this.refreshWeather();
     this.save();
   }
 }

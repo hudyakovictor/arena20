@@ -15,6 +15,7 @@ import { panel, selectableRow } from '../../ui/widgets';
 import { CandleChart } from '../../ui/CandleChart';
 import { enterPanel } from '../../ui/motion';
 import { haptic, playSfx } from '../../ui/feedbackFx';
+import { visibleSourceTabs } from '../../engine/arenaFlow';
 
 export interface SourceBrowserOpts {
   y: number;
@@ -45,8 +46,11 @@ export class SourceBrowser {
   constructor(scene: Phaser.Scene, opts: SourceBrowserOpts) {
     this.scene = scene;
     this.opts = opts;
-    this.active = opts.encounter.sources[0] as SourceId;
     this.blindOpened = !!opts.blindOpened;
+    const openedIndex = Math.min(opts.structure.tabs, opts.encounter.sources.length) - 1;
+    this.active = (this.blindOpened
+      ? opts.encounter.sources[Math.max(0, openedIndex)]
+      : opts.encounter.sources[0]) as SourceId;
     this.root = scene.add.container(0, opts.y);
     this.body = scene.add.container(0, 0);
     this.root.add(this.body);
@@ -71,9 +75,14 @@ export class SourceBrowser {
   }
 
   private tabsList(): SourceId[] {
-    const all = this.opts.encounter.sources as SourceId[];
-    const limit = Math.max(1, this.opts.structure.tabs);
-    return all.slice(0, limit);
+    // Закрытая вкладка занимает последний слот. После оплаты в этом же слоте
+    // появляется реальный источник; раньше плата лишь удаляла кнопку-пустышку.
+    return visibleSourceTabs(
+      this.opts.encounter.sources as SourceId[],
+      this.opts.structure.tabs,
+      this.opts.structure.blindTab,
+      this.blindOpened,
+    );
   }
 
   private build(): void {
@@ -93,7 +102,10 @@ export class SourceBrowser {
 
     // ── Вкладки источников ──
     const tabs = this.tabsList();
-    const showBlind = this.opts.structure.blindTab && !this.blindOpened;
+    const showBlind =
+      this.opts.structure.blindTab &&
+      !this.blindOpened &&
+      this.opts.encounter.sources.length > tabs.length;
     const total = tabs.length + (showBlind ? 1 : 0);
     const tabW = w / total;
 
@@ -234,7 +246,12 @@ export class SourceBrowser {
 
     const zones = this.zonesFor('chart');
     const listH = zones.length * (HIT.min + SP.sm);
-    const chartH = Math.max(90, h - listH - SP.xl);
+    const hintText = this.crutchText();
+    // При длинном вопросе окно становится ниже. Сначала сохраняем график и
+    // интерактивные улики; поясняющую строку убираем, если она начнёт
+    // пересекаться с нижней кнопкой «Развернуть».
+    const hintH = hintText && h >= listH + SP.xl + 90 + SP.xs + SP.xl ? SP.xl : 0;
+    const chartH = Math.max(64, h - listH - SP.xl - SP.xs - hintH);
 
     this.chart = new CandleChart(this.scene, {
       x,
@@ -250,14 +267,13 @@ export class SourceBrowser {
 
     // Ярлык-костыль эпохи
     const labelY = y + SP.xl + chartH + SP.xs;
-    const hintText = this.crutchText();
-    if (hintText) {
+    if (hintText && hintH > 0) {
       this.body.add(
         this.scene.add.text(x, labelY, hintText.text, TX.caption(p, { color: hintText.color, wrap: w })),
       );
     }
 
-    this.renderZoneList(x, labelY + (hintText ? SP.xl : 0), w, zones);
+    this.renderZoneList(x, labelY + hintH, w, zones);
   }
 
   private crutchText(): { text: string; color: string } | null {

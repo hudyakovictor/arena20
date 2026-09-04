@@ -6,7 +6,7 @@
 import Phaser from 'phaser';
 import { gameState } from '../state/GameState';
 import { balanceConfig } from '../config/balanceConfig';
-import { epochOf, getEpochForLevel } from '../config/epochConfig';
+import { getEpochForLevel } from '../config/epochConfig';
 import { structureForLevel, type EpochStructure } from '../config/epochStructure';
 import { templateFor } from '../data/templates';
 import { mutate } from '../engine/mutator';
@@ -31,7 +31,14 @@ import {
 import { sceneEnter, enterPanel } from '../ui/motion';
 import { haptic } from '../ui/feedbackFx';
 import { SourceBrowser } from './arena/SourceBrowser';
-import { AnswerGrid, CardRail, ConfidencePicker, VerdictRow, buildCardViews } from './arena/DecisionPanel';
+import {
+  AnswerGrid,
+  CardRail,
+  ConfidencePicker,
+  VerdictRow,
+  buildCardViews,
+} from './arena/DecisionPanel';
+import { cardChoiceFits, effectiveStackSlots } from '../engine/arenaFlow';
 import { FeedbackOverlay } from './arena/FeedbackOverlay';
 import { showDrawdown, showEpochTransition } from './arena/StatusOverlays';
 import { SOURCE_TITLES } from '../engine/scenarioGen';
@@ -48,8 +55,11 @@ export class ArenaScene extends Phaser.Scene {
   private selectedEvidence = new Set<string>();
   private confidence: Confidence = null;
   private selectedAnswer: number | null = null;
+  private selectedCard: string | null = null;
   private cardStack: string[] = [];
   private backdrop: Phaser.GameObjects.GameObject[] = [];
+  /** Эпоха до начисления награды — нужна, чтобы не потерять переход после level-up. */
+  private epochBeforeReward: EpochId | null = null;
   private verdictFactor: 'A' | 'B' | null = null;
   private blindOpened = false;
   private step: Step = 'investigate';
@@ -68,9 +78,6 @@ export class ArenaScene extends Phaser.Scene {
 
   private get progress() {
     return gameState.progress;
-  }
-  private get epoch() {
-    return epochOf(this.progress.level);
   }
 
   create(): void {
@@ -106,6 +113,12 @@ export class ArenaScene extends Phaser.Scene {
     // Детерминированный seed: та же задача воспроизводится по тем же аргументам.
     const seed = encounterSeed(localUserId(), p.level, gameState.taskIndex);
     this.encounter = mutate(this.pickTemplate(), seed);
+    // Контент ранних стадий иногда содержит меньше карт, чем глобальная эпоха
+    // требует от плана. Без ограничения такую встречу невозможно завершить.
+    this.structure.stackSlots = effectiveStackSlots(
+      this.structure.stackSlots,
+      this.encounter.skills,
+    );
     this.scenario = buildScenario(this.encounter);
   }
 
@@ -113,7 +126,9 @@ export class ArenaScene extends Phaser.Scene {
     this.selectedEvidence.clear();
     this.confidence = null;
     this.selectedAnswer = null;
+    this.selectedCard = null;
     this.cardStack = [];
+    this.epochBeforeReward = null;
     this.verdictFactor = null;
     this.blindOpened = false;
     this.step = 'investigate';
@@ -168,10 +183,10 @@ export class ArenaScene extends Phaser.Scene {
     const evidenceH = HIT.min;
 
     if (this.step === 'investigate') {
-      // Разбор: видно всё окружение задачи.
-      this.renderWeather(flow);
-      this.renderQuestion(flow, bottomLimit - flow.y - 200 - ctaH - evidenceH);
-      this.renderThreat(flow);
+      // Референсный принцип: один сильный бриф → одно рабочее окно → действие.
+      // Погода, вопрос и скрытый противник больше не рассыпаны на три плашки.
+      const briefingMax = bottomLimit - flow.y - 200 - ctaH - evidenceH - SP.md * 2;
+      this.renderBriefing(flow, briefingMax, true);
       const browserH = Math.max(
         200,
         bottomLimit - flow.y - ctaH - evidenceH - SP.md * 2,
@@ -180,47 +195,38 @@ export class ArenaScene extends Phaser.Scene {
       this.renderEvidenceStrip(flow);
       this.renderInvestigateCta(bottomLimit - ctaH);
     } else {
-      // Решение: на экране только то, что нужно для выбора.
-      // Погоду и карточку врага не повторяем — игрок их уже видел, а высоты
-      // не хватало: нижний ряд ответов уезжал под навигацию.
-      this.renderQuestion(flow, 132);
+      // На втором шаге тот же бриф остаётся узнаваемым, но становится компактнее.
+      this.renderBriefing(flow, 112, false);
       this.renderEvidenceSummary(flow);
       this.renderDecision(flow, bottomLimit);
     }
   }
 
-  private renderWeather(flow: Flow): void {
-    const p = this.P;
-    const y = flow.take(20, SP.sm);
-    const label = `${T.weather.label}: ${weatherLabel(this.progress.weather)}`;
-    this.add.text(GUTTER, y, label, TX.caption(p, { color: p.sub, wrap: CANVAS.w - GUTTER * 2 }));
-  }
-
   /**
-   * Карточка ситуации. maxH ограничивает блок сверху: без него длинный вопрос
-   * растягивал панель и выдавливал нижние блоки за пределы экрана.
+   * Единый бриф встречи. Это сохраняет структуру исходного концепта:
+   * крупная ситуация сверху, рабочий терминал в центре, действия снизу.
    */
-  private renderQuestion(flow: Flow, maxH = 220): void {
+  private renderBriefing(flow: Flow, maxH: number, showThreat: boolean): void {
     const p = this.P;
     const q = this.encounter;
     const w = CANVAS.w - GUTTER * 2;
-    const style = TX.bodyLg(p, { color: p.text, wrap: w - SP.lg * 2 });
-    const probe = this.add.text(0, 0, q.question, style).setVisible(false);
+    const textW = w - SP.lg * 2;
+    let style = TX.bodyLg(p, { color: p.inkText, wrap: textW });
+    let probe = this.add.text(0, 0, q.question, style).setVisible(false);
     let textH = probe.height;
     probe.destroy();
 
-    const limit = Math.max(72, maxH);
-    // Текст не влезает — уменьшаем кегль в пределах читаемой шкалы (>= 14px).
-    if (textH + SP.lg * 2 + 18 > limit) {
-      const smaller = TX.body(p, { color: p.text, wrap: w - SP.lg * 2 });
-      const probe2 = this.add.text(0, 0, q.question, smaller).setVisible(false);
-      textH = probe2.height;
-      probe2.destroy();
-      style.fontSize = smaller.fontSize;
-      style.lineSpacing = smaller.lineSpacing;
+    const footerH = showThreat ? 30 : 0;
+    const minH = showThreat ? 116 : 88;
+    const limit = Math.max(minH, maxH);
+    if (textH + 56 + footerH > limit) {
+      style = TX.body(p, { color: p.inkText, wrap: textW });
+      probe = this.add.text(0, 0, q.question, style).setVisible(false);
+      textH = probe.height;
+      probe.destroy();
     }
 
-    const boxH = Math.min(limit, textH + SP.lg * 2 + 18);
+    const boxH = Math.min(limit, Math.max(minH, textH + 56 + footerH));
     const y = flow.take(boxH);
     const box = panel(this, GUTTER, y, w, boxH, p, {
       fill: p.paperN,
@@ -228,40 +234,33 @@ export class ArenaScene extends Phaser.Scene {
       radius: RADIUS.md,
     });
     enterPanel(this, box as never);
+
+    const stepLabel = this.step === 'investigate' ? T.arena.investigateStep : T.arena.decideStep;
     this.add.text(
       GUTTER + SP.lg,
       y + SP.md,
-      `${T.arena.situation} · ${q.ticker} · ${q.timeframe}`,
-      TX.code(p, { color: p.inkSub }),
+      `${stepLabel}  ·  ${q.ticker}  ·  ${q.timeframe}`,
+      TX.code(p, { color: p.accent }),
     );
-    this.add.text(GUTTER + SP.lg, y + SP.md + 20, q.question, {
-      ...style,
-      color: p.inkText,
-    });
-  }
+    this.add.text(GUTTER + SP.lg, y + 34, q.question, style);
 
-  private renderThreat(flow: Flow): void {
-    const p = this.P;
-    const w = CANVAS.w - GUTTER * 2;
-    const h = 52;
-    const y = flow.take(h);
-    const box = panel(this, GUTTER, y, w, h, p, { fill: p.surfaceN, stroke: p.strongN });
-    enterPanel(this, box as never);
-    const g = this.add.graphics();
-    g.fillStyle(p.insetN, 1);
-    g.fillCircle(GUTTER + SP.lg + 14, y + h / 2, 16);
-    g.lineStyle(1, p.strongN, 1);
-    g.strokeCircle(GUTTER + SP.lg + 14, y + h / 2, 16);
-    this.add
-      .text(GUTTER + SP.lg + 14, y + h / 2, '?', TX.title(p, { color: p.accent }))
-      .setOrigin(0.5);
-    this.add.text(GUTTER + SP.lg + 40, y + SP.sm, T.arena.unknownEnemy, TX.body(p, { color: p.text }));
-    this.add.text(
-      GUTTER + SP.lg + 40,
-      y + SP.sm + 20,
-      T.arena.unknownEnemyHint,
-      TX.caption(p, { color: p.muted }),
-    );
+    if (showThreat) {
+      const lineY = y + boxH - 30;
+      const g = this.add.graphics();
+      g.lineStyle(1, p.borderN, 1);
+      g.lineBetween(GUTTER + SP.lg, lineY - SP.xs, GUTTER + w - SP.lg, lineY - SP.xs);
+      g.fillStyle(p.insetN, 1);
+      g.fillCircle(GUTTER + SP.lg + 10, lineY + 9, 10);
+      this.add
+        .text(GUTTER + SP.lg + 10, lineY + 9, '?', TX.caption(p, { color: p.accent }))
+        .setOrigin(0.5);
+      this.add.text(
+        GUTTER + SP.lg + 28,
+        lineY + 9,
+        `${T.arena.unknownEnemy} · ${weatherLabel(this.progress.weather)}`,
+        TX.caption(p, { color: p.inkSub }),
+      ).setOrigin(0, 0.5);
+    }
   }
 
   private renderBrowser(flow: Flow, height: number): void {
@@ -394,10 +393,19 @@ export class ArenaScene extends Phaser.Scene {
     );
     const railH = CardRail.heightFor(this.structure);
     const railY = flow.take(railH);
-    new CardRail(this, railY, p, this.structure, cards, (_active, stack) => {
-      this.cardStack = stack;
-      this.refreshSubmitState();
-    });
+    new CardRail(
+      this,
+      railY,
+      p,
+      this.structure,
+      cards,
+      (active, stack) => {
+        this.selectedCard = active;
+        this.cardStack = stack;
+        this.refreshSubmitState();
+      },
+      { active: this.selectedCard, stack: this.cardStack },
+    );
 
     // Вердикт конфликта — до выбора действия
     const needVerdict = this.structure.verdict && !!this.encounter.verdict;
@@ -534,6 +542,17 @@ export class ArenaScene extends Phaser.Scene {
 
   private pickAnswer(index: number): void {
     if (this.submitted) return;
+    if (this.structure.stackSlots === 0 && !this.selectedCard) {
+      haptic('warn');
+      const notice = this.add
+        .text(CANVAS.w / 2, CHROME.topBar + SP.sm, T.arena.pickCardFirst, {
+          ...TX.body(this.P, { color: this.P.accent, align: 'center', wrap: CANVAS.w - GUTTER * 2 }),
+        })
+        .setOrigin(0.5, 0)
+        .setDepth(550);
+      this.tweens.add({ targets: notice, alpha: 0, delay: 700, duration: 220, onComplete: () => notice.destroy() });
+      return;
+    }
     // После серии ошибок — короткая пауза «остынь»
     const tilt =
       this.progress.errorScroll.filter((e) => !e.closed).length >=
@@ -632,7 +651,10 @@ export class ArenaScene extends Phaser.Scene {
 
   private submitAnswer(): void {
     if (this.selectedAnswer === null || this.submitted) return;
-    let isCorrect = this.selectedAnswer === this.encounter.correctAnswer;
+    // Карта — часть решения, а не декоративная полка: верное действие без
+    // подходящего инструмента считается неполным разбором.
+    const cardFits = cardChoiceFits(this.encounter, this.selectedAnswer, this.selectedCard);
+    let isCorrect = this.selectedAnswer === this.encounter.correctAnswer && cardFits;
     // Ошибка в вердикте обнуляет верный выбор действия
     if (this.structure.verdict && this.encounter.verdict) {
       if (this.verdictFactor !== this.encounter.verdict.correctFactor) isCorrect = false;
@@ -657,6 +679,7 @@ export class ArenaScene extends Phaser.Scene {
   }
 
   private applyResult(v: Verdict, isCorrect: boolean, isJustified: boolean): void {
+    this.epochBeforeReward = getEpochForLevel(this.progress.level);
     const confVal = this.confidence === 'high' ? 0.9 : this.confidence === 'mid' ? 0.65 : 0.35;
     gameState.addCalibration(confVal, isCorrect ? 1 : 0);
 
@@ -681,13 +704,30 @@ export class ArenaScene extends Phaser.Scene {
     const budget = gameState.changeBudget(v.budgetDelta);
 
     if (budget <= 0) {
-      showDrawdown(this, this.P, 40, () => this.restartEncounter());
+      const restore = 40;
+      showDrawdown(this, this.P, restore, () => {
+        gameState.changeBudget(restore);
+        this.restartEncounter();
+      });
       return;
     }
     this.showFeedback(v, isCorrect, isJustified);
   }
 
+  private recordEnemyStage(enemyId: string): void {
+    const cur = this.progress.enemyStagesReached[enemyId] ?? 0;
+    if (this.encounter.stage > cur) {
+      this.progress.enemyStagesReached[enemyId] = this.encounter.stage;
+      gameState.save();
+    }
+  }
+
   private showFeedback(v: Verdict, isCorrect: boolean, isJustified: boolean): void {
+    // В «Системе» отдельного опознания уже нет, но победа всё равно должна
+    // продвигать трофей кампании.
+    if (this.structure.identifyOptions <= 0 && isCorrect && isJustified) {
+      this.recordEnemyStage(this.encounter.enemyId);
+    }
     this.feedback = new FeedbackOverlay(this, {
       palette: this.P,
       structure: this.structure,
@@ -697,15 +737,10 @@ export class ArenaScene extends Phaser.Scene {
       isCorrect,
       isJustified,
       onIdentified: (ok, enemyId) => {
-        if (!ok) return;
-        const cur = this.progress.enemyStagesReached[enemyId] ?? 0;
-        if (this.encounter.stage > cur) {
-          this.progress.enemyStagesReached[enemyId] = this.encounter.stage;
-          gameState.save();
-        }
+        if (ok) this.recordEnemyStage(enemyId);
       },
       onNext: () => {
-        const before = this.epoch.id;
+        const before = this.epochBeforeReward ?? getEpochForLevel(this.progress.level);
         const after = getEpochForLevel(this.progress.level);
         if (before !== after) showEpochTransition(this, after, () => this.restartEncounter());
         else this.restartEncounter();

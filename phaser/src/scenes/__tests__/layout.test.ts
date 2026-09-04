@@ -59,9 +59,10 @@ describe('раскладка шага «разбор»', () => {
     const ctaH = HIT.comfortable + SP.md;
     const evidenceH = HIT.min;
     let y = CHROME.topBar + SP.md;
-    y += 20 + SP.sm; // погода
-    y += questionH(lines, BOTTOM - y - 200 - ctaH - evidenceH) + SP.md;
-    y += 52 + SP.md; // карточка врага
+    const briefingMax = BOTTOM - y - 200 - ctaH - evidenceH - SP.md * 2;
+    // Единый бриф: служебная строка + вопрос + строка противника/погоды.
+    const briefingH = Math.min(briefingMax, Math.max(116, lines * LINE + 56 + 30));
+    y += briefingH + SP.md;
     const browserH = BOTTOM - y - ctaH - evidenceH - SP.md * 2;
     expect(browserH).toBeGreaterThanOrEqual(200);
   });
