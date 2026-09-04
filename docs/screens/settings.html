@@ -1,0 +1,41 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/><title>Settings</title><style>
+:root{--bg:#070B14;--inset:#060A12;--surface:#0C1323;--elevated:#111B2E;--hover:#14223A;--text:#E9F2FF;--sub:#93A3BC;--muted:#62708A;--border:#22304A;--strong:#344563;--cyan:#31D6C4;--good:#3BDE8A;--bad:#FF596D;--warn:#FFB341;--mono:"IBM Plex Mono",Consolas,monospace;--ui:Inter,system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}body{background:#000;font:14px/1.35 var(--ui);display:grid;place-items:start center;min-height:100vh}
+.phone{width:390px;height:844px;background:var(--bg);color:var(--text);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.topbar{height:56px;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid var(--border);background:var(--elevated)}
+.back-btn{width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--sub);display:grid;place-items:center;cursor:pointer;font-size:18px;flex-shrink:0}.page-title{flex:1;font:700 14px var(--ui)}
+.content{flex:1;overflow-y:auto;padding:14px;scrollbar-width:none}.content::-webkit-scrollbar{display:none}
+.section-head{font:700 12px var(--mono);color:var(--muted);letter-spacing:.08em;margin:14px 0 8px;padding-left:4px}
+.menu{display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:12px;overflow:hidden}.menu-item{display:flex;align-items:center;gap:12px;min-height:48px;padding:0 14px;background:var(--surface);cursor:pointer}.menu-item:active{background:var(--hover)}.menu-label{flex:1;font-size:14px;color:var(--text)}.menu-val{font:11px var(--mono);color:var(--muted)}
+.toggle{width:44px;height:26px;border-radius:99px;background:var(--inset);border:1px solid var(--border);position:relative;flex-shrink:0;cursor:pointer;transition:all 220ms}.toggle.on{background:rgba(49,214,196,.15);border-color:var(--cyan)}.toggle::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--muted);transition:all 220ms}.toggle.on::after{left:20px;background:var(--cyan)}
+.lang-row{display:flex;gap:6px;margin-top:6px}.lang{padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--sub);font:11px var(--mono);cursor:pointer;transition:all 220ms}.lang.active{border-color:var(--cyan);color:var(--cyan);background:rgba(49,214,196,.06)}
+.about{border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:12px;margin-top:14px}.about b{display:block;font:700 13px var(--ui);margin-bottom:4px}.about p{font:10px var(--mono);color:var(--muted);line-height:1.5}
+.bottomnav{height:60px;flex-shrink:0;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);background:var(--elevated)}.nav-item{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--muted);font:8px var(--mono);border:0;background:transparent;cursor:pointer}.nav-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5}.nav-item.active{color:var(--cyan)}.nav-item.active::before{content:"";position:absolute;top:0;width:22px;height:2px;background:var(--cyan);border-radius:0 0 2px 2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<div class="phone">
+<div class="topbar"><button class="back-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="page-title">Настройки</div></div>
+<div class="content">
+<div class="section-head">ГЕЙМПЛЕЙ</div>
+<div class="menu">
+<div class="menu-item" onclick="toggleSwitch(this)"><span class="menu-label">Reduced motion</span><div class="toggle on"></div></div>
+<div class="menu-item" onclick="toggleSwitch(this)"><span class="menu-label">Звук</span><div class="toggle on"></div></div>
+<div class="menu-item" onclick="toggleSwitch(this)"><span class="menu-label">Вибрация</span><div class="toggle"></div></div>
+<div class="menu-item" onclick="toggleSwitch(this)"><span class="menu-label">Подсказки Архивариуса</span><div class="toggle on"></div></div>
+</div>
+<div class="section-head">ЯЗЫК</div>
+<div class="lang-row"><button class="lang active" onclick="selectLang(this)">RU</button><button class="lang" onclick="selectLang(this)">EN</button><button class="lang" style="opacity:.4">ES (скоро)</button></div>
+<div class="section-head">ДАННЫЕ</div>
+<div class="menu">
+<div class="menu-item" onclick="confirmReset()"><span class="menu-label">Сбросить прогресс</span><span class="menu-val" style="color:var(--bad)">Опасно</span></div>
+<div class="menu-item"><span class="menu-label">Экспорт журнала ошибок</span><span class="menu-val">›</span></div>
+</div>
+<div class="about"><b>Signal Arena · v1.0.0</b><p>Phaser 4.2.1 · TypeScript · Vite<br>Данные симулированы. Не финансовый совет.</p></div>
+</div>
+<div class="bottomnav"><button class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>ACADEMY</span></button><button class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 4-3.5 7-8 9-4.5-2-8-5-8-9V7l8-4z"/></svg><span>ARENA</span></button><button class="nav-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>COLLECTION</span></button><button class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg><span>MORE</span></button></div>
+</div>
+<script>function toggleSwitch(el){var t=el.querySelector('.toggle');t.classList.toggle('on')}
+function selectLang(el){document.querySelectorAll('.lang').forEach(function(l){if(!l.style.opacity)l.classList.remove('active')});el.classList.add('active')}
+function confirmReset(){if(confirm('Сбросить весь прогресс? Это действие необратимо.'))alert('Прогресс сброшен.')}
+document.querySelectorAll('.nav-item').forEach(function(b){var t=b.textContent.trim(),m={ACADEMY:'academy-path.html',ARENA:'arena-encounter.html',COLLECTION:'collection.html',MORE:'more-profile.html'};if(m[t])b.onclick=function(){location.href=m[t]}});document.querySelector('.back-btn').onclick=function(){location.href='more-profile.html'};</script>
+</body></html>

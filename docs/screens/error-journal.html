@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" /><
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Error Journal</title>
+<style>
+:root{
+  --bg:#070B14;--inset:#060A12;--surface:#0C1323;--elevated:#111B2E;--hover:#14223A;
+  --text:#E9F2FF;--sub:#93A3BC;--muted:#62708A;--border:#22304A;--strong:#344563;
+  --cyan:#31D6C4;--good:#3BDE8A;--bad:#FF596D;--warn:#FFB341;--paper:#E7DFD0;--ink:#1C1916;
+  --crypto:#B783FF;--mono:"IBM Plex Mono",Consolas,monospace;--ui:Inter,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}body{background:#000;font:14px/1.35 var(--ui);display:grid;place-items:start center;min-height:100vh}
+.phone{width:390px;height:844px;background:var(--bg);color:var(--text);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.topbar{height:56px;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid var(--border);background:var(--elevated)}
+.back-btn{width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--sub);display:grid;place-items:center;cursor:pointer;font-size:18px;flex-shrink:0}
+.page-title{flex:1;font:700 14px var(--ui)}
+.content{flex:1;overflow-y:auto;padding:14px;scrollbar-width:none}.content::-webkit-scrollbar{display:none}
+/* Summary */
+.summary{display:flex;gap:8px;margin-bottom:14px}
+.sum-card{flex:1;border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:10px;text-align:center}
+.sum-card b{display:block;font:700 20px var(--mono)}.sum-card small{font:8px var(--mono);color:var(--muted)}
+.sum-card.warn b{color:var(--warn)}.sum-card.bad b{color:var(--bad)}.sum-card.good b{color:var(--good)}
+/* Error rows */
+.section-head{font:700 14px var(--ui);margin-bottom:10px;display:flex;justify-content:space-between}
+.section-head small{font:9px var(--mono);color:var(--muted)}
+.error-list{display:flex;flex-direction:column;gap:8px}
+.error-row{border:1px solid var(--border);border-radius:11px;background:var(--surface);overflow:hidden;cursor:pointer}
+.error-row.active{border-color:var(--warn)}
+.error-bar{height:3px;background:var(--warn)}.error-row.active .error-bar{background:var(--warn)}
+.error-body{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.error-ic{width:36px;height:36px;border-radius:9px;background:rgba(255,179,65,.08);display:grid;place-items:center;color:var(--warn);font-size:16px;flex-shrink:0}
+.error-info{flex:1;min-width:0;overflow:hidden}
+.error-name{font:700 12px var(--ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.error-meta{font:9px var(--mono);color:var(--muted);margin-top:2px}
+.error-count{font:700 16px var(--mono);color:var(--warn);flex-shrink:0}
+.error-arrow{color:var(--muted);flex-shrink:0}
+/* Fix mission sheet */
+.sheet{border:1px solid var(--warn);border-radius:12px;background:rgba(255,179,65,.04);padding:14px;margin-top:12px}
+.sheet h3{font:700 14px var(--ui);margin-bottom:4px}
+.sheet p{font:11px var(--mono);color:var(--sub);margin-bottom:10px}
+.mission-list{display:flex;flex-direction:column;gap:6px}
+.mission{display:flex;align-items:center;gap:8px;min-height:44px;border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:6px 10px;cursor:pointer}
+.mission-check{width:22px;height:22px;border:1px solid var(--strong);border-radius:6px;display:grid;place-items:center;flex-shrink:0;color:var(--good);font-size:12px}
+.mission-check.done{border-color:var(--good);background:rgba(59,222,138,.08)}
+.mission-info{flex:1}.mission-info b{display:block;font:12px var(--ui);color:var(--text)}.mission-info small{font:9px var(--mono);color:var(--muted)}
+.mission-status{font:8px var(--mono);padding:2px 6px;border-radius:4px;flex-shrink:0}
+.mission-status.done{color:var(--good);border:1px solid rgba(59,222,138,.3)}
+.mission-status.now{color:var(--cyan);border:1px solid rgba(49,214,196,.3)}
+.mission-status.lock{color:var(--muted);border:1px solid var(--border)}
+.btn{appearance:none;border:1px solid var(--cyan);min-height:44px;width:100%;border-radius:11px;background:var(--cyan);color:#03110f;font-weight:700;font-size:13px;cursor:pointer;margin-top:10px}
+.bottomnav{height:60px;flex-shrink:0;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);background:var(--elevated)}
+.nav-item{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--muted);font:8px var(--mono);border:0;background:transparent;cursor:pointer}
+.nav-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5}
+.nav-item.active{color:var(--cyan)}.nav-item.active::before{content:"";position:absolute;top:0;width:22px;height:2px;background:var(--cyan);border-radius:0 0 2px 2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head><body>
+<div class="phone">
+  <div class="topbar">
+    <button class="back-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <div class="page-title">Журнал ошибок</div>
+  </div>
+  <div class="content">
+    <div class="summary">
+      <div class="sum-card warn"><b>3</b><small>ОШИБКИ</small></div>
+      <div class="sum-card bad"><b>7</b><small>ПОВТОРОВ</small></div>
+      <div class="sum-card good"><b>2</b><small>ИСПРАВЛЕНО</small></div>
+    </div>
+    <div class="section-head">Активные ошибки <small>3</small></div>
+    <div class="error-list">
+      <div class="error-row active">
+        <div class="error-bar"></div>
+        <div class="error-body">
+          <div class="error-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l10 16H2z"/><path d="M12 10v4M12 17v.5"/></svg></div>
+          <div class="error-info"><div class="error-name">Вход без подтверждения объёма</div><div class="error-meta">3 раза · связан: Fake Breakout Phantom</div></div>
+          <div class="error-count">3×</div>
+          <div class="error-arrow">›</div>
+        </div>
+      </div>
+      <div class="error-row">
+        <div class="error-bar" style="background:var(--bad);opacity:.5"></div>
+        <div class="error-body">
+          <div class="error-ic" style="background:rgba(255,89,109,.08);color:var(--bad)">⚠</div>
+          <div class="error-info"><div class="error-name">Игнорирование контекста таймфрейма</div><div class="error-meta">2 раза · связан: Indicator Cult</div></div>
+          <div class="error-count" style="color:var(--bad)">2×</div>
+          <div class="error-arrow">›</div>
+        </div>
+      </div>
+      <div class="error-row">
+        <div class="error-bar" style="background:var(--warn);opacity:.3"></div>
+        <div class="error-body">
+          <div class="error-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l10 16H2z"/><path d="M12 10v4M12 17v.5"/></svg></div>
+          <div class="error-info"><div class="error-name">Удержание убыточной позиции</div><div class="error-meta">1 раз · связан: Leverage Goblin</div></div>
+          <div class="error-count" style="opacity:.5">1×</div>
+          <div class="error-arrow">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="sheet">
+      <h3>Fix Mission: Вход без подтверждения</h3>
+      <p>Корень: вход до данных. Контркарта: «Подтверждение объёмом». Враг: Fake Breakout Phantom</p>
+      <div class="mission-list">
+        <div class="mission"><div class="mission-check done">✓</div><div class="mission-info"><b>Сценарий 1: Определи объём</b><small>2 / 2 верно</small></div><span class="mission-status done">ГОТОВО</span></div>
+        <div class="mission"><div class="mission-check">○</div><div class="mission-info"><b>Сценарий 2: Ретест уровня</b><small>1 / 2 верно</small></div><span class="mission-status now">СЕЙЧАС</span></div>
+        <div class="mission"><div class="mission-check" style="opacity:.3">○</div><div class="mission-info"><b>Сценарий 3: Ложный пробой</b><small>Заблокирован</small></div><span class="mission-status lock">🔒</span></div>
+      </div>
+      <button class="btn">Продолжить миссию</button>
+    </div>
+  </div>
+  <div class="bottomnav">
+    <button class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>ACADEMY</span></button>
+    <button class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 4-3.5 7-8 9-4.5-2-8-5-8-9V7l8-4z"/></svg><span>ARENA</span></button>
+    <button class="nav-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>COLLECTION</span></button>
+    <button class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg><span>MORE</span></button>
+  </div>
+</div><script>document.querySelectorAll(".nav-item").forEach(function(b){var t=b.textContent.trim(),m={ACADEMY:"academy-path.html",ARENA:"arena-encounter.html",COLLECTION:"collection.html",MORE:"more-profile.html"};if(m[t])b.onclick=function(){location.href=m[t]}});document.querySelectorAll(".back-btn").forEach(function(b){b.onclick=function(){history.back()}});</script></body></html>
