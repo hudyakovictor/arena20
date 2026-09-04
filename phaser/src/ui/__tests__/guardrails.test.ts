@@ -7,6 +7,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { FS, HIT } from '../tokens';
 import { T } from '../copy';
+import { palettes } from '../palette';
 
 const SRC = join(__dirname, '..', '..');
 
@@ -135,5 +136,59 @@ describe('код сцен', () => {
       for (const m of matches) offenders.push(`${path}: ${m[1].slice(0, 40)}`);
     }
     expect(offenders).toEqual([]);
+  });
+});
+
+describe('единый визуальный тон', () => {
+  it('цвета эпох существуют только в palette.ts', () => {
+    const cfg = sources.find((f) => f.path === 'config/epochConfig.ts');
+    expect(cfg).toBeDefined();
+    // второй набор токенов здесь был причиной «то один тон, то другой»
+    expect(/tokens:\s*\{/.test(cfg!.code)).toBe(false);
+    expect(/#[0-9a-fA-F]{6}/.test(cfg!.code.replace(/\/\/[^\n]*/g, ''))).toBe(false);
+  });
+
+  it('у каждой эпохи палитра задана полностью', () => {
+    const ids = ['street', 'cabinet', 'terminal', 'system'];
+    for (const id of ids) {
+      const pal = palettes[id];
+      expect(pal, id).toBeDefined();
+      for (const [k, v] of Object.entries(pal)) {
+        expect(v, `${id}.${k}`).not.toBeUndefined();
+      }
+    }
+  });
+
+  it('палитра не читается из scene.registry (источник — прогресс игрока)', () => {
+    const offenders = sources
+      .filter(({ code }) => /registry\.(get|set)\(\s*'epoch'/.test(code))
+      .map(({ path }) => path);
+    expect(offenders).toEqual([]);
+  });
+});
+
+describe('каркас не дублируется', () => {
+  it('топбар и навигация заменяют предыдущий экземпляр', () => {
+    const shell = sources.find((f) => f.path === 'ui/shell.ts')!;
+    expect(shell.code).toMatch(/replaceChrome/);
+  });
+
+  it('фон не перерисовывается повторно', () => {
+    const shell = sources.find((f) => f.path === 'ui/shell.ts')!;
+    expect(shell.code).toMatch(/__arenaBg/);
+  });
+
+  it('Арена не сносит фон при пересборке', () => {
+    const arena = sources.find((f) => f.path === 'scenes/ArenaScene.ts')!;
+    expect(arena.code).not.toMatch(/children\.removeAll/);
+  });
+});
+
+describe('нет утечек ввода', () => {
+  it('ScrollList снимает все свои слушатели в destroy()', () => {
+    const sl = sources.find((f) => f.path === 'ui/ScrollList.ts')!;
+    const on = (sl.code.match(/scene\.input\.on\(/g) ?? []).length;
+    const off = (sl.code.match(/input\.off\(/g) ?? []).length;
+    expect(off).toBeGreaterThanOrEqual(on);
   });
 });

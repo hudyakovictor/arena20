@@ -27,7 +27,6 @@ export class ErrorJournalScene extends Phaser.Scene {
   create(): void {
     const prog = gameState.progress;
     this.P = buildPalette(prog.epoch);
-    this.registry.set('epoch', prog.epoch);
     renderBackground(this, this.P);
     sceneEnter(this);
     renderTopBar(this, gameState);

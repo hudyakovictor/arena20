@@ -3,7 +3,7 @@
 // safe-area внизу, человеческие подписи без внутренних меток.
 
 import Phaser from 'phaser';
-import type { GameState } from '../state/GameState';
+import { gameState, type GameState } from '../state/GameState';
 import { epochOf } from '../config/epochConfig';
 import { iconKey } from '../engine/assetKeys';
 import { buildPalette, type Palette } from './palette';
@@ -23,6 +23,18 @@ const NAV_ITEMS = [
 ];
 
 /** Верхняя панель: уровень, опыт, монеты, запас риска. */
+const TOP_BAR_KEY = '__arenaTopBar';
+const BOTTOM_NAV_KEY = '__arenaBottomNav';
+
+/** Снимает ранее нарисованный элемент каркаса, чтобы не копить дубли. */
+function replaceChrome(scene: Phaser.Scene, key: string, made: Phaser.GameObjects.Container): void {
+  const store = scene.data;
+  const prev = store.get(key) as Phaser.GameObjects.Container | undefined;
+  if (prev && prev !== made && prev.scene) prev.destroy();
+  store.set(key, made);
+  scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => store.remove(key));
+}
+
 export function renderTopBar(
   scene: Phaser.Scene,
   gs: GameState,
@@ -32,6 +44,7 @@ export function renderTopBar(
   const pal = buildPalette(p.epoch);
   const ep = epochOf(p.level);
   const c = scene.add.container(0, 0);
+  replaceChrome(scene, TOP_BAR_KEY, c);
   const h = CHROME.topBar;
 
   const bg = scene.add.graphics();
@@ -97,11 +110,12 @@ export function renderBottomNav(
   current: string,
   unlocked: string[],
 ): Phaser.GameObjects.Container {
-  const pal = buildPalette(currentEpochId(scene));
+  const pal = currentPalette();
   const insets = safeAreaInsets();
   const navH = CHROME.bottomNav + insets.bottom;
   const y = CANVAS.h - navH;
   const c = scene.add.container(0, y);
+  replaceChrome(scene, BOTTOM_NAV_KEY, c);
 
   const bg = scene.add.graphics();
   bg.fillStyle(pal.bgN, 0.98);
@@ -168,14 +182,24 @@ export function navForEpoch(level: number): string[] {
   return ['AcademyScene', 'ArenaScene', 'CollectionScene', 'MoreScene'];
 }
 
-function currentEpochId(scene: Phaser.Scene): string {
-  const fromRegistry = scene.registry.get('epoch') as string | undefined;
-  return fromRegistry ?? 'street';
+/**
+ * Текущая палитра. Единственный источник — прогресс игрока.
+ * Раньше цвет брался из scene.registry, который сцены выставляли вручную;
+ * если сцена забывала его обновить, навигация красилась в цвет прошлой эпохи,
+ * и экран выглядел «наполовину в одном тоне, наполовину в другом».
+ */
+export function currentPalette(): Palette {
+  return buildPalette(gameState.progress.epoch);
 }
 
 /** Фон экрана в токенах эпохи, включая кирпич «Улицы». */
 export function renderBackground(scene: Phaser.Scene, pal: Palette): void {
   scene.cameras.main.setBackgroundColor(pal.bgN);
+  // Защита от повторной отрисовки: иначе кирпич и затемнение накладывались
+  // друг на друга и фон темнел с каждой пересборкой экрана.
+  if (scene.data.get('__arenaBg')) return;
+  scene.data.set('__arenaBg', true);
+  scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => scene.data.remove('__arenaBg'));
   if (pal.brick && scene.textures.exists('bg-wall')) {
     scene.add.image(0, 0, 'bg-wall').setOrigin(0).setDisplaySize(CANVAS.w, CANVAS.h).setAlpha(0.7);
     scene.add.rectangle(0, 0, CANVAS.w, CANVAS.h, 0x000000, 0.55).setOrigin(0);

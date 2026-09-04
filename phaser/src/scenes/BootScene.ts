@@ -79,8 +79,6 @@ export class BootScene extends Phaser.Scene {
     const prog = gameState.progress;
     const p = buildPalette(prog.epoch);
     const ep = epochOf(prog.level);
-
-    this.registry.set('epoch', prog.epoch);
     this.cameras.main.setBackgroundColor(p.bgN);
     if (this.textures.exists('bg-wall')) {
       this.add.image(0, 0, 'bg-wall').setOrigin(0).setDisplaySize(CANVAS.w, CANVAS.h).setAlpha(0.5);

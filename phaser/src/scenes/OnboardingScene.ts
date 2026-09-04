@@ -29,7 +29,6 @@ export class OnboardingScene extends Phaser.Scene {
   create(): void {
     this.step = 0;
     this.P = buildPalette('street');
-    this.registry.set('epoch', 'street');
     renderBackground(this, this.P);
     sceneEnter(this);
     this.render();

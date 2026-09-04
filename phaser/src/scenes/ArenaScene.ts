@@ -48,6 +48,7 @@ export class ArenaScene extends Phaser.Scene {
   private confidence: Confidence = null;
   private selectedAnswer: number | null = null;
   private cardStack: string[] = [];
+  private backdrop: Phaser.GameObjects.GameObject[] = [];
   private verdictFactor: 'A' | 'B' | null = null;
   private blindOpened = false;
   private step: Step = 'investigate';
@@ -73,12 +74,20 @@ export class ArenaScene extends Phaser.Scene {
 
   create(): void {
     this.loadEncounter();
-
-    this.registry.set('epoch', this.progress.epoch);
     renderBackground(this, this.P);
+    // Всё, что нарисовано до этого момента, — статичный фон.
+    // Пересборка экрана снимает только объекты, добавленные после него.
+    this.backdrop = this.children.list.slice();
     sceneEnter(this);
 
     this.buildLayout();
+  }
+
+  /** Удаляет содержимое экрана, оставляя фон нетронутым. */
+  private clearContent(): void {
+    for (const obj of this.children.list.slice()) {
+      if (!this.backdrop.includes(obj)) obj.destroy();
+    }
   }
 
   /**
@@ -674,19 +683,20 @@ export class ArenaScene extends Phaser.Scene {
     });
   }
 
-  /** Полная пересборка экрана — только когда меняется шаг или структура. */
+  /**
+   * Пересборка содержимого экрана. Фон не трогаем: он статичен и его повторная
+   * отрисовка давала заметное мигание при каждой смене шага и задачи.
+   */
   private rebuild(): void {
     this.browser?.destroy();
     this.feedback?.destroy();
     this.expandLayer?.destroy();
-    this.children.removeAll(true);
+    this.clearContent();
     this.tweens.killAll();
     this.time.removeAllEvents();
-    renderBackground(this, this.P);
     this.buildLayout();
   }
 
-  /** Следующая встреча: обновляем данные, не перезапуская сцену целиком. */
   /** Следующая задача без перезапуска сцены: фон и камера остаются на месте. */
   private restartEncounter(): void {
     this.loadEncounter();

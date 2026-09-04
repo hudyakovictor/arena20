@@ -32,6 +32,15 @@ export class ScrollList {
   private dragStartY = 0;
   private scrollStart = 0;
   private velocity = 0;
+  private destroyed = false;
+  private readonly onPointerMove: (p: Phaser.Input.Pointer) => void;
+  private readonly onPointerUp: () => void;
+  private readonly onWheel: (
+    p: Phaser.Input.Pointer,
+    o: unknown,
+    dx: number,
+    dy: number,
+  ) => void;
   private lastPointerY = 0;
   private scrollbar: Phaser.GameObjects.Graphics;
 
@@ -68,26 +77,29 @@ export class ScrollList {
       this.scrollStart = this.scrollY;
       this.velocity = 0;
     });
-    scene.input.on('pointermove', (p: Phaser.Input.Pointer) => {
+    // Слушатели живут на общем вводе сцены, поэтому их обязательно снимать
+    // в destroy(): иначе каждое переключение вкладки оставляло ещё один
+    // невидимый список, который продолжал реагировать на жесты.
+    this.onPointerMove = (p: Phaser.Input.Pointer) => {
       if (!this.dragging) return;
       const dy = p.y - this.dragStartY;
       if (Math.abs(dy) > 6) this.dragged = true;
       this.velocity = p.y - this.lastPointerY;
       this.lastPointerY = p.y;
       this.setScroll(this.scrollStart - dy);
-    });
-    scene.input.on('pointerup', () => {
+    };
+    this.onPointerUp = () => {
       this.dragging = false;
-    });
-    scene.input.on(
-      'wheel',
-      (_p: Phaser.Input.Pointer, _o: unknown, _dx: number, dy: number) => {
-        this.setScroll(this.scrollY + dy * 0.5);
-      },
-    );
+    };
+    this.onWheel = (_p: Phaser.Input.Pointer, _o: unknown, _dx: number, dy: number) => {
+      this.setScroll(this.scrollY + dy * 0.5);
+    };
+    scene.input.on('pointermove', this.onPointerMove);
+    scene.input.on('pointerup', this.onPointerUp);
+    scene.input.on('wheel', this.onWheel);
 
     scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
-    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.destroy());
+    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, this.destroy, this);
     this.drawScrollbar();
   }
 
@@ -122,7 +134,13 @@ export class ScrollList {
   }
 
   destroy(): void {
+    if (this.destroyed) return;
+    this.destroyed = true;
     this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
+    this.scene.input.off('pointermove', this.onPointerMove);
+    this.scene.input.off('pointerup', this.onPointerUp);
+    this.scene.input.off('wheel', this.onWheel);
+    this.scene.events.off(Phaser.Scenes.Events.SHUTDOWN, this.destroy, this);
     this.content.destroy();
     this.maskShape.destroy();
     this.zone.destroy();

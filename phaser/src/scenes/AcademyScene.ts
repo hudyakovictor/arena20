@@ -28,7 +28,6 @@ export class AcademyScene extends Phaser.Scene {
   create(): void {
     const p = gameState.progress;
     this.P = buildPalette(p.epoch);
-    this.registry.set('epoch', p.epoch);
     renderBackground(this, this.P);
     sceneEnter(this);
     renderTopBar(this, gameState);
