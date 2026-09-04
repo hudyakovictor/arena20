@@ -8,6 +8,8 @@ import {
   enemyRenderKey, enemyRenderUrl, cardKey, cardUrl, iconKey, iconUrl,
   MENU_ICONS
 } from '../engine/assetKeys';
+import { api } from '../net/api';
+import { prefetchTask } from '../net/taskBridge';
 
 export class BootScene extends Phaser.Scene {
   constructor(){ super({ key: 'BootScene' }); }
@@ -40,6 +42,10 @@ export class BootScene extends Phaser.Scene {
   }
 
   create(): void {
+    // мост клиент↔API: анонимный вход + слив офлайн-очереди + предзагрузка задания.
+    // Ошибки глотаются — офлайн-режим работает на локальном движке.
+    void api.init().then(()=> prefetchTask());
+
     const p = gameState.progress;
     // реестр в Phaser registry для совместимости со старым прототипом + новый стейт
     this.registry.set('level', p.level);

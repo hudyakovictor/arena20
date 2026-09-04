@@ -9,8 +9,10 @@ import { enemies, enemyById } from '../data/enemies';
 import { cards, cardById } from '../data/cards';
 import { sourceById } from '../data/sources';
 import { enemyAvatarKey, cardKey } from '../engine/assetKeys';
-import type { EncounterInstance, Confidence, SourceId } from '../types';
+import type { EncounterInstance, Confidence, SourceId, SkillDomain, AnswerOption, EvidenceZone } from '../types';
 import { buildPalette } from '../ui/palette';
+import { api, type AttemptPayload, type AttemptResponse, type ServerTask, type NextTaskResponse } from '../net/api';
+import { takeServerTask, prefetchTask } from '../net/taskBridge';
 
 // Токены — Terminal Design System, меняются эпохой без новой сцены (ТЗ Часть 2 §4)
 const FONT_UI = { fontFamily: 'Inter, system-ui, sans-serif' };
@@ -27,6 +29,10 @@ export class ArenaScene extends Phaser.Scene {
   private activeSource: SourceId = 'chart';
   private evidenceHighlights = true;
   private uiGroup!: Phaser.GameObjects.Group;
+  // мост клиент↔API: серверное задание (валидация по seed на сервере, ответы клиенту не шипуются)
+  private serverTask: ServerTask | null = null;
+  private taskStartedAt = 0;
+  private lastShadow: AttemptResponse['shadow'] | null = null;
 
   // Токены эпохи (ТЗ Часть 2): скелет один — взрослеют токены.
   private P = buildPalette('street');
@@ -61,13 +67,23 @@ export class ArenaScene extends Phaser.Scene {
     if(!this.preserveTask || !this.encounter){
       // новое задание — полный сброс выбора
       this.selectedEvidence.clear(); this.confidence=null; this.selectedAnswer=null; this.selectedSequence=[]; this.verdictFactor=null; this.blindOpened=false;
-      // M11 — детерминированный seed: уровень + счётчик заданий (воспроизводимо, без Date.now)
-      const counter = gameState.nextTaskSeedCounter();
-      const seed = (this.progress.level*1000003 + counter*7919 + this.progress.xp)>>>0;
-      // M12 кампания: выбираем шаблон по уровню и не закрытым стадиям
-      const tpl = this.pickTemplate();
-      this.encounter = mutate(tpl, seed);
+      // приоритет — серверное задание (клиент не знает верный ответ до отправки, ТЗ Часть 6 §2)
+      const srv = takeServerTask();
+      if(srv){
+        this.serverTask = srv.task;
+        this.encounter = this.encounterFromServer(srv);
+      } else {
+        // офлайн-фолбэк: локальный движок (ярлык LOCAL в углу)
+        this.serverTask = null;
+        // M11 — детерминированный seed: уровень + счётчик заданий (воспроизводимо, без Date.now)
+        const counter = gameState.nextTaskSeedCounter();
+        const seed = (this.progress.level*1000003 + counter*7919 + this.progress.xp)>>>0;
+        // M12 кампания: выбираем шаблон по уровню и не закрытым стадиям
+        const tpl = this.pickTemplate();
+        this.encounter = mutate(tpl, seed);
+      }
       this.activeSource = this.encounter.sources[0] as SourceId;
+      this.taskStartedAt = Date.now();
     }
     this.preserveTask = false;
     this.evidenceHighlights = balanceConfig.evidence.highlightInEpoch[this.progress.epoch as 'street'|'cabinet'|'terminal'|'system'];
@@ -90,6 +106,35 @@ export class ArenaScene extends Phaser.Scene {
     this.createAnswerBlock();
     this.createBottomNav();
     this.createDebugEpochSwitcher(); // dev — показать взросление
+  }
+
+  /** Серверное задание → формат EncounterInstance (верный ответ клиенту неизвестен: correct = -1). */
+  private encounterFromServer(srv: NextTaskResponse): EncounterInstance {
+    const t = srv.task;
+    const enemyId = srv.queueItem?.enemyId ?? 'E01';
+    return {
+      id: t.templateId,
+      learningGoal: t.learningGoal,
+      atoms: t.atoms,
+      enemyId,
+      stage: t.stage,
+      sources: t.sources as SourceId[],
+      questionPool: [t.question],
+      answers: t.answers as AnswerOption[],
+      correct: -1,                 // сервер не раскрывает ответ до попытки (ТЗ Часть 1 §7)
+      evidence: t.evidence.map(e=> ({ id: e.id, source: e.source as SourceId, label: e.label, isCorrect: false })),
+      skills: t.skills,
+      domain: t.enemyDomain as SkillDomain,
+      verdict: t.verdict ? { ...t.verdict, correctFactor: 'A' as const } : undefined, // фактор скрыт — проверяет сервер
+      seed: t.seed,
+      question: t.question,
+      mutatedAnswers: t.answers as AnswerOption[],
+      correctAnswer: -1,
+      mutatedEvidence: t.evidence.map(e=> ({ id: e.id, source: e.source as SourceId, label: e.label, isCorrect: false })) as EvidenceZone[],
+      ticker: t.ticker,
+      timeframe: t.timeframe,
+      isMirrored: t.isMirrored,
+    };
   }
 
   private pickTemplate(){
@@ -183,6 +228,8 @@ export class ArenaScene extends Phaser.Scene {
     this.add.text(bx+8,by+7,'● ● ●', { fontSize:'5px', color:this.COLORS.mutedS});
     this.add.text(bx+54,by+7,`arena://sandbox/${this.encounter.id.toLowerCase()}`, { ...FONT_MONO, fontSize:'7px', color:this.COLORS.mutedS});
     this.add.text(bx+bw-44,by+7,'SEED '+String(this.encounter.seed).slice(-5), { ...FONT_MONO, fontSize:'7px', color:this.COLORS.mutedS});
+    // индикатор источника задания: SRV — сервер (валидация по seed), LOCAL — офлайн-движок
+    this.add.text(bx+bw-8, by+7, this.serverTask? '●SRV':'●LOCAL', { ...FONT_MONO, fontSize:'6px', color: this.serverTask? this.COLORS.goodS : this.COLORS.warnS}).setOrigin(1,0);
     // вкладки — не более трёх, только релевантные (ТЗ Часть 4 §3)
     const tabs = this.encounter.sources.slice(0,3) as SourceId[];
     // M9 слепой источник: одна вкладка закрыта, открытие стоит бюджет
@@ -535,6 +582,11 @@ export class ArenaScene extends Phaser.Scene {
   }
 
   private submitSequence(){
+    // серверное задание — стек валидирует сервер
+    if(this.serverTask){
+      this.showConfidenceAfter(()=> this.submitToServer());
+      return;
+    }
     // проверяем стек — допустимые порядки из шаблона (упрощено: правильный порядок — по списку skills)
     const correctOrder = this.encounter.skills.slice(0, (balanceConfig.sequence.slotsByEpoch as any)[this.progress.epoch as any]);
     const isCorrect = this.selectedSequence.length===correctOrder.length && this.selectedSequence.every((v,i)=> v===correctOrder[i]);
@@ -563,6 +615,8 @@ export class ArenaScene extends Phaser.Scene {
 
   private submitAnswer(){
     if(this.selectedAnswer===null) return;
+    // серверное задание — валидирует сервер по seed, клиент ответа не знает
+    if(this.serverTask){ this.submitToServer(); return; }
     const isCorrect = this.selectedAnswer===this.encounter.correctAnswer;
     // M4 проверка вердикта
     if(this.encounter.verdict && this.progress.level>=balanceConfig.verdict.introducedAt){
@@ -582,6 +636,74 @@ export class ArenaScene extends Phaser.Scene {
     const isJustified = hasCorrectEvidence && this.selectedEvidence.size>=need;
     const verdict = scoreEncounter({ domain: this.encounter.domain, isCorrect, isJustified, confidence: this.confidence, level:this.progress.level, epoch:this.progress.epoch, streak:this.progress.streak});
     this.handleResult(verdict, isCorrect, isJustified);
+  }
+
+  /** Отправка попытки на сервер: /attempts. Сеть упала → офлайн-очередь + локальный расчёт. */
+  private submitToServer(){
+    const t = this.serverTask!;
+    const payload: AttemptPayload = {
+      clientAttemptId: api.newAttemptId(),
+      templateId: t.templateId,
+      contentVersion: t.contentVersion,
+      seed: t.seed,
+      answer: this.selectedAnswer,
+      evidence: [...this.selectedEvidence],
+      confidence: this.confidence,
+      openedSources: [this.activeSource],
+      sequence: this.selectedSequence,
+      verdict: this.verdictFactor,
+      blindOpened: this.blindOpened,
+      durationMs: Math.min(10*60*1000, Math.max(0, Date.now()-this.taskStartedAt)),
+    };
+    const waiting = this.add.text(195, 660, '⇅ проверка на сервере...', { ...FONT_MONO, fontSize:'8px', color:this.COLORS.subS}).setOrigin(0.5);
+    api.submitAttempt(payload).then(res=>{
+      waiting.destroy();
+      this.applyServerResult(res);
+    }).catch(()=>{
+      waiting.destroy();
+      // офлайн: очередь для батча + локальный расчёт без раскрытия ответа сервера
+      api.queueAttempt(payload);
+      const isJustified = this.selectedEvidence.size>0;
+      const verdict = scoreEncounter({ domain: this.encounter.domain, isCorrect:false, isJustified, confidence: this.confidence, level:this.progress.level, epoch:this.progress.epoch, streak:this.progress.streak});
+      this.add.text(195, 660, '◌ офлайн — попытка в очереди, синхронизируется позже', { ...FONT_MONO, fontSize:'7px', color:this.COLORS.warnS}).setOrigin(0.5);
+      this.time.delayedCall(900, ()=> this.handleResult(verdict, false, isJustified));
+    });
+  }
+
+  /** Ответ сервера → раскрытие + награда + синхронизация локального прогресса. */
+  private applyServerResult(res: AttemptResponse){
+    const isCorrect = res.result==='correct' || res.result==='correct_unfounded';
+    const isJustified = res.result==='correct';
+    // раскрытие: теперь клиент знает верный ответ и улики (после решения — ТЗ §7 соблюдён)
+    this.encounter.correctAnswer = res.reveal.correctAnswer;
+    this.encounter.mutatedEvidence.forEach(z=> { z.isCorrect = res.reveal.correctEvidence.includes(z.id); });
+    // серверный прогресс — источник правды
+    const p = gameState.progress;
+    p.level = res.progress.level;
+    p.coins = res.progress.coins;
+    p.riskBudget = Math.max(0, Math.min(p.maxBudget, res.progress.riskBudget));
+    p.streak = res.progress.streak;
+    gameState.refreshEpoch();
+    // свиток ошибок M7 — локальное зеркало серверного
+    if(res.progress.scrollAdded){
+      gameState.pushError(this.encounter.enemyId, this.encounter.atoms[0] ?? 'C1.1', res.reveal.missedEvidence || 'нет улики');
+    } else if(isCorrect && isJustified){
+      const open = p.errorScroll.find(e=> e.enemy===this.encounter.enemyId && !e.closed);
+      if(open) gameState.closeError(open.id);
+    }
+    // калибровка M3
+    const confVal = this.confidence==='high'?0.9: this.confidence==='mid'?0.65:0.35;
+    gameState.addCalibration(confVal, isCorrect?1:0);
+    // трофей M12
+    if(res.progress.stageWon){
+      const cur = p.enemyStagesReached[res.progress.stageWon.enemyId] ?? 0;
+      if(res.progress.stageWon.stage>cur) p.enemyStagesReached[res.progress.stageWon.enemyId]=res.progress.stageWon.stage;
+    }
+    this.lastShadow = res.shadow;
+    gameState.save();
+    if(res.progress.leviathan){ this.showLeviathan(); return; }
+    const v = { isCorrect, isJustified, xp: res.reward.xp, coins: res.reward.coins, budgetDelta: res.reward.budgetDelta, enemyDefeated: res.reward.enemyDefeated };
+    this.showFeedback(v as ReturnType<typeof scoreEncounter>, isCorrect, isJustified);
   }
 
   private handleResult(v:ReturnType<typeof scoreEncounter>, isCorrect:boolean, isJustified:boolean){
@@ -685,7 +807,10 @@ export class ArenaScene extends Phaser.Scene {
     const y=360;
     // M14 тень арены
     this.add.text(20, y, 'M14 ТЕНЬ АРЕНЫ — как ответили другие', { ...FONT_MONO, fontSize:'8px', color:this.COLORS.subS});
-    const dist = isCorrect ? [12,58,22,8] : [38,18,32,12]; // проценты A-D
+    // реальное распределение с сервера; офлайн — типовая заглушка
+    const dist = this.lastShadow?.n
+      ? [0,1,2,3].map(i=> Math.round((this.lastShadow!.distribution.find(d=>d.variant===i)?.share ?? 0)*100))
+      : (isCorrect ? [12,58,22,8] : [38,18,32,12]);
     const labels=['A','B','C','D'];
     dist.forEach((pct,i)=>{
       const bx=20+i*88;
@@ -693,7 +818,10 @@ export class ArenaScene extends Phaser.Scene {
       this.add.rectangle(bx, y+18, Math.round(80*pct/100), 10, i===this.encounter.correctAnswer? this.COLORS.good : this.COLORS.muted).setOrigin(0);
       this.add.text(bx+40, y+32, `${labels[i]} ${pct}%`, { ...FONT_MONO, fontSize:'7px', color:this.COLORS.subS}).setOrigin(0.5);
     });
-    this.add.text(20, y+48, isCorrect? 'ты с большинством, но 42% попались на ловушку C (типовое искажение)' : 'типовое искажение толпы — FOMO (E05) сработало на 38%', { ...FONT_MONO, fontSize:'7px', color:this.COLORS.mutedS, wordWrap:{width:350}}).setOrigin(0);
+    const shadowNote = this.lastShadow?.n
+      ? (this.lastShadow.crowdBias ?? `по данным ${this.lastShadow.n} игроков`)
+      : (isCorrect? 'ты с большинством, но часть игроков попалась на ловушку (типовое искажение)' : 'типовое искажение толпы — сравни свой выбор с распределением');
+    this.add.text(20, y+48, shadowNote, { ...FONT_MONO, fontSize:'7px', color:this.COLORS.mutedS, wordWrap:{width:350}}).setOrigin(0);
 
     // награда и бюджет
     const rewardY=430;
