@@ -72,85 +72,14 @@ export class BootScene extends Phaser.Scene {
       const ep = epochOf(p.level);
       this.cameras.main.setBackgroundColor(ep.tokens.bg as any);
 
-      // Фон — если текстура есть, показываем, если нет — просто цвет
-      if (this.textures.exists('bg-wall')) {
-        this.add.image(0, 0, 'bg-wall').setOrigin(0).setDisplaySize(390, 844).setAlpha(0.5);
-        this.add.rectangle(0, 0, 390, 844, 0x000000, 0.55).setOrigin(0);
-      } else {
-        // fallback градиент из прямоугольников
-        this.add.rectangle(0,0,390,844,0x0a0b0d).setOrigin(0);
-        this.add.rectangle(0,0,390,400,0x16181d,0.5).setOrigin(0);
-        console.warn('[Boot] bg-wall missing, using fallback');
-      }
-
-      // Заголовок — всегда виден, даже если ассеты не загрузились
-      this.add.rectangle(20, 300, 350, 120, 0x16181d, 0.9).setStrokeStyle(1, 0xc8ff00).setOrigin(0);
-      this.add.text(195, 330, 'SIGNAL ARENA', {
-        fontFamily:'Oswald, Inter, sans-serif',
-        fontSize:'28px',
-        color:'#c8ff00',
-        fontStyle:'normal'
-      }).setOrigin(0.5);
-      this.add.text(195, 360, `${ep.name} · УРОВЕНЬ ${p.level}`, {
-        fontFamily:'IBM Plex Mono, monospace',
-        fontSize:'10px',
-        color: ep.tokens.accent
-      }).setOrigin(0.5);
-      this.add.text(195, 380, ep.motto, {
-        fontFamily:'Inter, sans-serif',
-        fontSize:'9px',
-        color:'#93A3BC',
-        align:'center',
-        wordWrap:{width:300}
-      }).setOrigin(0.5);
-      this.add.text(195, 520, 'КОШЕЛЁК — НЕ ТЕРМИНАЛ. ТЕРМИНАЛ — НЕ КАЗИНО.', {
-        fontFamily:'IBM Plex Mono, monospace',
-        fontSize:'8px',
-        color:'#62708A'
-      }).setOrigin(0.5);
-
-      // Инфо о загрузке
-      const loadedCount = this.textures.list ? Object.keys(this.textures.list).length : 0;
-      this.add.text(195, 470, `ассетов: ${loadedCount} · кликни чтобы продолжить`, {
-        fontFamily:'IBM Plex Mono, monospace',
-        fontSize:'8px',
-        color:'#62708A'
-      }).setOrigin(0.5);
-
-      // Кнопка продолжить — на случай если автовход не сработает
-      const btn = this.add.rectangle(45, 540, 300, 44, 0xc8ff00).setOrigin(0).setInteractive();
-      this.add.text(195, 562, 'ВОЙТИ В АРЕНУ', {
-        fontFamily:'Inter, sans-serif',
-        fontSize:'14px',
-        color:'#0a0b0d'
-      }).setOrigin(0.5);
-
-      const goNext = () => {
-        try {
-          // Фикс: онбординг больше не показывается автоматически (юзер сказал "его не должно было быть")
-          // Сразу идем в Арену, флаг ставим чтобы онбординг не всплывал в будущем
-          try { gameState.setFlag('onboarding_done', true); } catch {}
-          console.log('[Boot] goNext -> ArenaScene (onboarding skipped)');
-          this.scene.start('ArenaScene');
-        } catch (e) {
-          console.error('[Boot] scene start failed', e);
-          this.add.text(195, 600, 'ОШИБКА: ' + (e as any)?.message, {
-            fontFamily:'monospace',
-            fontSize:'10px',
-            color:'#ff4d5e',
-            wordWrap:{width:320}
-          }).setOrigin(0.5);
-        }
-      };
-
-      btn.on('pointerdown', goNext);
-      this.time.delayedCall(900, goNext);
-
-      // Скрываем fallback из index.html
+      // Скрываем fallback из index.html сразу
       const fb = document.getElementById('fallback');
       if (fb) fb.style.display='none';
-      const dbg = document.getElementById('debug');
-      if (dbg) dbg.textContent += '\n[Boot] create OK, textures=' + loadedCount;
+
+      // Никаких промежуточных экранов — сразу в Арену (юзер: "его не должно было быть")
+      try { gameState.setFlag('onboarding_done', true); } catch {}
+      console.log('[Boot] instant -> ArenaScene');
+      this.scene.start('ArenaScene');
 
     } catch (e:any) {
       console.error('[Boot] create failed', e);
@@ -162,11 +91,6 @@ export class BootScene extends Phaser.Scene {
         wordWrap:{width:340},
         align:'center'
       }).setOrigin(0.5);
-      const dbg = document.getElementById('debug');
-      if (dbg) {
-        dbg.style.display='block';
-        dbg.textContent += '\n[Boot] FATAL: ' + (e?.message||e) + '\n' + (e?.stack||'');
-      }
     }
   }
 }
