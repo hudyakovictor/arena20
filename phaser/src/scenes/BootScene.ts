@@ -127,9 +127,11 @@ export class BootScene extends Phaser.Scene {
 
       const goNext = () => {
         try {
-          const firstRun = gameState.getFlag('onboarding_done') ? false : true;
-          console.log('[Boot] goNext firstRun=', firstRun);
-          this.scene.start(firstRun ? 'OnboardingScene' : 'ArenaScene');
+          // Фикс: онбординг больше не показывается автоматически (юзер сказал "его не должно было быть")
+          // Сразу идем в Арену, флаг ставим чтобы онбординг не всплывал в будущем
+          try { gameState.setFlag('onboarding_done', true); } catch {}
+          console.log('[Boot] goNext -> ArenaScene (onboarding skipped)');
+          this.scene.start('ArenaScene');
         } catch (e) {
           console.error('[Boot] scene start failed', e);
           this.add.text(195, 600, 'ОШИБКА: ' + (e as any)?.message, {
