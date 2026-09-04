@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { gameState } from '../state/GameState';
 import { epochOf } from '../config/epochConfig';
 import { iconKey } from '../engine/assetKeys';
+import { buildPalette } from '../ui/palette';
 
 const W = 390, H = 844;
 
@@ -11,9 +12,16 @@ export class OnboardingScene extends Phaser.Scene {
   private step = 0;
   constructor(){ super({ key:'OnboardingScene' }); }
 
+  private P = buildPalette('street');
+
   create(){
     this.step = 0;
-    this.cameras.main.setBackgroundColor(0x070B14);
+    this.P = buildPalette('street');
+    this.cameras.main.setBackgroundColor(this.P.bgN);
+    if (this.textures.exists('bg-wall')) {
+      this.add.image(0, 0, 'bg-wall').setOrigin(0).setDisplaySize(390, 844).setAlpha(0.5);
+      this.add.rectangle(0, 0, 390, 844, 0x000000, 0.55).setOrigin(0);
+    }
     this.showStep();
   }
 
@@ -22,11 +30,11 @@ export class OnboardingScene extends Phaser.Scene {
     const ep = epochOf(1);
     this.add.rectangle(0, 0, W, H, 0x070B14).setOrigin(0);
     // бренд
-    this.add.text(W/2, 60, 'SIGNAL ARENA', { fontFamily:'Inter, system-ui, sans-serif', fontSize:'26px', color:'#E9F2FF', fontStyle:'italic' }).setOrigin(0.5);
-    this.add.text(W/2, 92, `${ep.name} · ПЕРВЫЙ ВХОД`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:'#31D6C4' }).setOrigin(0.5);
+    this.add.text(W/2, 60, 'SIGNAL ARENA', { fontFamily:'Inter, system-ui, sans-serif', fontSize:'26px', color:'#f2f3f5', fontStyle:'italic' }).setOrigin(0.5);
+    this.add.text(W/2, 92, `${ep.name} · ПЕРВЫЙ ВХОД`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:'#c8ff00' }).setOrigin(0.5);
 
     if(this.step===0){
-      this.add.text(W/2, 160, 'Игра, которая учит торговать крипту.\nНе терминал с XP. Не курс с картинками.', { fontFamily:'Inter, sans-serif', fontSize:'14px', color:'#93A3BC', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
+      this.add.text(W/2, 160, 'Игра, которая учит торговать крипту.\nНе терминал с XP. Не курс с картинками.', { fontFamily:'Inter, sans-serif', fontSize:'14px', color:'#b8bcc4', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
       // три доли
       const tiles = [
         { t:'33%', s:'ТЕРМИНАЛ', icon:'nav-arena' },
@@ -35,15 +43,15 @@ export class OnboardingScene extends Phaser.Scene {
       ];
       tiles.forEach((x,i)=>{
         const cx = 40 + i*115;
-        this.add.rectangle(cx, 300, 100, 90, 0x0C1323).setStrokeStyle(1, 0x22304A).setOrigin(0);
+        this.add.rectangle(cx, 300, 100, 90, 0x16181d).setStrokeStyle(1, 0x33383f).setOrigin(0);
         const k = iconKey(x.icon);
-        if(this.textures.exists(k)) this.add.image(cx+50, 330, k).setTint(0x31D6C4).setScale(1.6);
-        this.add.text(cx+50, 355, x.t, { fontFamily:'IBM Plex Mono, monospace', fontSize:'16px', color:'#E9F2FF' }).setOrigin(0.5);
-        this.add.text(cx+50, 378, x.s, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#62708A' }).setOrigin(0.5);
+        if(this.textures.exists(k)) this.add.image(cx+50, 330, k).setTint(0xc8ff00).setScale(1.6);
+        this.add.text(cx+50, 355, x.t, { fontFamily:'IBM Plex Mono, monospace', fontSize:'16px', color:'#f2f3f5' }).setOrigin(0.5);
+        this.add.text(cx+50, 378, x.s, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#7d838d' }).setOrigin(0.5);
       });
-      this.add.text(W/2, 430, 'Академия → теория и карты навыков.\nАрена → применяешь карты против врагов.', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#93A3BC', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
+      this.add.text(W/2, 430, 'Академия → теория и карты навыков.\nАрена → применяешь карты против врагов.', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#b8bcc4', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
     } else if(this.step===1){
-      this.add.text(W/2, 160, 'Ты — трейдер. Враги — твои ошибки.', { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#E9F2FF', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
+      this.add.text(W/2, 160, 'Ты — трейдер. Враги — твои ошибки.', { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#f2f3f5', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
       const enemies=['E04','E05','E18'];
       enemies.forEach((e,i)=>{
         const k = `enemy_${e.replace('E','')}_avatar`;
@@ -51,14 +59,14 @@ export class OnboardingScene extends Phaser.Scene {
         this.add.circle(cx, 300, 44, 0x0C1323).setStrokeStyle(2, 0x22304A);
         if(this.textures.exists(k)) this.add.image(cx, 300, k).setDisplaySize(80,80).setAlpha(0.8);
       });
-      this.add.text(W/2, 380, 'Новости врут. Проверяй каждый источник.\nОбъём решает. Стоп — до входа.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'11px', color:'#31D6C4', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
+      this.add.text(W/2, 380, 'Новости врут. Проверяй каждый источник.\nОбъём решает. Стоп — до входа.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'11px', color:'#c8ff00', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
     } else {
-      this.add.text(W/2, 160, 'Сессию не ограничивает энергия.\nТолько бюджет риска. Его нельзя купить.', { fontFamily:'Inter, sans-serif', fontSize:'14px', color:'#93A3BC', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
+      this.add.text(W/2, 160, 'Сессию не ограничивает энергия.\nТолько бюджет риска. Его нельзя купить.', { fontFamily:'Inter, sans-serif', fontSize:'14px', color:'#b8bcc4', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
       // бюджет бары
       this.add.text(W/2, 250, 'БЮДЖЕТ РИСКА = 100', { fontFamily:'IBM Plex Mono, monospace', fontSize:'18px', color:'#3BDE8A' }).setOrigin(0.5);
       this.add.rectangle(W/2-140, 290, 280, 10, 0x060A12).setStrokeStyle(1, 0x22304A).setOrigin(0);
       this.add.rectangle(W/2-140, 290, 280, 10, 0x3BDE8A).setOrigin(0);
-      this.add.text(W/2, 330, 'Ошибки списывают. Верные улики восстанавливают.\nНоль — событийная встреча с Левиафаном.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:'#93A3BC', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
+      this.add.text(W/2, 330, 'Ошибки списывают. Верные улики восстанавливают.\nНоль — событийная встреча с Левиафаном.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:'#b8bcc4', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
     }
 
     // CTA
@@ -71,9 +79,9 @@ export class OnboardingScene extends Phaser.Scene {
       }
     });
     this.add.text(W/2, 644, btn, { fontFamily:'Inter, system-ui, sans-serif', fontSize:'14px', color:'#03110f' }).setOrigin(0.5);
-    this.add.text(W/2, 690, this.step<2 ? `${this.step+1}/3` : '3/3', { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:'#62708A' }).setOrigin(0.5);
+    this.add.text(W/2, 690, this.step<2 ? `${this.step+1}/3` : '3/3', { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:'#7d838d' }).setOrigin(0.5);
     // скип
-    const skip = this.add.text(W/2, 760, 'пропустить (демо)', { fontFamily:'IBM Plex Mono, monospace', fontSize:'11px', color:'#62708A' }).setOrigin(0.5).setInteractive();
+    const skip = this.add.text(W/2, 760, 'пропустить (демо)', { fontFamily:'IBM Plex Mono, monospace', fontSize:'11px', color:'#7d838d' }).setOrigin(0.5).setInteractive();
     skip.on('pointerdown', ()=>{ gameState.setFlag('onboarding_done'); this.scene.start('AcademyScene'); });
   }
 }
