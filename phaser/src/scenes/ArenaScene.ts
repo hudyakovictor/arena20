@@ -163,7 +163,9 @@ export class ArenaScene extends Phaser.Scene {
     const bottomLimit = CANVAS.h - bottomNavHeight() - SP.md;
     // Место под нижний блок действия
     const ctaH = HIT.comfortable + SP.md;
-    const evidenceH = 34;
+    // Полоса улик — полноценная мобильная плашка, а не 30px-декорация.
+    // Её визуальная высота совпадает с минимальной зоной касания.
+    const evidenceH = HIT.min;
 
     if (this.step === 'investigate') {
       // Разбор: видно всё окружение задачи.
@@ -282,7 +284,7 @@ export class ArenaScene extends Phaser.Scene {
 
   /** Полоса найденных доказательств — обновляется на месте, без «стирания» поверх. */
   private renderEvidenceStrip(flow: Flow): void {
-    const y = flow.take(34, SP.sm);
+    const y = flow.take(HIT.min, SP.sm);
     this.evidenceStrip = this.add.container(0, y);
     this.refreshEvidenceStrip();
   }
@@ -298,20 +300,24 @@ export class ArenaScene extends Phaser.Scene {
     const ok = have >= need;
 
     const g = this.add.graphics();
-    g.fillStyle(p.surfaceN, 1);
-    g.fillRoundedRect(GUTTER, 0, w, 30, RADIUS.sm);
-    g.lineStyle(1, ok ? p.goodN : p.borderN, 1);
-    g.strokeRoundedRect(GUTTER, 0, w, 30, RADIUS.sm);
+    g.fillStyle(ok ? p.hoverN : p.surfaceN, 1);
+    g.fillRoundedRect(GUTTER, 0, w, HIT.min, RADIUS.sm);
+    g.lineStyle(ok ? 2 : 1, ok ? p.goodN : p.borderN, 1);
+    g.strokeRoundedRect(GUTTER, 0, w, HIT.min, RADIUS.sm);
     c.add(g);
 
-    c.add(this.add.text(GUTTER + SP.md, 8, T.arena.evidenceTitle, TX.caption(p)));
+    c.add(
+      this.add
+        .text(GUTTER + SP.md, HIT.min / 2, T.arena.evidenceTitle, TX.caption(p, { color: p.sub }))
+        .setOrigin(0, 0.5),
+    );
     const status = have === 0 ? T.arena.evidenceNeed(need) : T.arena.evidencePicked(have);
     c.add(
       this.add
-        .text(GUTTER + w - SP.md, 8, status, {
+        .text(GUTTER + w - SP.md, HIT.min / 2, status, {
           ...TX.caption(p, { color: ok ? p.good : p.muted }),
         })
-        .setOrigin(1, 0),
+        .setOrigin(1, 0.5),
     );
   }
 

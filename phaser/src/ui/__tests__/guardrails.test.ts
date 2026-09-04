@@ -167,6 +167,19 @@ describe('единый визуальный тон', () => {
   });
 });
 
+describe('иконки интерфейса', () => {
+  it('SVG имеют белую базу для корректного Phaser tint', () => {
+    const iconDir = join(SRC, '..', 'public', 'assets', 'render', 'icons');
+    const icons = readdirSync(iconDir).filter((name) => name.endsWith('.svg'));
+    expect(icons).toHaveLength(10);
+    for (const name of icons) {
+      const svg = readFileSync(join(iconDir, name), 'utf8');
+      expect(svg, name).toContain('stroke="#ffffff"');
+      expect(svg, name).not.toMatch(/#31D6C4|currentColor/);
+    }
+  });
+});
+
 describe('каркас не дублируется', () => {
   it('топбар и навигация заменяют предыдущий экземпляр', () => {
     const shell = sources.find((f) => f.path === 'ui/shell.ts')!;

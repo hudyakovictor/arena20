@@ -129,8 +129,17 @@ export function button(
   c.add(g);
 
   const hasHint = !!opts.hint;
+  // Длинные русские CTA не должны вылезать из плашки на узком холсте.
+  // Уменьшаем только конкретную подпись, сохраняя нижний предел 12px.
+  const labelStyle = fitFontSize(
+    scene,
+    label,
+    TX.button(p, { color: textColor }),
+    w - SP.xl * 2,
+    FS.caption,
+  );
   const label1 = scene.add
-    .text(w / 2, hasHint ? h / 2 - 8 : h / 2, label, TX.button(p, { color: textColor }))
+    .text(w / 2, hasHint ? h / 2 - 8 : h / 2, label, labelStyle)
     .setOrigin(0.5);
   c.add(label1);
   if (hasHint) {

@@ -214,7 +214,11 @@ for(const [id,name,short,domain,rank] of CARDS){
   manifest.cards.push({ id, name, short, domain, rank, file:`render/cards/${fn}`, size:{ w:220, h:320 } }); count++;
 }
 for(const [id,g] of Object.entries(ICONS)){
-  write(path.join(OUT,'icons'), `${id}.svg`, iconSVG(id, '#31D6C4'));
+  // Навигационные и доменные пиктограммы теперь взяты из Lucide (ISC) и
+  // лежат в public как исходные ассеты. Не затираем их процедурными старыми
+  // контурами: белая база нужна Phaser для корректного setTint() эпохи.
+  const iconFile = path.join(OUT, 'icons', `${id}.svg`);
+  if (!fs.existsSync(iconFile)) write(path.join(OUT,'icons'), `${id}.svg`, iconSVG(id, '#ffffff'));
   manifest.icons.push({ id, file:`render/icons/${id}.svg`, size:24, role: id.startsWith('nav')?'menu':'domain' }); count++;
 }
 
