@@ -9,12 +9,12 @@ export const enemies: Enemy[] = [
     {stage:1, level:1, requiredCards:[{cardId:'C1',rank:1}], sources:['chart'], factor:'длинная тень — неопределённость, а не сигнал', layers:'S1 базовый мастер'},
     {stage:2, level:6, requiredCards:[{cardId:'C1',rank:2},{cardId:'C2',rank:1}], sources:['chart'], factor:'объём почти выключен на свече', layers:'S2 lantern объёма'},
     {stage:3, level:18, requiredCards:[{cardId:'C1',rank:2},{cardId:'C5',rank:1}], sources:['chart','position'], factor:'FOMO на длинной тени', secondDomain:'human', comboRequired:['K01'], layers:'S3 pink rim'},
-    {stage:4, level:45, requiredCards:[{cardId:'C1',rank:3},{cardId:'C2',rank:2},{cardId:'C16',rank:1}], sources:['chart'], factor:'перенос: другой режим рынка', layers:'S4 arena'},
+    {stage:4, level:45, requiredCards:[{cardId:'C1',rank:3},{cardId:'C2',rank:2},{cardId:'C16',rank:1}], sources:['chart'], factor:'перенос: другой режим рынка', comboRequired:['K01'], layers:'S4 arena'},
   ]},
   { id:'E02', name:'Fake Breakout Phantom', domain:'technical', rankDanger:1, mode:'normal', stages:[
     {stage:1, level:5, requiredCards:[{cardId:'C2',rank:1}], sources:['chart'], factor:'пробой без объёма', layers:'S1 базовый'},
     {stage:2, level:10, requiredCards:[{cardId:'C2',rank:2},{cardId:'C3',rank:1}], sources:['chart'], factor:'индикатор «подтверждает» пробой', layers:'S2 bell-кривая маска'},
-    {stage:3, level:24, requiredCards:[{cardId:'C2',rank:2},{cardId:'C6',rank:1}], sources:['chart','news'], factor:'новость как повод для пробоя', secondDomain:'context', layers:'S3 burning newspaper'},
+    {stage:3, level:24, requiredCards:[{cardId:'C2',rank:2},{cardId:'C6',rank:1}], sources:['chart','news'], factor:'новость как повод для пробоя', secondDomain:'context', comboRequired:['K07'], layers:'S3 burning newspaper'},
     {stage:4, level:60, requiredCards:[{cardId:'C2',rank:2},{cardId:'C10',rank:2},{cardId:'C11',rank:1}], sources:['chart','orderbook','sentiment'], factor:'перенос: пробой на ликвидациях', comboRequired:['T05'], layers:'S4 hooks'},
   ]},
   { id:'E03', name:'Indicator Cult', domain:'technical', rankDanger:1, mode:'normal', stages:[
@@ -39,8 +39,8 @@ export const enemies: Enemy[] = [
   { id:'E18', name:'Stop-Hunt Kraken', domain:'risk', rankDanger:2, mode:'normal', stages:[
     {stage:1, level:42, requiredCards:[{cardId:'C2',rank:2},{cardId:'C10',rank:1}], sources:['chart','orderbook'], factor:'стопы под очевидным уровнем', layers:'S1 hooks'},
     {stage:2, level:49, requiredCards:[{cardId:'C2',rank:2},{cardId:'C10',rank:2},{cardId:'C4',rank:1}], sources:['chart','orderbook','position'], factor:'плечо как груз', layers:'S2 brass weights'},
-    {stage:3, level:59, requiredCards:[{cardId:'C2',rank:2},{cardId:'C13',rank:1}], sources:['chart','orderbook'], factor:'исполнение: где ставить стоп по структуре', secondDomain:'risk', comboRequired:['K14'], layers:'S3 ruler'},
-    {stage:4, level:87, requiredCards:[{cardId:'C2',rank:3},{cardId:'C10',rank:2},{cardId:'C14',rank:2}], sources:['chart','orderbook'], factor:'турнир, перенос', layers:'S4 boiling'},
+    {stage:3, level:59, requiredCards:[{cardId:'C2',rank:2},{cardId:'C13',rank:1}], sources:['chart','orderbook'], factor:'исполнение: где ставить стоп по структуре', secondDomain:'risk', comboRequired:['K03'], layers:'S3 ruler'},
+    {stage:4, level:87, requiredCards:[{cardId:'C2',rank:3},{cardId:'C10',rank:2},{cardId:'C14',rank:2}], sources:['chart','orderbook'], factor:'турнир, перенос', comboRequired:['K12'], layers:'S4 boiling'},
   ]},
   { id:'E19', name:'Liquidity Hydra', domain:'risk', rankDanger:3, mode:'normal', stages:[
     {stage:1, level:43, requiredCards:[{cardId:'C10',rank:1}], sources:['orderbook','chart'], factor:'карта ликвидаций', layers:'S1 many heads'},
@@ -119,7 +119,7 @@ export const enemies: Enemy[] = [
   { id:'E28', name:'Yield Chimera', domain:'crypto', rankDanger:3, mode:'normal', stages:[
     {stage:1, level:67, requiredCards:[{cardId:'C15',rank:1}], sources:['tokenomics','wallet'], factor:'APY и IL', layers:'S1 three heads'},
     {stage:2, level:75, requiredCards:[{cardId:'C15',rank:2},{cardId:'C7',rank:1}], sources:['tokenomics'], factor:'эмиссия наград', secondDomain:'crypto', comboRequired:['K16'], layers:'S2 paper coins'},
-    {stage:3, level:86, requiredCards:[{cardId:'C15',rank:2},{cardId:'C4',rank:2}], sources:['tokenomics','wallet','position'], factor:'депег и ликвидация в лендинге', secondDomain:'risk', layers:'S3 melting wax'},
+    {stage:3, level:86, requiredCards:[{cardId:'C15',rank:2},{cardId:'C4',rank:2}], sources:['tokenomics','wallet','position'], factor:'депег и ликвидация в лендинге', secondDomain:'risk', comboRequired:['T07'], layers:'S3 melting wax'},
   ]},
   { id:'E29', name:'Governance Golem', domain:'crypto', rankDanger:3, mode:'normal', stages:[
     {stage:1, level:68, requiredCards:[{cardId:'C15',rank:1},{cardId:'C7',rank:1}], sources:['tokenomics','wallet'], factor:'концентрация голосов', layers:'S1 ballot boxes'},
@@ -132,13 +132,13 @@ export const enemies: Enemy[] = [
     {stage:1, level:17, requiredCards:[{cardId:'C5',rank:1},{cardId:'C1',rank:1}], sources:['chart','position'], factor:'вход после импульса', layers:'S1 sprint'},
     {stage:2, level:22, requiredCards:[{cardId:'C5',rank:2},{cardId:'C6',rank:1}], sources:['chart','news'], factor:'новость как триггер', layers:'S2 newspaper'},
     {stage:3, level:48, requiredCards:[{cardId:'C5',rank:2},{cardId:'C11',rank:2}], sources:['chart','sentiment'], factor:'Siren: нарратив', secondDomain:'cognitive', comboRequired:['K13'], layers:'S3 siren'},
-    {stage:4, level:88, requiredCards:[{cardId:'C5',rank:3},{cardId:'C16',rank:1}], sources:['chart'], factor:'поздний цикл, все «уже купили»', layers:'S4 crowd leaving'},
+    {stage:4, level:88, requiredCards:[{cardId:'C5',rank:3},{cardId:'C16',rank:1}], sources:['chart'], factor:'поздний цикл, все «уже купили»', comboRequired:['K13'], layers:'S4 crowd leaving'},
   ]},
   { id:'E06', name:'Loss Aversion Wraith', domain:'human', rankDanger:1, mode:'normal', stages:[
     {stage:1, level:18, requiredCards:[{cardId:'C5',rank:1}], sources:['chart','position'], factor:'держать убыток, резать прибыль', layers:'S1 ember'},
     {stage:2, level:27, requiredCards:[{cardId:'C5',rank:2},{cardId:'C4',rank:2}], sources:['chart','position'], factor:'усреднение убытка', layers:'S2 second ember'},
     {stage:3, level:52, requiredCards:[{cardId:'C5',rank:2},{cardId:'C13',rank:1}], sources:['chart','position'], factor:'Paper-Hands: конфликт «держать по плану / резать»', secondDomain:'risk', comboRequired:['K01'], layers:'S3 poltergeist tug'},
-    {stage:4, level:90, requiredCards:[{cardId:'C5',rank:3},{cardId:'C14',rank:2}], sources:['position'], factor:'sunk cost в цифрах', layers:'S4 frost tally'},
+    {stage:4, level:90, requiredCards:[{cardId:'C5',rank:3},{cardId:'C14',rank:2}], sources:['position'], factor:'sunk cost в цифрах', comboRequired:['K15'], layers:'S4 frost tally'},
   ]},
   { id:'E09', name:'Revenge Wraith', domain:'human', rankDanger:2, mode:'normal', stages:[
     {stage:1, level:23, requiredCards:[{cardId:'C5',rank:1},{cardId:'C4',rank:1}], sources:['chart','position'], factor:'рост размера после потери', layers:'S1 fists'},
@@ -189,7 +189,7 @@ export const enemies: Enemy[] = [
     {stage:1, level:20, requiredCards:[{cardId:'C5',rank:1}], sources:['position'], factor:'серия побед + систематическая переоценка (без трофея)', layers:'S1 dragon eye'},
     {stage:2, level:80, requiredCards:[{cardId:'C5',rank:2},{cardId:'C14',rank:2}], sources:['position'], factor:'hindsight, «я знал»', layers:'S2 mirror shield'},
     {stage:3, level:92, requiredCards:[{cardId:'C5',rank:3},{cardId:'C17',rank:2}], sources:['position'], factor:'система переписана после удачной серии', secondDomain:'cognitive', layers:'S3 rewritten scroll'},
-    {stage:4, level:98, requiredCards:[{cardId:'C5',rank:3},{cardId:'C14',rank:2},{cardId:'C17',rank:2}], sources:['position'], factor:'босс', layers:'S4 collapse'},
+    {stage:4, level:98, requiredCards:[{cardId:'C5',rank:3},{cardId:'C14',rank:2},{cardId:'C17',rank:2}], sources:['position'], factor:'босс', comboRequired:['T06'], layers:'S4 collapse'},
   ]},
   { id:'E33', name:'System Breaker', domain:'cognitive', rankDanger:4, mode:'boss', stages:[
     {stage:1, level:81, requiredCards:[{cardId:'C17',rank:1}], sources:['position','chart'], factor:'отклонение «по ситуации»', layers:'S1 crack'},

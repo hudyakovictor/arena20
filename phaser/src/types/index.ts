@@ -42,7 +42,7 @@ export interface Enemy {
   mode: 'normal' | 'event' | 'boss';
   stages: EnemyStage[];
 }
-export interface AnswerOption { label: string; text: string; isWait?: boolean; errorType?: string; enemyHint?: string; }
+export interface AnswerOption { label: string; text: string; isWait?: boolean; errorType?: string; enemyHint?: string; answerPool?: string[]; }
 export interface EvidenceZone { id: string; source: SourceId; label: string; isCorrect: boolean; hint?: string; }
 export interface EncounterTemplate {
   id: string;

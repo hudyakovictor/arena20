@@ -30,9 +30,16 @@ export function mutate(template: EncounterTemplate, seed: number): EncounterInst
     if(label.includes('20')) label = label.replace('20', String(rng.int(15,30)));
     return { ...ev, label };
   });
+  // Ось «формулировка» для ответов: пул фраз (answerPool) — выбор после всех прочих розыгрышей,
+  // порядок розыгрышей должен байт-в-байт совпадать с серверным мутатором.
+  const pooled = mutatedAnswers.map(a => {
+    if (!a.answerPool || a.answerPool.length === 0) return a;
+    const text = rng.pick([a.text, ...a.answerPool]);
+    return { ...a, text };
+  });
   // в эпохах III–IV добавляется шум — лишний источник (не влияет на вердикт)
   return {
-    ...template, seed, question, mutatedAnswers, correctAnswer, mutatedEvidence,
+    ...template, seed, question, mutatedAnswers: pooled, correctAnswer, mutatedEvidence,
     ticker, timeframe, isMirrored
   };
 }

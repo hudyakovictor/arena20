@@ -11,7 +11,7 @@ export const combos: ComboDef[] = [
   { id:'K04', cards:['C3','C4'], name:'Размер от волатильности', requiredStage:'E04 S3' },
   { id:'K05', cards:['C4','C5'], name:'Хладнокровный размер', requiredStage:'E09 S3' },
   { id:'K06', cards:['C5','C12'], name:'Пауза по правилу', requiredStage:'E10 S3' },
-  { id:'K07', cards:['C6','C2'], name:'Новость у уровня', requiredStage:'E08 S3' },
+  { id:'K07', cards:['C6','C2'], name:'Новость у уровня', requiredStage:'E02 S3' },
   { id:'K08', cards:['C6','C11'], name:'Факт и толпа', requiredStage:'E21 S2' },
   { id:'K09', cards:['C7','C9'], name:'Анлок на цепи', requiredStage:'E11 S2' },
   { id:'K10', cards:['C8','C7'], name:'Контракт и владелец', requiredStage:'E13 S2' },
