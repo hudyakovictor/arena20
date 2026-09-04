@@ -1,36 +1,85 @@
+// Турниры — асинхронные, на одинаковых наборах задач.
+
 import Phaser from 'phaser';
 import { gameState } from '../state/GameState';
 import { epochOf } from '../config/epochConfig';
-import { renderTopBar, renderBottomNav, navForEpoch } from '../engine/shell';
+import { buildPalette, type Palette } from '../ui/palette';
+import { CANVAS, CHROME, GUTTER, HIT, SP } from '../ui/tokens';
+import * as TX from '../ui/text';
+import { T } from '../ui/copy';
+import { button, panel } from '../ui/widgets';
+import { renderTopBar, renderBottomNav, navForEpoch, renderBackground, bottomNavHeight } from '../ui/shell';
+import { sceneEnter, enterPanel } from '../ui/motion';
+import { Flow } from '../ui/layout';
 
-const W = 390, H = 844;
-
-// Турниры — асинхронные, тень игрока выше по рейтингу на тех же seed (M14).
 export class TournamentScene extends Phaser.Scene {
-  constructor(){ super({ key:'TournamentScene' }); }
-  create(){
-    const p = gameState.progress;
-    const ep = epochOf(p.level);
-    this.cameras.main.setBackgroundColor(ep.tokens.bg as any);
+  private P!: Palette;
+
+  constructor() {
+    super({ key: 'TournamentScene' });
+  }
+
+  create(): void {
+    const prog = gameState.progress;
+    this.P = buildPalette(prog.epoch);
+    renderBackground(this, this.P);
+    sceneEnter(this);
     renderTopBar(this, gameState);
-    this.add.text(14, 68, 'ТУРНИРЫ', { fontFamily:'Inter, system-ui, sans-serif', fontSize:'20px', color:'#E9F2FF' });
-    this.add.text(14, 92, 'асинхронные · одинаковый seed-набор · без влияния покупок', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#B783FF' });
 
-    this.add.rectangle(14, 116, 362, 84, 0x0C1323).setStrokeStyle(1, 0xB783FF).setOrigin(0);
-    this.add.text(24, 128, 'БЛИЖАЙШЕЕ ОКНО', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#62708A' });
-    this.add.text(24, 148, 'НЕДЕЛЯ ТРЕЙДЕРА · 5 задач на 5 картах', { fontFamily:'Inter, sans-serif', fontSize:'13px', color:'#E9F2FF' });
-    this.add.text(24, 172, 'старт через 2 дня · ранняя регистрация', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#93A3BC' });
+    const p = this.P;
+    const w = CANVAS.w - GUTTER * 2;
+    const flow = new Flow(CHROME.topBar + SP.md, SP.md);
 
-    // тень
-    this.add.text(14, 220, 'ТЕНЬ АРЕНЫ (M14)', { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#31D6C4' });
-    this.add.rectangle(14, 240, 362, 70, 0x0C1323).setStrokeStyle(1, 0x22304A).setOrigin(0);
-    this.add.text(24, 252, 'На тех же seed-ах, что и предыдущий этап,\nсравнишь ход с «тенью» игрока выше по рейтингу.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#93A3BC', wordWrap:{width:330} });
-    this.add.text(24, 288, 'Показывается только после ответа — не раскрывает решение.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#62708A' });
-
-    this.add.rectangle(14, 340, 362, 44, 0x31D6C4).setOrigin(0).setInteractive().on('pointerdown', ()=>{
-      this.add.text(195, 400, 'Турниры открываются с эпохи II (Кабинет).\nСейчас — практика ядра.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:'#FFB341', align:'center', wordWrap:{width:320} }).setOrigin(0.5,0);
+    this.add.text(GUTTER, flow.take(40), T.more.tournaments, TX.title(p, { color: p.text }));
+    this.add.text(GUTTER, flow.take(36), 'Одинаковые задачи для всех. Покупки ни на что не влияют.', {
+      ...TX.caption(p, { color: p.crypto, wrap: w }),
     });
-    this.add.text(195, 362, 'РЕГИСТРАЦИЯ (ДЕМО)', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#03110f' }).setOrigin(0.5);
-    renderBottomNav(this, 'MoreScene', navForEpoch(p.level));
+
+    // Ближайшее окно
+    const h1 = 96;
+    const y1 = flow.take(h1);
+    const box = panel(this, GUTTER, y1, w, h1, p, { fill: p.surfaceN, stroke: p.cryptoN });
+    enterPanel(this, box as never);
+    this.add.text(GUTTER + SP.lg, y1 + SP.md, 'Ближайший турнир', TX.caption(p));
+    this.add.text(GUTTER + SP.lg, y1 + SP.md + 22, 'Неделя трейдера', {
+      ...TX.bodyLg(p, { color: p.text, wrap: w - SP.lg * 2 }),
+    });
+    this.add.text(GUTTER + SP.lg, y1 + h1 - 28, '5 задач · старт через 2 дня', {
+      ...TX.caption(p, { color: p.sub }),
+    });
+
+    // Как это работает
+    this.add.text(GUTTER, flow.take(24), 'Как это работает', TX.caption(p, { color: p.accent }));
+    const h2 = 84;
+    const y2 = flow.take(h2);
+    const box2 = panel(this, GUTTER, y2, w, h2, p, { fill: p.surfaceN });
+    enterPanel(this, box2 as never);
+    this.add.text(GUTTER + SP.md, y2 + SP.md, T.feedback.shadowTitle, TX.body(p, { color: p.text }));
+    this.add.text(
+      GUTTER + SP.md,
+      y2 + SP.md + 24,
+      'После своего ответа увидишь, как ту же задачу решил игрок выше по рейтингу. До ответа — ничего не показываем.',
+      { ...TX.caption(p, { color: p.muted, wrap: w - SP.md * 2 }) },
+    );
+
+    const locked = epochOf(prog.level).id === 'street';
+    const by = Math.min(flow.take(HIT.comfortable) + SP.md, CANVAS.h - bottomNavHeight() - HIT.comfortable - SP.md);
+    button(
+      this,
+      GUTTER,
+      by,
+      locked ? T.nav.locked : 'Записаться',
+      p,
+      () => {
+        /* регистрация появится вместе с серверной частью */
+      },
+      {
+        width: w,
+        disabled: locked,
+        hint: locked ? 'Турниры открываются во второй эпохе' : undefined,
+      },
+    );
+
+    renderBottomNav(this, 'MoreScene', navForEpoch(prog.level));
   }
 }

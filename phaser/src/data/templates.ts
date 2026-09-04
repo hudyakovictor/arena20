@@ -1,6 +1,5 @@
 import type { EncounterTemplate } from '../types';
 import { enemyById } from './enemies';
-import { cardById } from './cards';
 import { sourceById } from './sources';
 
 // MVP-набор шаблонов — по одному на врага/стадию, покрывает M1-M15
@@ -67,7 +66,7 @@ export const templates: EncounterTemplate[] = [
       {id:'ev-news', source:'position', label:'Журнал: 3 FOMO-входа на этой неделе', isCorrect:true},
     ],
     skills:['C5','C1'],
-    verdict: { factorA:'график', factorB:'эмоция', correctFactor:'B' } as any
+    verdict: { factorA:'график', factorB:'эмоция', correctFactor:'B' }
   },
   {
     id:'T-E08-S2', learningGoal:'Отличить факт от фейка и его макро-вес', atoms:['C6.1'], enemyId:'E08', stage:2, domain:'context',
@@ -156,12 +155,6 @@ export const templateById = Object.fromEntries(templates.map(t=>[t.id,t])) as Re
 // ── Синтез шаблона для ЛЮБОГО врага/стадии (заглушка, чтобы весь ростер был проходим) ──
 // Порядок из ТЗ Часть 1 §6.2: учебная цель → ситуация → атомы/карты → источники → враг →
 // вопрос → 4 варианта (верный + 2 типовые ошибки + ЖДАТЬ) → улики → обратная связь.
-const FACTOR_HINT: Record<string,string> = {
-  'ликвидац':'Карта ликвидаций/плечо', 'стоп':'Стоп и исполнение', 'объём':'Объём', 'тренд':'Тренд',
-  'фейк':'Фейк-источник', 'новост':'Новость', 'анлок':'Анлоки', 'апрув':'Апрув', 'фишинг':'Фишинг',
-  'нарратив':'Нарратив', 'цикл':'Цикл', 'эмисси':'Эмиссия', 'просадк':'Просадка', 'депег':'Депег',
-};
-
 export function synthTemplate(enemyId: string, stageNum: number): EncounterTemplate {
   const enemy = enemyById[enemyId];
   const stage = enemy?.stages.find(s=>s.stage===stageNum) ?? enemy?.stages[0];
@@ -171,7 +164,6 @@ export function synthTemplate(enemyId: string, stageNum: number): EncounterTempl
   const skills = cards.map(c=>c.cardId);
   const srcs = stage.sources.slice(0,3) as EncounterTemplate['sources'] & any[];
   const sourceNames = srcs.map(id=>sourceById[id]?.short ?? id).join(' + ');
-  const goalHint = Object.entries(FACTOR_HINT).find(([k])=> stage.factor.toLowerCase().includes(k.toLowerCase()))?.[1] ?? 'сигнал';
 
   // верный вариант строится от фактора стадии
   const correctText = textFromFactor(stage.factor, enemy.name);
@@ -198,7 +190,9 @@ export function synthTemplate(enemyId: string, stageNum: number): EncounterTempl
     evidence:[
       { id:`ev-0`, source: srcs[0], label:`Ключевая улика в «${sourceNames}» подтверждает: ${stage.factor}`, isCorrect:true },
       { id: `ev-1`, source: srcs[0], label:'Шум, не решающий сигнал', isCorrect:false },
-      ...(srcs[1] ? [{ id:'ev-2', source: srcs[1], label:'Второстепенная деталь', isCorrect:false }] as any : [])
+      ...(srcs[1]
+        ? [{ id: 'ev-2', source: srcs[1], label: 'Второстепенная деталь', isCorrect: false }]
+        : []),
     ],
     skills,
     domain: enemy.domain,

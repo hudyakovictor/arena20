@@ -1,136 +1,367 @@
+// Коллекция — карты навыков и трофеи противников.
+// Две вкладки вместо одного перегруженного экрана; списки скроллятся.
+
 import Phaser from 'phaser';
 import { gameState } from '../state/GameState';
 import { cards } from '../data/cards';
-import { enemies, enemyById } from '../data/enemies';
-import { epochOf } from '../config/epochConfig';
-import { enemyAvatarKey, enemyRenderKey } from '../engine/assetKeys';
+import { enemies } from '../data/enemies';
+import type { Enemy, SkillCard } from '../types';
+import { buildPalette, type Palette } from '../ui/palette';
+import { CANVAS, CHROME, GUTTER, HIT, RADIUS, SP } from '../ui/tokens';
+import * as TX from '../ui/text';
+import { T } from '../ui/copy';
+import { panel } from '../ui/widgets';
+import { enemyAvatarKey, enemyRenderKey, cardKey } from '../engine/assetKeys';
+import { renderTopBar, renderBottomNav, navForEpoch, renderBackground, bottomNavHeight } from '../ui/shell';
+import { sceneEnter, fadeIn } from '../ui/motion';
+import { haptic, playSfx } from '../ui/feedbackFx';
+import { ScrollList } from '../ui/ScrollList';
 
-const COLORS={ bg:0x070B14, surface:0x0C1323, elevated:0x111B2E, border:0x22304A, cyan:0x31D6C4, good:0x3BDE8A, bad:0xFF596D, muted:0x62708A, strong:0x344563, text:0xE9F2FF };
+type Tab = 'cards' | 'trophies';
 
-// Коллекция — трофеи-стадии, а не дубликаты (ТЗ Часть 6 §4.2 EnemyTrophy)
-// Master рендер один на врага, стадии — слои, пресеты собираются скриптом
+const CARD_ROW_H = 92;
+const TROPHY_ROW_H = 96;
+
 export class CollectionScene extends Phaser.Scene {
-  constructor(){ super({ key:'CollectionScene'}); }
-  create(): void {
-    const p=gameState.progress;
-    const ep=epochOf(p.level);
-    this.cameras.main.setBackgroundColor(ep.tokens.bg as any);
-    this.add.text(14,14,'Коллекция', { fontFamily:'Inter, sans-serif', fontSize:'22px', color:'#E9F2FF'});
-    this.add.text(14,40, `${cards.filter(c=> gameState.isCardUnlocked(c.id)).length} КАРТ · ${Object.keys(p.enemyStagesReached).length} ТРОФЕЕВ · КОМБО ${p.combosUnlocked.length}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'9px', color:'#62708A'});
-    this.add.text(14,52,'трофей эволюционирует слоями S1→S4, дубликатов нет', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A'});
+  private P!: Palette;
+  private tab: Tab = 'cards';
+  private list?: ScrollList;
+  private listLayer?: Phaser.GameObjects.Container;
+  private tabsLayer?: Phaser.GameObjects.Container;
+  private tabsY = 0;
 
-    // карты 3×N
-    this.add.text(14,66,'КАРТЫ НАВЫКОВ — рамка = ранг (ТЗ §5.2)', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#93A3BC'});
-    cards.slice(0,9).forEach((c,i)=>{
-      const cx=14+(i%3)*122, cy=80+Math.floor(i/3)*74;
-      const unlocked=gameState.isCardUnlocked(c.id);
-      const rank=p.cardRanks[c.id]??0;
-      const col = !unlocked? 0x22304A : rank>=3? 0xFFB341 : rank>=2? 0x3BDE8A : 0x31D6C4;
-      const bg = !unlocked? 0x060A12 : 0x0C1323;
-      this.add.rectangle(cx,cy,114,68, bg).setStrokeStyle(unlocked && rank>=2?2:1, col).setOrigin(0).setInteractive().on('pointerdown', ()=>{
-        if(!unlocked){ this.cameras.main.flash(60,255,89,109); return; }
-        const sheet=this.add.rectangle(0,0,390,844, 0x070B14, 0.92).setOrigin(0).setInteractive();
-        this.add.text(195, 260, c.name, { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#E9F2FF'}).setOrigin(0.5);
-        this.add.text(195, 280, `РАНГ ${rank||1}/3 · пороги ${c.rankThresholds.join('/') } атомов`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color: toHex(col)}).setOrigin(0.5);
-        this.add.text(195, 310, c.atoms.map(a=>a.desc).join(' · '), { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#93A3BC', wordWrap:{width:340}, align:'center'}).setOrigin(0.5);
-        this.add.text(195, 360, 'ОБЯЗАТЕЛЬНЫЕ ИСТОЧНИКИ: '+c.mandatorySources.join(', '), { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A'}).setOrigin(0.5);
-        this.add.text(195, 380, 'ATOM ОБЯЗАН ИСПОЛЬЗОВАТЬСЯ В АРЕНЕ — иначе декоративный и удаляется', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#FF596D', wordWrap:{width:340}, align:'center'}).setOrigin(0.5);
-        this.add.text(195, 520,'✕ закрыть', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#93A3BC'}).setOrigin(0.5).setInteractive().on('pointerdown', ()=> sheet.destroy());
-        // clickable atoms close
-        this.input.once('pointerdown', ()=> sheet.destroy());
-      });
-      this.add.text(cx+57, cy+22, c.icon, { fontSize:'16px', color: toHex(col)}).setOrigin(0.5);
-      this.add.text(cx+57, cy+38, unlocked? c.short:'?', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color: unlocked?'#93A3BC':'#62708A'}).setOrigin(0.5);
-      this.add.text(cx+57, cy+52, `r${rank|| (unlocked?1:0)}/3`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color: toHex(col)}).setOrigin(0.5);
-    });
-
-    // трофеи врагов — эволюция
-    this.add.text(14, 322,'ТРОФЕИ — враг 3–4 стадии, S3 обязательно второй домен (ТЗ §4.8)', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#93A3BC'});
-    const toShow = enemies.slice(0,8);
-    toShow.forEach((e,i)=>{
-      const cx=14+(i%4)*94, cy=338+Math.floor(i/4)*96;
-      const stage=p.enemyStagesReached[e.id]??0;
-      const mastered = stage>=3;
-      const col = stage===0? 0x22304A : mastered? 0xFFB341 : 0xB783FF;
-      this.add.rectangle(cx,cy,86,86, 0x0C1323).setStrokeStyle(1, col).setOrigin(0).setInteractive().on('pointerdown', ()=>{
-        const sheet=this.add.rectangle(0,0,390,844, 0x070B14, 0.94).setOrigin(0).setInteractive();
-        this.add.text(195, 248, e.name, { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#E9F2FF'}).setOrigin(0.5);
-        this.add.text(195, 266, `${e.domain} · ранг ${e.rankDanger} · ${e.mode}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#93A3BC'}).setOrigin(0.5);
-        // заглушка-рендер достигнутой стадии (SVG → текстура)
-        const reachedStage = e.stages.find(s=> stage>=s.stage) ?? e.stages[0];
-        const renderKey = enemyRenderKey(e.id, reachedStage.stage);
-        if(this.textures.exists(renderKey)){
-          this.add.rectangle(195, 288, 92, 92, 0x060A12).setStrokeStyle(1, col).setOrigin(0.5,0);
-          this.add.image(195, 334, renderKey).setDisplaySize(80,80);
-        }
-        e.stages.forEach((s,j)=>{
-          const yy=388+j*36;
-          const reached = stage>=s.stage;
-          this.add.rectangle(20,yy,350,34, reached? 0x0C1323:0x060A12).setStrokeStyle(1, reached? 0x344563:0x22304A).setOrigin(0);
-          this.add.text(28, yy+6, `S${s.stage} · L${s.level} · ${s.requiredCards.map(c=>c.cardId+'r'+c.rank).join(' + ')}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color: reached?'#E9F2FF':'#62708A'}).setOrigin(0);
-          this.add.text(28, yy+18, s.factor, { fontFamily:'Inter, sans-serif', fontSize:'8px', color: reached?'#93A3BC':'#62708A', wordWrap:{width:334}}).setOrigin(0);
-          if(s.secondDomain) this.add.text(322, yy+6, s.secondDomain.slice(0,3), { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#FFB341'}).setOrigin(0);
-        });
-        this.add.text(195, 560, 'Слои S2–S4 — одна поза мастера + альфа-слои. Пресеты собираются скриптом.', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A', wordWrap:{width:340}}).setOrigin(0.5);
-        this.add.text(195, 606,'✕ закрыть', { fontFamily:'Inter, sans-serif', fontSize:'12px', color:'#93A3BC'}).setOrigin(0.5).setInteractive().on('pointerdown', ()=> sheet.destroy());
-      });
-      // аватар — тизер 5-8% rim до раскрытия (SVG-заглушка)
-      this.add.circle(cx+43, cy+28, 20, 0x060A12).setStrokeStyle(1, col);
-      const avKey = enemyAvatarKey(e.id);
-      if(this.textures.exists(avKey)){
-        this.add.image(cx+43, cy+28, avKey).setDisplaySize(34,34).setAlpha(stage? 1:0.7);
-      } else {
-        this.add.text(cx+43, cy+28, stage? '◉':'?', { fontFamily:'IBM Plex Mono, monospace', fontSize:'12px', color: toHex(col)}).setOrigin(0.5);
-      }
-      this.add.text(cx+43, cy+54, e.name.split(' ')[0].slice(0,8), { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#93A3BC'}).setOrigin(0.5);
-      this.add.text(cx+43, cy+66, stage? `S${stage}/4`:'SILHOUETTE', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color: stage?'#3BDE8A':'#62708A'}).setOrigin(0.5);
-      if(stage) this.add.rectangle(cx, cy+78, 86, 4, col).setOrigin(0);
-    });
-
-    // ошибки — свиток (M7)
-    this.add.text(14, 540,'СВИТОК ОШИБОК — приоритет разминки (M7)', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#FFB341'});
-    if(p.errorScroll.length===0){
-      this.add.text(14,556,'пока пусто — ошибайся, чтобы учиться', { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#62708A'});
-    } else {
-      p.errorScroll.slice(0,3).forEach((e,i)=>{
-        const ey=556+i*36;
-        this.add.rectangle(14,ey,362,32, e.closed? 0x060A12:0x0C1323).setStrokeStyle(1, e.closed? COLORS.border: COLORS.bad).setOrigin(0);
-        this.add.text(22,ey+6, `${e.enemy} · ${e.atom} · улика: ${e.missedEvidence.slice(0,22)||'нет'}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color: e.closed?'#62708A':'#FF596D', wordWrap:{width:340}}).setOrigin(0);
-        this.add.text(22,ey+18, e.closed?'CLOSED — сгорела':'OPEN — будет в разминке мутированной и сложнее', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#62708A'}).setOrigin(0);
-      });
-    }
-
-    // калибровка M3
-    if(p.calibration.length>2){
-      const last5=p.calibration.slice(-10);
-      const avgPred = last5.reduce((a,b)=>a+b.predicted,0)/last5.length;
-      const avgActual = last5.reduce((a,b)=>a+b.actual,0)/last5.length;
-      const gap = avgPred - avgActual;
-      this.add.text(14, 680, `M3 КАЛИБРОВКА: предсказано ${avgPred.toFixed(2)} · факт ${avgActual.toFixed(2)} · разрыв ${gap>0?'+':''}${gap.toFixed(2)} ${gap>0.15?'→ риск Hubris Dragon':''}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color: gap>0.15?'#FF596D':'#93A3BC', wordWrap:{width:362}}).setOrigin(0);
-    }
-
-    // комбо
-    this.add.text(14, 708,'КОМБО КАРТ (M8): двойки с L28, тройки с L51 — требуются на S3–S4', { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#31D6C4'});
-    const combos=['K01 C1+C2 Подтв. свеча','K07 C6+C2 Новость у уровня','K03 C2+C4 Стоп по структуре','T02 C4+C10+C14 Выживание'];
-    combos.forEach((c,i)=>{
-      this.add.rectangle(14,722+i*16,362,14, 0x0C1323).setStrokeStyle(1, COLORS.border).setOrigin(0);
-      this.add.text(20,722+i*16+3,c, { fontFamily:'IBM Plex Mono, monospace', fontSize:'7px', color:'#93A3BC'}).setOrigin(0);
-    });
-
-    this.createBottomNav();
+  constructor() {
+    super({ key: 'CollectionScene' });
   }
-  private createBottomNav(){
-    const items=[
-      {label:'ACADEMY', go:'AcademyScene'},
-      {label:'ARENA', go:'ArenaScene'},
-      {label:'COLLECTION', active:true},
-      {label:'MORE', go:'MoreScene'},
-    ] as any[];
-    items.forEach((it,i)=>{
-      const nx=i*(390/4);
-      this.add.rectangle(nx,784,390/4,60, COLORS.elevated).setStrokeStyle(1, COLORS.border).setOrigin(0).setInteractive().on('pointerdown', ()=>{ if(it.go) this.scene.start(it.go); });
-      this.add.text(nx+390/8,814,it.label, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color: it.active?'#31D6C4':'#62708A'}).setOrigin(0.5);
+
+  create(): void {
+    const p = gameState.progress;
+    this.P = buildPalette(p.epoch);
+    renderBackground(this, this.P);
+    sceneEnter(this);
+    renderTopBar(this, gameState);
+
+    const headY = CHROME.topBar + SP.md;
+    this.add.text(GUTTER, headY, T.collection.title, TX.title(this.P, { color: this.P.text }));
+
+    this.renderTabs(headY + 40);
+    this.renderList();
+    renderBottomNav(this, 'CollectionScene', navForEpoch(p.level));
+  }
+
+  private renderTabs(y: number): void {
+    this.tabsY = y;
+    this.tabsLayer?.destroy();
+    const layer = this.add.container(0, 0);
+    this.tabsLayer = layer;
+    const p = this.P;
+    const w = CANVAS.w - GUTTER * 2;
+    const tabs: { id: Tab; label: string }[] = [
+      { id: 'cards', label: T.collection.cards },
+      { id: 'trophies', label: T.collection.trophies },
+    ];
+    const tw = (w - SP.sm) / 2;
+    tabs.forEach((t, i) => {
+      const x = GUTTER + i * (tw + SP.sm);
+      const active = this.tab === t.id;
+      const g = this.add.graphics();
+      layer.add(g);
+      g.fillStyle(active ? p.hoverN : p.surfaceN, 1);
+      g.fillRoundedRect(x, y, tw, HIT.min, RADIUS.md);
+      g.lineStyle(active ? 2 : 1, active ? p.accentN : p.borderN, 1);
+      g.strokeRoundedRect(x, y, tw, HIT.min, RADIUS.md);
+      const label = this.add
+        .text(x + tw / 2, y + HIT.min / 2, t.label, {
+          ...TX.body(p, { color: active ? p.text : p.muted }),
+        })
+        .setOrigin(0.5);
+      layer.add(label);
+      const zone = this.add
+        .rectangle(x, y, tw, HIT.min, 0x000000, 0)
+        .setOrigin(0)
+        .setInteractive();
+      layer.add(zone);
+      zone.on('pointerdown', () => {
+        if (this.tab === t.id) return;
+        haptic('light');
+        playSfx('tap');
+        this.tab = t.id;
+        // Меняем только вкладки и список — сцена не перезапускается (аудит A2).
+        this.renderTabs(this.tabsY);
+        this.renderList();
+      });
     });
+  }
+
+  private renderList(): void {
+    this.list?.destroy();
+    this.listLayer?.destroy();
+    const top = CHROME.topBar + SP.md + 40 + HIT.min + SP.md;
+    const height = CANVAS.h - bottomNavHeight() - top - SP.md;
+
+    if (this.tab === 'cards') {
+      this.list = new ScrollList(this, {
+        x: 0,
+        y: top,
+        width: CANVAS.w,
+        height,
+        itemHeight: CARD_ROW_H + SP.sm,
+        itemCount: cards.length,
+        renderItem: (i, c, y) => this.renderCardRow(cards[i], c, y),
+      });
+    } else {
+      this.list = new ScrollList(this, {
+        x: 0,
+        y: top,
+        width: CANVAS.w,
+        height,
+        itemHeight: TROPHY_ROW_H + SP.sm,
+        itemCount: enemies.length,
+        renderItem: (i, c, y) => this.renderTrophyRow(enemies[i], c, y),
+      });
+    }
+  }
+
+  private renderCardRow(c: SkillCard, container: Phaser.GameObjects.Container, y: number): void {
+    const p = this.P;
+    const prog = gameState.progress;
+    const unlocked = gameState.isCardUnlocked(c.id);
+    const rank = prog.cardRanks[c.id] ?? 0;
+    const w = CANVAS.w - GUTTER * 2;
+    const accent = !unlocked ? p.borderN : rank >= 3 ? p.warnN : rank >= 2 ? p.goodN : p.accentN;
+    const accentS = !unlocked ? p.muted : rank >= 3 ? p.warn : rank >= 2 ? p.good : p.accent;
+
+    const g = this.add.graphics();
+    g.fillStyle(unlocked ? p.surfaceN : p.insetN, 1);
+    g.fillRoundedRect(GUTTER, y, w, CARD_ROW_H, RADIUS.md);
+    // рамка = ранг карты
+    g.lineStyle(rank >= 2 ? 2 : 1, unlocked ? accent : p.borderN, 1);
+    g.strokeRoundedRect(GUTTER, y, w, CARD_ROW_H, RADIUS.md);
+    container.add(g);
+
+    const tex = cardKey(c.id);
+    if (this.textures.exists(tex)) {
+      const img = this.add.image(GUTTER + SP.md + 22, y + CARD_ROW_H / 2, tex).setDisplaySize(34, 48);
+      if (!unlocked) img.setTint(p.mutedN);
+      container.add(img);
+    }
+
+    const tx = GUTTER + SP.md + 44 + SP.md;
+    const textW = w - (tx - GUTTER) - SP.md - 60;
+    container.add(
+      this.add.text(tx, y + SP.md, c.name, {
+        ...TX.body(p, { color: unlocked ? p.text : p.muted, wrap: textW }),
+      }),
+    );
+    container.add(
+      this.add.text(
+        tx,
+        y + SP.md + 22,
+        unlocked ? T.academy.rank(rank || 1) : T.academy.locked(c.unlockLevel),
+        TX.caption(p, { color: accentS }),
+      ),
+    );
+    container.add(
+      this.add.text(tx, y + CARD_ROW_H - 26, c.atoms.map((a) => a.desc).join(' · '), {
+        ...TX.caption(p, { color: p.muted, wrap: textW }),
+      }),
+    );
+
+    const zone = this.add
+      .rectangle(GUTTER, y, w, Math.max(CARD_ROW_H, HIT.min), 0x000000, 0)
+      .setOrigin(0)
+      .setInteractive();
+    zone.on('pointerup', () => {
+      if (this.list?.didDrag()) return;
+      if (!unlocked) {
+        haptic('warn');
+        return;
+      }
+      haptic('light');
+      this.openCardSheet(c, rank);
+    });
+    container.add(zone);
+  }
+
+  private renderTrophyRow(e: Enemy, container: Phaser.GameObjects.Container, y: number): void {
+    const p = this.P;
+    const stage = gameState.progress.enemyStagesReached[e.id] ?? 0;
+    const met = stage > 0;
+    const w = CANVAS.w - GUTTER * 2;
+    const accent = !met ? p.borderN : stage >= 3 ? p.warnN : p.cryptoN;
+    const accentS = !met ? p.muted : stage >= 3 ? p.warn : p.crypto;
+
+    const g = this.add.graphics();
+    g.fillStyle(met ? p.surfaceN : p.insetN, 1);
+    g.fillRoundedRect(GUTTER, y, w, TROPHY_ROW_H, RADIUS.md);
+    g.lineStyle(1, accent, 1);
+    g.strokeRoundedRect(GUTTER, y, w, TROPHY_ROW_H, RADIUS.md);
+    container.add(g);
+
+    const av = enemyAvatarKey(e.id);
+    if (this.textures.exists(av)) {
+      const img = this.add
+        .image(GUTTER + SP.md + 28, y + TROPHY_ROW_H / 2, av)
+        .setDisplaySize(56, 56);
+      // не встреченный противник — только силуэт
+      if (!met) img.setTint(0x2a2f38).setAlpha(0.8);
+      container.add(img);
+    }
+
+    const tx = GUTTER + SP.md + 56 + SP.md;
+    const textW = w - (tx - GUTTER) - SP.md;
+    container.add(
+      this.add.text(tx, y + SP.md, met ? e.name : T.collection.silhouette, {
+        ...TX.body(p, { color: met ? p.text : p.muted, wrap: textW }),
+      }),
+    );
+    container.add(
+      this.add.text(
+        tx,
+        y + SP.md + 24,
+        met ? T.collection.stage(stage, e.stages.length) : '—',
+        TX.caption(p, { color: accentS }),
+      ),
+    );
+    if (met) {
+      const done = stage / e.stages.length;
+      const bar = this.add.graphics();
+      bar.fillStyle(p.insetN, 1);
+      bar.fillRoundedRect(tx, y + TROPHY_ROW_H - 24, textW, 6, 3);
+      bar.fillStyle(accent, 1);
+      bar.fillRoundedRect(tx, y + TROPHY_ROW_H - 24, textW * done, 6, 3);
+      container.add(bar);
+    }
+
+    const zone = this.add
+      .rectangle(GUTTER, y, w, Math.max(TROPHY_ROW_H, HIT.min), 0x000000, 0)
+      .setOrigin(0)
+      .setInteractive();
+    zone.on('pointerup', () => {
+      if (this.list?.didDrag()) return;
+      haptic('light');
+      this.openTrophySheet(e, stage);
+    });
+    container.add(zone);
+  }
+
+  private sheet(): { layer: Phaser.GameObjects.Container; close: () => void } {
+    const p = this.P;
+    const layer = this.add.container(0, 0).setDepth(700);
+    const shade = this.add
+      .rectangle(0, 0, CANVAS.w, CANVAS.h, p.bgN, 0.97)
+      .setOrigin(0)
+      .setInteractive();
+    layer.add(shade);
+    fadeIn(this, shade, { to: 0.97 });
+    const close = () => layer.destroy();
+    shade.on('pointerdown', close);
+    return { layer, close };
+  }
+
+  private openCardSheet(c: SkillCard, rank: number): void {
+    const p = this.P;
+    const { layer, close } = this.sheet();
+    const w = CANVAS.w - GUTTER * 2;
+    let y = 140;
+
+    layer.add(this.add.text(GUTTER, y, c.name, TX.title(p, { color: p.text, wrap: w })));
+    y += 44;
+    layer.add(this.add.text(GUTTER, y, T.academy.rank(rank || 1), TX.body(p, { color: p.accent })));
+    y += 36;
+
+    layer.add(this.add.text(GUTTER, y, 'Чему учит', TX.caption(p)));
+    y += 22;
+    c.atoms.forEach((a) => {
+      const box = panel(this, GUTTER, y, w, 44, p, { fill: p.surfaceN });
+      layer.add(box);
+      layer.add(
+        this.add.text(GUTTER + SP.md, y + 13, a.desc, {
+          ...TX.body(p, { color: p.text, wrap: w - SP.md * 2 }),
+        }),
+      );
+      y += 44 + SP.sm;
+    });
+
+    layer.add(
+      this.add
+        .text(CANVAS.w / 2, CANVAS.h - 120, T.common.close, TX.body(p, { color: p.muted }))
+        .setOrigin(0.5),
+    );
+    const z = this.add
+      .rectangle(CANVAS.w / 2 - 80, CANVAS.h - 120 - HIT.min / 2, 160, HIT.min, 0x000000, 0)
+      .setOrigin(0)
+      .setInteractive();
+    z.on('pointerdown', close);
+    layer.add(z);
+  }
+
+  private openTrophySheet(e: Enemy, stage: number): void {
+    const p = this.P;
+    const { layer, close } = this.sheet();
+    const w = CANVAS.w - GUTTER * 2;
+    const met = stage > 0;
+    let y = 110;
+
+    if (met) {
+      const reached = e.stages.find((s) => stage >= s.stage) ?? e.stages[0];
+      const key = enemyRenderKey(e.id, reached.stage);
+      if (this.textures.exists(key)) {
+        layer.add(this.add.image(CANVAS.w / 2, y + 60, key).setDisplaySize(120, 120));
+      }
+      y += 130;
+    }
+
+    layer.add(
+      this.add
+        .text(CANVAS.w / 2, y, met ? e.name : T.collection.silhouette, {
+          ...TX.title(p, { color: p.text, align: 'center', wrap: w }),
+        })
+        .setOrigin(0.5, 0),
+    );
+    y += 44;
+    layer.add(
+      this.add
+        .text(CANVAS.w / 2, y, T.collection.trophiesHint, {
+          ...TX.caption(p, { color: p.muted, align: 'center', wrap: w }),
+        })
+        .setOrigin(0.5, 0),
+    );
+    y += 40;
+
+    e.stages.forEach((s) => {
+      const reached = stage >= s.stage;
+      const g = this.add.graphics();
+      g.fillStyle(reached ? p.surfaceN : p.insetN, 1);
+      g.fillRoundedRect(GUTTER, y, w, 56, RADIUS.sm);
+      g.lineStyle(1, reached ? p.strongN : p.borderN, 1);
+      g.strokeRoundedRect(GUTTER, y, w, 56, RADIUS.sm);
+      layer.add(g);
+      layer.add(
+        this.add.text(
+          GUTTER + SP.md,
+          y + SP.sm,
+          T.collection.stage(s.stage, e.stages.length),
+          TX.caption(p, { color: reached ? p.accent : p.muted }),
+        ),
+      );
+      layer.add(
+        this.add.text(GUTTER + SP.md, y + SP.sm + 20, reached ? s.factor : '—', {
+          ...TX.body(p, { color: reached ? p.sub : p.muted, wrap: w - SP.md * 2 }),
+        }),
+      );
+      y += 56 + SP.sm;
+    });
+
+    const cy = Math.min(y + SP.md, CANVAS.h - 90);
+    layer.add(
+      this.add.text(CANVAS.w / 2, cy, T.common.close, TX.body(p, { color: p.muted })).setOrigin(0.5),
+    );
+    const z = this.add
+      .rectangle(CANVAS.w / 2 - 80, cy - HIT.min / 2, 160, HIT.min, 0x000000, 0)
+      .setOrigin(0)
+      .setInteractive();
+    z.on('pointerdown', close);
+    layer.add(z);
   }
 }
-function toHex(n:number){ return '#'+n.toString(16).padStart(6,'0'); }

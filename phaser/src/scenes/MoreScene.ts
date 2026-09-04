@@ -1,49 +1,103 @@
+// «Ещё» — профиль и сервисные разделы.
+
 import Phaser from 'phaser';
 import { gameState } from '../state/GameState';
 import { epochOf } from '../config/epochConfig';
-import { renderTopBar, renderBottomNav, navForEpoch } from '../engine/shell';
+import { buildPalette, type Palette } from '../ui/palette';
+import { CANVAS, CHROME, GUTTER, HIT, RADIUS, SP } from '../ui/tokens';
+import * as TX from '../ui/text';
+import { T } from '../ui/copy';
+import { renderTopBar, renderBottomNav, navForEpoch, renderBackground, bottomNavHeight } from '../ui/shell';
+import { sceneEnter, enterPanel, transitionTo } from '../ui/motion';
+import { haptic, playSfx } from '../ui/feedbackFx';
+import { Flow } from '../ui/layout';
 
-const W = 390, H = 844;
-const S = { bg:0x070B14, surface:0x0C1323, elevated:0x111B2E, border:0x22304A, cyan:0x31D6C4, muted:0x62708A, sub:0x93A3BC, text:0xE9F2FF };
-
-// «Ещё» — профиль + сервисные разделы (растут с эпохой, ТЗ Часть 2 §2)
 export class MoreScene extends Phaser.Scene {
-  constructor(){ super({ key:'MoreScene' }); }
-  create(){
-    const p = gameState.progress;
-    const ep = epochOf(p.level);
-    this.cameras.main.setBackgroundColor(ep.tokens.bg as any);
+  private P!: Palette;
+
+  constructor() {
+    super({ key: 'MoreScene' });
+  }
+
+  create(): void {
+    const prog = gameState.progress;
+    this.P = buildPalette(prog.epoch);
+    renderBackground(this, this.P);
+    sceneEnter(this);
     renderTopBar(this, gameState);
-    this.add.text(14, 68, 'ЕЩЁ', { fontFamily:'Inter, system-ui, sans-serif', fontSize:'22px', color:'#E9F2FF' });
 
-    // профиль-карточка
-    this.add.rectangle(14, 104, 362, 74, S.surface).setStrokeStyle(1, S.border).setOrigin(0).setInteractive().on('pointerdown', ()=> this.openSheet('profile'));
-    this.add.circle(46, 141, 24, 0x060A12).setStrokeStyle(2, S.cyan);
-    const av = `enemy_${(Object.keys(p.enemyStagesReached)[0]||'E02').replace('E','')}_avatar`;
-    if(this.textures.exists(av)) this.add.image(46,141,av).setDisplaySize(44,44).setAlpha(0.85);
-    this.add.text(84, 118, `УРОВЕНЬ ${p.level} · ${ep.name}`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:'#E9F2FF' });
-    this.add.text(84, 140, `${p.coins} SIG · ${p.streak} стрик · ${p.errorScroll.filter(e=>!e.closed).length} ошибок в свитке`, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color:'#62708A' });
-    this.add.text(352, 141,'›', { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#62708A' }).setOrigin(0.5);
+    const p = this.P;
+    const w = CANVAS.w - GUTTER * 2;
+    const flow = new Flow(CHROME.topBar + SP.md, SP.md);
 
-    // меню сервисных разделов
-    const rows = [
-      { label:'СВИТОК ОШИБОК', sub:`${p.errorScroll.filter(e=>!e.closed).length} открытых`,  scene:'ErrorJournalScene', badge: p.errorScroll.filter(e=>!e.closed).length? '#FFB341':'#62708A' },
-      { label:'МАСТЕР-ЧЕК', sub:'готовность к экзамену главы', scene:'MasteryCheckScene', badge:'#31D6C4' },
-      { label:'РАЗМИНКА ДНЯ', sub:`погода ${p.weather}`, scene:'DailyWarmupScene', badge:'#3BDE8A' },
-      { label:'ТУРНИРЫ', sub:'асинхронные · тень', scene:'TournamentScene', badge:'#B783FF' },
-      { label:'МАРКЕТ КОСМЕТИКИ', sub:'SIG только на косметику', scene:'StoreScene', badge:'#FFB341' },
-      { label:'НАСТРОЙКИ', sub:'профиль, сброс демо', scene:'SettingsScene', badge:'#62708A' },
+    this.add.text(GUTTER, flow.take(36), T.more.title, TX.title(p, { color: p.text }));
+
+    // Профиль
+    const ph = 80;
+    const py = flow.take(ph);
+    const pg = this.add.graphics();
+    pg.fillStyle(p.surfaceN, 1);
+    pg.fillRoundedRect(GUTTER, py, w, ph, RADIUS.md);
+    pg.lineStyle(1, p.borderN, 1);
+    pg.strokeRoundedRect(GUTTER, py, w, ph, RADIUS.md);
+    enterPanel(this, pg as never);
+
+    const ep = epochOf(prog.level);
+    this.add.text(GUTTER + SP.lg, py + SP.md, T.topBar.level(prog.level), TX.body(p, { color: p.text }));
+    this.add.text(GUTTER + SP.lg, py + SP.md + 24, ep.name, TX.caption(p, { color: p.accent }));
+    this.add
+      .text(GUTTER + w - SP.lg, py + SP.md, String(prog.coins), TX.numLg(p, { color: p.text }))
+      .setOrigin(1, 0);
+    this.add
+      .text(GUTTER + w - SP.lg, py + SP.md + 28, T.topBar.coins, TX.caption(p))
+      .setOrigin(1, 0);
+
+    // Разделы
+    const openMistakes = prog.errorScroll.filter((e) => !e.closed).length;
+    const rows: { label: string; sub: string; scene: string; color: string }[] = [
+      {
+        label: T.more.journal,
+        sub: T.more.openCount(openMistakes),
+        scene: 'ErrorJournalScene',
+        color: openMistakes ? p.warn : p.muted,
+      },
+      { label: T.more.warmup, sub: T.weather[prog.weather] ?? '', scene: 'DailyWarmupScene', color: p.good },
+      { label: T.more.mastery, sub: 'Проверь, что усвоил', scene: 'MasteryCheckScene', color: p.accent },
+      { label: T.more.tournaments, sub: 'Сравни себя с другими', scene: 'TournamentScene', color: p.crypto },
+      { label: T.more.store, sub: 'Оформление за монеты', scene: 'StoreScene', color: p.warn },
+      { label: T.more.settings, sub: 'Звук, вибрация, сброс', scene: 'SettingsScene', color: p.muted },
     ];
-    rows.forEach((r,i)=>{
-      const y = 190 + i*66;
-      this.add.rectangle(14, y, 362, 58, S.surface).setStrokeStyle(1, S.border).setOrigin(0).setInteractive()
-        .on('pointerdown', ()=> this.scene.start(r.scene));
-      this.add.text(28, y+10, r.label, { fontFamily:'IBM Plex Mono, monospace', fontSize:'10px', color:'#E9F2FF' });
-      this.add.text(28, y+34, r.sub, { fontFamily:'IBM Plex Mono, monospace', fontSize:'8px', color: r.badge });
-      this.add.text(352, y+29,'›', { fontFamily:'Inter, sans-serif', fontSize:'16px', color:'#62708A' }).setOrigin(0.5);
+
+    const rowH = 64;
+    rows.forEach((r, i) => {
+      const y = flow.take(rowH, SP.sm);
+      if (y + rowH > CANVAS.h - bottomNavHeight() - SP.md) return;
+      const g = this.add.graphics();
+      g.fillStyle(p.surfaceN, 1);
+      g.fillRoundedRect(GUTTER, y, w, rowH, RADIUS.md);
+      g.lineStyle(1, p.borderN, 1);
+      g.strokeRoundedRect(GUTTER, y, w, rowH, RADIUS.md);
+      enterPanel(this, g as never, { delay: i * 40 });
+
+      this.add.text(GUTTER + SP.lg, y + SP.md, r.label, TX.body(p, { color: p.text }));
+      this.add.text(GUTTER + SP.lg, y + SP.md + 22, r.sub, {
+        ...TX.caption(p, { color: r.color, wrap: w - SP.lg * 2 - 30 }),
+      });
+      this.add
+        .text(GUTTER + w - SP.lg, y + rowH / 2, '›', TX.title(p, { color: p.muted }))
+        .setOrigin(1, 0.5);
+
+      const zone = this.add
+        .rectangle(GUTTER, y, w, Math.max(rowH, HIT.min), 0x000000, 0)
+        .setOrigin(0)
+        .setInteractive();
+      zone.on('pointerdown', () => {
+        haptic('light');
+        playSfx('tap');
+        transitionTo(this, r.scene);
+      });
     });
 
-    renderBottomNav(this, 'MoreScene', navForEpoch(p.level));
+    renderBottomNav(this, 'MoreScene', navForEpoch(prog.level));
   }
-  private openSheet(kind:string){ /* детальный профиль — заглушка */ }
 }
