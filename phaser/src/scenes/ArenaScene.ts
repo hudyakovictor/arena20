@@ -63,8 +63,8 @@ export class ArenaScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor(this.P.bgN);
     // Эпоха I «Улица» — согласованный фон: кирпич + виньетка (ui/prototype_style_*.png)
     if (this.P.brick && this.textures.exists('bg-wall')) {
-      this.add.image(0, 0, 'bg-wall').setOrigin(0).setDisplaySize(390, 844).setAlpha(0.55);
-      this.add.rectangle(0, 0, 390, 844, 0x000000, 0.5).setOrigin(0);
+      this.add.image(0, 0, 'bg-wall').setOrigin(0).setDisplaySize(390, 844).setAlpha(0.85);
+      this.add.rectangle(0, 0, 390, 844, 0x000000, 0.38).setOrigin(0);
     }
 
     this.createTopBar();
@@ -108,29 +108,24 @@ export class ArenaScene extends Phaser.Scene {
 
   private createTopBar(): void {
     const p=this.progress;
-    // риск-бюджет — единственный ограничитель сессии (M15), никогда не покупается
-    this.add.rectangle(0,0,390,56, this.COLORS.elevated).setOrigin(0).setStrokeStyle(1, this.COLORS.border);
-    this.add.circle(18,28,16, this.COLORS.surface).setStrokeStyle(1, this.COLORS.cyan);
-    this.add.text(18,28, `L${p.level}`, { ...FONT_MONO, fontSize:'10px', color:this.COLORS.accentS}).setOrigin(0.5);
-    this.add.text(46,13, `УР.${p.level} · ${this.epoch.name}`, { ...FONT_MONO, fontSize:'8px', color: String(this.epoch.tokens.accent)});
-    this.add.text(46,24, `${p.xp} / ${p.xpMax} XP`, { ...FONT_MONO, fontSize:'8px', color:this.COLORS.mutedS});
-    this.add.rectangle(46,36,120,4, this.COLORS.inset).setStrokeStyle(1, this.COLORS.border).setOrigin(0,0.5);
-    this.add.rectangle(46,36, Math.round(120*(p.xp/p.xpMax)),4, this.COLORS.cyan).setOrigin(0,0.5);
-    // SIG — только косметика (ТЗ Часть 3 §4)
-    this.add.text(176,28, `◉ ${p.coins}`, { ...FONT_MONO, fontSize:'11px', color:this.COLORS.subS});
-    // M15 бюджет риска
-    const bW=66, bX=238, bPct=p.riskBudget/p.maxBudget;
-    const bCol = p.riskBudget<=20 ? this.COLORS.bad : p.riskBudget<=45 ? this.COLORS.warn : this.COLORS.good;
-    this.add.text(bX,13,'БЮДЖЕТ РИСКА', { ...FONT_MONO, fontSize:'7px', color:this.COLORS.mutedS});
-    this.add.rectangle(bX,bY(26),bW,6, this.COLORS.inset).setStrokeStyle(1, bCol).setOrigin(0,0.5);
-    this.add.rectangle(bX,bY(26), Math.round(bW*bPct),6, bCol).setOrigin(0,0.5);
-    this.add.text(bX+bW+6,26, `${p.riskBudget}`, { ...FONT_MONO, fontSize:'10px', color: toHex(bCol)}).setOrigin(0,0.5);
-    // M7 свиток + M13 погода + стрик
-    this.add.text(310,13,`☰ ${p.errorScroll.filter(e=>!e.closed).length} свиток`, { ...FONT_MONO, fontSize:'7px', color: p.errorScroll.filter(e=>!e.closed).length? this.COLORS.warnS : this.COLORS.mutedS});
-    this.add.text(310,24, `⚑ ${p.weather} · ×${p.streak}`, { ...FONT_MONO, fontSize:'7px', color:this.COLORS.subS});
-    this.add.text(310,34, `эпоха ${this.epoch.id}`, { ...FONT_MONO, fontSize:'7px', color: this.epoch.tokens.accent});
-    function bY(y:number){ return y; }
-    function toHex(n:number){ return '#'+n.toString(16).padStart(6,'0'); }
+    const C=this.COLORS;
+    this.add.rectangle(8,8,374,48, C.surface, 0.94).setStrokeStyle(1, C.border);
+    this.add.circle(28,32,14, C.inset).setStrokeStyle(1, C.strong);
+    this.add.text(28,32, `L${p.level}`, { ...FONT_MONO, fontSize:'9px', color:C.accentS}).setOrigin(0.5);
+    // XP — кислотная пилюля
+    this.add.rectangle(50,20,148,24, C.accentN).setOrigin(0,0);
+    this.add.text(58,32, `XP ${p.xp} / ${p.xpMax}`, { ...FONT_MONO, fontSize:'10px', color:'#0a0b0d'}).setOrigin(0,0.5);
+    // SIG
+    this.add.rectangle(206,20,84,24, C.inset).setStrokeStyle(1, C.accentN).setOrigin(0,0);
+    this.add.text(214,32, `SIG ${p.coins}`, { ...FONT_MONO, fontSize:'10px', color:C.accentS}).setOrigin(0,0.5);
+    // M15 бюджет риска — красная пилюля
+    const bColN = p.riskBudget<=20 ? C.bad : p.riskBudget<=45 ? C.warn : C.good;
+    const bColS = p.riskBudget<=20 ? C.badS : p.riskBudget<=45 ? C.warnS : C.goodS;
+    this.add.rectangle(298,20,68,24, C.inset).setStrokeStyle(1, bColN).setOrigin(0,0);
+    this.add.text(306,32, `⌖ ${p.riskBudget}`, { ...FONT_MONO, fontSize:'10px', color:bColS}).setOrigin(0,0.5);
+    // вторая строка: погода · свиток · стрик · эпоха
+    const scroll=p.errorScroll.filter(e=>!e.closed).length;
+    this.add.text(50,50, `УР.${p.level} · ${this.epoch.name} · ⚑ ${p.weather} · ☰ ${scroll} · ×${p.streak}`, { ...FONT_MONO, fontSize:'7px', color:C.mutedS});
   }
 
   private createWeatherStrip(): void {
@@ -144,12 +139,17 @@ export class ArenaScene extends Phaser.Scene {
   private createQuestion(): void {
     // вопрос и условия — блок 1 из 4 (ТЗ Часть 1 §6.1), без раскрытия ответа (§5 Запреты)
     const q=this.encounter;
-    this.add.rectangle(14,76,362,50, this.COLORS.paper).setOrigin(0).setStrokeStyle(1, this.COLORS.cyan);
-    this.add.text(22,80, `СИТУАЦИЯ · ${q.id} · ${q.ticker} · ${q.timeframe}`, { ...FONT_MONO, fontSize:'7px', color:this.COLORS.inkSubS});
-    this.add.text(22,92, q.question, { ...FONT_UI, fontSize:'12px', color:this.COLORS.inkTextS, wordWrap:{width:346}});
-    // теория → карта → практика связка
-    const cardNeed = enemyById[q.enemyId]?.stages.find(s=>s.stage===q.stage)?.requiredCards.map(c=>c.cardId).join('+') ?? q.skills.slice(0,2).join('+');
-    this.add.text(22,118, `НУЖНЫ КАРТЫ: ${cardNeed} · атомы ${q.atoms.join(', ')}`, { ...FONT_MONO, fontSize:'7px', color:this.COLORS.mutedS});
+    const C=this.COLORS;
+    if(this.P.brick){
+      this.add.text(195,78, q.question.toUpperCase(), { fontFamily:C.fontHead, fontSize:'17px', color:C.accentS, align:'center', wordWrap:{width:352} }).setOrigin(0.5,0);
+      this.add.text(195,120, `${q.ticker} · ${q.timeframe} · ${q.id} · атомы ${q.atoms.join(', ')}`, { ...FONT_MONO, fontSize:'7px', color:C.subS}).setOrigin(0.5,0);
+    } else {
+      this.add.rectangle(14,76,362,50, C.paper).setOrigin(0).setStrokeStyle(1, C.cyan);
+      this.add.text(22,80, `СИТУАЦИЯ · ${q.id} · ${q.ticker} · ${q.timeframe}`, { ...FONT_MONO, fontSize:'7px', color:C.inkSubS});
+      this.add.text(22,92, q.question, { ...FONT_UI, fontSize:'12px', color:C.inkTextS, wordWrap:{width:346}});
+      const cardNeed = enemyById[q.enemyId]?.stages.find(st=>st.stage===q.stage)?.requiredCards.map(c=>c.cardId).join('+') ?? q.skills.slice(0,2).join('+');
+      this.add.text(22,118, `НУЖНЫ КАРТЫ: ${cardNeed} · атомы ${q.atoms.join(', ')}`, { ...FONT_MONO, fontSize:'7px', color:C.mutedS});
+    }
   }
 
   private createThreat(): void {
@@ -474,24 +474,25 @@ export class ArenaScene extends Phaser.Scene {
       return;
     }
 
-    // стандартный блок ответов
+    // стандартный блок ответов — сетка 2×2 (согласованный макет)
     const answers = this.encounter.mutatedAnswers;
     answers.forEach((a,i)=>{
-      const ay=476+i*46;
+      const col=i%2, row=Math.floor(i/2);
+      const ax=14+col*184, ay=470+row*66;
       const isSel=this.selectedAnswer===i;
-      this.add.rectangle(14,ay,362,42, isSel? this.COLORS.hover: this.COLORS.surface).setStrokeStyle(1, isSel? this.COLORS.cyan: this.COLORS.border).setOrigin(0).setInteractive().on('pointerdown', ()=>{
+      const C=this.COLORS;
+      this.add.rectangle(ax,ay,178,60, isSel? C.accentN : C.surface, isSel?1:0.94).setStrokeStyle(1, isSel? C.accentN : C.border).setOrigin(0).setInteractive().on('pointerdown', ()=>{
         // M10 задержка после серии ошибок
         const tilt = this.progress.errorScroll.filter(e=>!e.closed).length >= balanceConfig.coldHead.tiltThreshold;
         if(tilt && !this.selectedAnswer){
-          this.add.text(195, ay+44, '◷ холодная голова — вдох...', { ...FONT_MONO, fontSize:'7px', color:this.COLORS.warnS}).setOrigin(0.5);
+          this.add.text(195, ay+62, '◷ холодная голова — вдох...', { ...FONT_MONO, fontSize:'7px', color:C.warnS}).setOrigin(0.5);
           this.time.delayedCall(balanceConfig.coldHead.delayMs, ()=> { this.selectedAnswer=i; this.showConfidencePicker(); });
           return;
         }
         this.selectedAnswer=i; this.showConfidencePicker();
       });
-      this.add.text(28,ay+14, a.label, { ...FONT_MONO, fontSize:'11px', color: isSel?this.COLORS.accentS:this.COLORS.mutedS});
-      this.add.text(50,ay+14, a.text, { ...FONT_UI, fontSize:'11px', color:this.COLORS.textS, wordWrap:{width:300}});
-      if(a.isWait) this.add.text(320,ay+14,'◷', { fontSize:'10px', color:this.COLORS.warnS});
+      this.add.text(ax+10,ay+10, a.label, { ...FONT_MONO, fontSize:'10px', color: isSel? '#0a0b0d' : (a.isWait? C.warnS : C.badS)});
+      this.add.text(ax+10,ay+26, a.text, { ...FONT_UI, fontSize:'9px', color: isSel? '#0a0b0d' : C.textS, wordWrap:{width:158}});
     });
     // подсказка M1
     if(this.selectedAnswer===null){
@@ -737,21 +738,31 @@ export class ArenaScene extends Phaser.Scene {
 
   private createBottomNav(): void {
     const nav = this.epoch.nav;
-    // всегда 4 зоны по контракту, но в Улице 2 активны — остальные locked как ось взросления
+    const C=this.COLORS;
     const all = ['ACADEMY','ARENA','COLLECTION','MORE'];
+    const ru: Record<string,string> = { ACADEMY:'АКАДЕМИЯ', ARENA:'АРЕНА', COLLECTION:'КОЛЛЕКЦИЯ', MORE:'ЕЩЁ' };
+    const ic: Record<string,string> = { ACADEMY:'nav-academy', ARENA:'nav-arena', COLLECTION:'nav-collection', MORE:'nav-more' };
+    this.add.rectangle(0,784,390,60, 0x0a0b0d, 0.96).setOrigin(0);
+    this.add.rectangle(0,784,390,1, C.border).setOrigin(0);
     all.forEach((label,i)=>{
       const unlocked = nav.includes(label) || (label==='MORE' && (nav.includes('TOURNAMENTS') || nav.includes('MARKET')));
       const isActive = label==='ARENA';
       const nx=i*(390/4);
-      this.add.rectangle(nx, 784, 390/4, 60, unlocked? this.COLORS.elevated: this.COLORS.inset).setStrokeStyle(1, this.COLORS.border).setOrigin(0).setInteractive().on('pointerdown', ()=>{
+      this.add.rectangle(nx,784,390/4,60,0x000000,0).setOrigin(0).setInteractive().on('pointerdown', ()=>{
         if(!unlocked){ this.cameras.main.flash(60,255,179,65); return; }
         if(label==='ACADEMY') this.scene.start('AcademyScene');
         if(label==='COLLECTION') this.scene.start('CollectionScene');
         if(label==='MORE') this.scene.start('MoreScene');
       });
-      this.add.text(nx+390/8, 810, label, { ...FONT_MONO, fontSize:'7px', color: isActive? this.COLORS.accentS : unlocked?this.COLORS.subS:'#46536A'}).setOrigin(0.5);
-      if(!unlocked) this.add.text(nx+390/8,822,'SOON', { ...FONT_MONO, fontSize:'6px', color:this.COLORS.mutedS}).setOrigin(0.5);
-      if(isActive) this.add.rectangle(nx,784,390/4,2, this.COLORS.cyan).setOrigin(0);
+      const k='icon_'+ic[label];
+      const tk = ic[label];
+      if(this.textures.exists(tk)){
+        const img=this.add.image(nx+390/8, 806, tk).setDisplaySize(20,20);
+        img.setTint(isActive? C.accentN : unlocked? 0x9aa2ad : 0x46536a);
+      }
+      this.add.text(nx+390/8, 828, ru[label], { ...FONT_MONO, fontSize:'7px', color: isActive? C.accentS : unlocked? C.subS : '#46536A'}).setOrigin(0.5);
+      if(!unlocked) this.add.text(nx+390/8+34, 798, '🔒', { fontSize:'7px', color:C.mutedS}).setOrigin(0.5);
+      if(isActive) this.add.rectangle(nx,784,390/4,2, C.accentN).setOrigin(0);
     });
   }
 
