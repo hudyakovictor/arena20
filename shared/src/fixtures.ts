@@ -208,6 +208,21 @@ const PROTOCOLS: Protocol[] = [
     ruleKey: 'protocol.noise-quarantine.rule',
   },
   { protocolId: 'flat-ok', titleKey: 'protocol.flat-ok.title', ruleKey: 'protocol.flat-ok.rule' },
+  {
+    protocolId: 'save-system',
+    titleKey: 'protocol.save-system.title',
+    ruleKey: 'protocol.save-system.rule',
+  },
+  {
+    protocolId: 'after-loss',
+    titleKey: 'protocol.after-loss.title',
+    ruleKey: 'protocol.after-loss.rule',
+  },
+  {
+    protocolId: 'confidence',
+    titleKey: 'protocol.confidence.title',
+    ruleKey: 'protocol.confidence.rule',
+  },
 ];
 
 function buildPack(): ContentPack {
@@ -231,6 +246,7 @@ function buildPack(): ContentPack {
         ],
         visibleCandles: genCandles(`${seed1}:visible`, 48, 100, 0.12),
         t0Index: 47,
+        timeframeKey: 'scen.mvp-001.tf',
         skillIds: ['risk-first', 'no-confirm', 'news-noise', 'flat-ok'],
         entityIds: ['fake-breakout-phantom'],
         protocolId: 'risk-first',
@@ -269,6 +285,7 @@ function buildPack(): ContentPack {
         ],
         visibleCandles: genCandles(`${seed2}:visible`, 40, 64, 0.02),
         t0Index: 39,
+        timeframeKey: 'scen.mvp-002.tf',
         skillIds: ['risk-first', 'no-average', 'invalidate'],
         entityIds: ['revenge-wraith'],
         protocolId: 'evidence-only',

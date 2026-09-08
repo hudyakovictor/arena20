@@ -74,6 +74,8 @@ export const scenarioPublicSchema = z.object({
   visibleCandles: z.array(candleSchema).min(10).max(240),
   /** Индекс t0 в visibleCandles (обычно последний). */
   t0Index: z.number().int().nonnegative(),
+  /** copy-key метки таймфрейма (прототип 4.2: сетка ФАЗА/ТАЙМФРЕЙМ/ПРАВИЛО/СЛОЖНОСТЬ). */
+  timeframeKey: z.string().min(1),
   skillIds: z.array(z.string().min(1)).min(1).max(6),
   entityIds: z.array(z.string().min(1)).max(3),
   protocolId: z.string().min(1),

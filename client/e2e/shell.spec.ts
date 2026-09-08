@@ -57,7 +57,7 @@ test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.clear();
     localStorage.setItem(
-      'signal-arena:v1',
+      'signal-arena:v2',
       JSON.stringify({
         state: {
           route: 'home',
@@ -72,9 +72,10 @@ test.beforeEach(async ({ page }) => {
             bestQuality: {},
             ownedItems: [],
             openTopics: [],
+            skillStats: {},
           },
         },
-        version: 1,
+        version: 2,
       }),
     );
   });
@@ -97,11 +98,14 @@ test('shell: нижняя навигация переключает ленивы
   expect(state.route).toBe('home');
 });
 
-test('arena: брифинг → решение → 2-й шаг → reveal → вердикт → следующая охота', async ({
+test('arena: режим → брифинг → решение → 2-й шаг → reveal → вердикт → следующая охота', async ({
   page,
 }) => {
   await tapAnchor(page, 'nav:arena');
-  await waitFor(page, (s) => s.route === 'arena' && s.arena?.phase === 'brief');
+  await waitFor(page, (s) => s.route === 'arena' && s.arena?.phase === 'menu');
+
+  await tapAnchor(page, 'arena:menu-start');
+  await waitFor(page, (s) => s.arena?.phase === 'brief');
 
   await tapAnchor(page, 'arena:brief-cta');
   await waitFor(page, (s) => s.arena?.phase === 'task');
@@ -129,13 +133,18 @@ test('arena: брифинг → решение → 2-й шаг → reveal → в
   expect(verdict.arena?.quality).toBeGreaterThan(0);
   expect(verdict.progress.completed).toContain('mvp-001');
 
+  await tapAnchor(page, 'verdict:next-step');
+  await waitFor(page, (s) => s.activeScenes.includes('Verdict'));
+  await tapAnchor(page, 'verdict:next-step');
   await tapAnchor(page, 'verdict:next');
-  await waitFor(page, (s) => s.arena?.scenarioId === 'mvp-002' && s.arena?.phase === 'brief');
+  await waitFor(page, (s) => s.arena?.scenarioId === 'mvp-002' && s.arena?.phase === 'menu');
 });
 
 test('perсист: сессия и прогресс переживают релоад', async ({ page }) => {
   await tapAnchor(page, 'nav:arena');
-  await waitFor(page, (s) => s.route === 'arena' && s.arena?.phase === 'brief');
+  await waitFor(page, (s) => s.route === 'arena' && s.arena?.phase === 'menu');
+  await tapAnchor(page, 'arena:menu-start');
+  await waitFor(page, (s) => s.arena?.phase === 'brief');
   await page.reload();
   await expect(page.locator('#game canvas')).toBeVisible({ timeout: 30_000 });
   const state = await waitFor(page, (s) => s.route === 'arena' && s.arena !== null);

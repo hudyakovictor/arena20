@@ -190,26 +190,30 @@ export class ShellScene extends Phaser.Scene {
       },
     );
     const phaseLabel =
-      arena?.phase === 'brief'
-        ? t('arena.brief')
-        : arena?.phase === 'task'
-          ? t('arena.task')
-          : arena?.phase === 'reveal'
-            ? t('reveal.title')
-            : t('reveal.quality');
+      arena?.phase === 'menu'
+        ? t('arena.mode.title')
+        : arena?.phase === 'brief'
+          ? t('arena.brief')
+          : arena?.phase === 'task'
+            ? t('arena.task')
+            : arena?.phase === 'reveal'
+              ? t('reveal.title')
+              : t('reveal.quality');
     const right = makeText(this, 0, 12, phaseLabel, { mono: true, size: 10, tone: 'data' });
     right.setOrigin(1, 0);
     right.setX(250);
     const bar = makeProgressBar(this, 194, 8, 'data');
     bar.container.setPosition(56, 40);
     const phaseFrac =
-      arena?.phase === 'brief'
-        ? 0.15
-        : arena?.phase === 'task'
-          ? 0.45
-          : arena?.phase === 'reveal'
-            ? 0.8
-            : 1;
+      arena?.phase === 'menu'
+        ? 0.05
+        : arena?.phase === 'brief'
+          ? 0.15
+          : arena?.phase === 'task'
+            ? 0.45
+            : arena?.phase === 'reveal'
+              ? 0.8
+              : 1;
     bar.setRatio(phaseFrac);
     root.add([label, right, bar.container]);
 

@@ -67,9 +67,11 @@ export function panelBg(
   fill: number = UI_BG.surface,
   radius: number = LAYOUT.radiusMd,
 ): RexUIRoundRectangle {
-  return rex(scene)
-    .add.roundRectangle(0, 0, w, h, radius, fill)
-    .setStrokeStyle(1, UI_TINT.secondary, 0.22);
+  // Top-left origin: фон кладётся в ручной контейнер точкой (x, y) без сдвига.
+  const bg = rex(scene).add.roundRectangle(0, 0, w, h, radius, fill);
+  bg.setOrigin(0, 0);
+  bg.setStrokeStyle(1, UI_TINT.secondary, 0.22);
+  return bg;
 }
 
 export interface LabelOpts {
@@ -469,6 +471,96 @@ export function clearAnchors(): void {
 /** Обрезка строки с многоточием (для компактных карточек). */
 export function ellipsis(text: string, max: number): string {
   return text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text;
+}
+
+export interface KvCell {
+  label: string;
+  value: string;
+  valueTone?: UiTone | undefined;
+  maxChars?: number | undefined;
+}
+
+/**
+ * Сетка «метка → значение» (прототип 4.2: ФАЗА/ТАЙМФРЕЙМ/ПРАВИЛО/СЛОЖНОСТЬ;
+ * 4.6: мета карты). Возвращает контейнер с выставленным размером.
+ */
+export function makeKvGrid(
+  scene: Phaser.Scene,
+  cells: KvCell[],
+  opts: { width?: number; cols?: number; cellH?: number } = {},
+): Phaser.GameObjects.Container {
+  const width = opts.width ?? LAYOUT.viewWidth - LAYOUT.gutter * 2;
+  const cols = opts.cols ?? 2;
+  const cellH = opts.cellH ?? 52;
+  const gap = SPACING.sm;
+  const cellW = (width - gap * (cols - 1)) / cols;
+  const root = scene.add.container(0, 0);
+  cells.forEach((cell, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const x = col * (cellW + gap);
+    const y = row * (cellH + gap);
+    const bg = panelBg(scene, cellW, cellH, UI_BG.surface2, LAYOUT.radiusSm);
+    bg.setPosition(x, y);
+    bg.setOrigin(0, 0);
+    const label = makeText(scene, x + SPACING.sm, y + 7, cell.label, {
+      mono: true,
+      size: FONT_SIZES.label,
+      tone: 'muted',
+    });
+    const value = makeText(
+      scene,
+      x + SPACING.sm,
+      y + 23,
+      ellipsis(cell.value, cell.maxChars ?? 22),
+      {
+        size: FONT_SIZES.body,
+        tone: cell.valueTone ?? 'primary',
+      },
+    );
+    root.add([bg, label, value]);
+  });
+  const rows = Math.max(1, Math.ceil(cells.length / cols));
+  root.setSize(width, rows * cellH + (rows - 1) * gap);
+  return root;
+}
+
+export interface Pager {
+  container: Phaser.GameObjects.Container;
+  setStep: (index: number) => void;
+}
+
+/**
+ * Пейджер точек для многошаговых экранов (прототип 4.11–4.13).
+ * Точки — индикаторы; управление — крупной CTA-кнопкой (touch ≥44).
+ */
+export function makePager(scene: Phaser.Scene, steps: number, initial = 0): Pager {
+  const root = scene.add.container(0, 0);
+  const dots: Phaser.GameObjects.Graphics[] = [];
+  for (let i = 0; i < steps; i += 1) {
+    const g = scene.add.graphics();
+    root.add(g);
+    dots.push(g);
+  }
+  const paint = (active: number): void => {
+    let x = 0;
+    dots.forEach((g, i) => {
+      g.clear();
+      g.setPosition(x, 0);
+      const on = i === active;
+      g.fillStyle(on ? UI_TINT.active : UI_TINT.muted, on ? 1 : 0.5);
+      if (on) {
+        g.fillRoundedRect(0, 2, 26, 6, 3);
+        x += 34;
+      } else {
+        g.fillCircle(4, 5, 3);
+        x += 16;
+      }
+    });
+    root.setSize(Math.max(0, x - 8), 10);
+  };
+  paint(initial);
+  return { container: root, setStep: paint };
 }
 
 /** Вертикальный стек: раскладывает детей с шагом. Возвращает высоту. */
