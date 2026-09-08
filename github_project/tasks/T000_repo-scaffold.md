@@ -4,8 +4,8 @@
 
 - **Фаза:** 0 — Фундамент и конвенции (Foundation)
 - **Трек:** `foundation`
-- **Статус:** `todo`
-- **Исполнитель:** —
+- **Статус:** `in_progress`
+- **Исполнитель:** agent-arena-01
 - **Зависимости:** —
 - **CEO-гейт:** нет
 - **Обновлено:** 2026-09-08
@@ -36,6 +36,7 @@
 | Дата | Агент | Статус | Заметка |
 |---|---|---|---|
 | 2026-09-08 | init | `todo` | задача импортирована в единый реестр |
+| 2026-09-08 | agent-arena-01 | `in_progress` | claim: scaffold monorepo + phaser vertical slice (user direct assignment: ekrany dlya phaser po prototipu) |
 
 ## Команды статуса
 ```bash

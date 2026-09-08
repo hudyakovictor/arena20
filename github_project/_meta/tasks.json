@@ -303,8 +303,8 @@
       ],
       "ceo_gate": false,
       "note": "Не реализовывать игру здесь — только каркас и конвенции.",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -312,6 +312,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "claim: scaffold monorepo + phaser vertical slice (user direct assignment: ekrany dlya phaser po prototipu)"
         }
       ]
     },
