@@ -4,7 +4,7 @@
 
 - **Фаза:** 0 — Фундамент и конвенции (Foundation)
 - **Трек:** `frontend`
-- **Статус:** `done`
+- **Статус:** `approved`
 - **Исполнитель:** agent-arena-01
 - **Зависимости:** T000
 - **CEO-гейт:** нет
@@ -36,6 +36,8 @@
 | 2026-09-08 | init | `todo` | задача импортирована в единый реестр |
 | 2026-09-08 | agent-arena-01 | `in_progress` | force: прямое назначение пользователя (vertical slice: shared+экраны phaser); deps approve позже |
 | 2026-09-08 | agent-arena-01 | `done` | vitest tokens 4/4 + check-conventions HEX-scan OK; woff2 x6 в бандле (каждый ≤24KB) |
+| 2026-09-08 | agent-arena-01 | `review` | PR #1 открыт |
+| 2026-09-08 | agent-arena-01 | `approved` | PR #1 merged в main; принято CEO |
 
 ## Команды статуса
 ```bash

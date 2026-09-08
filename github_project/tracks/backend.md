@@ -7,7 +7,7 @@ _Fastify/SQLite/Drizzle/Zod/WS сервер (фаза 10)._
 | ID | Задача | Фаза | Зависимости | Статус | Исполнитель |
 |---|---|---|---|---|---|
 | T081 | [WS realtime + асинхронная оценка](../tasks/T081_tournament-ws.md) | 8 | T080, T104 | `todo` | — |
-| T100 | [Каркас сервера (Fastify)](../tasks/T100_server-scaffold.md) | 10 | T000, T001 | `done` | agent-arena-01 |
+| T100 | [Каркас сервера (Fastify)](../tasks/T100_server-scaffold.md) | 10 | T000, T001 | `approved` | agent-arena-01 |
 | T101 | [Профили и персист прогресса](../tasks/T101_profiles.md) | 10 | T100 | `todo` | — |
 | T102 | [Отдача сценариев/ассетов + версионность + хэш future](../tasks/T102_content-serving.md) | 10 | T100, T030, T003 | `todo` | — |
 | T103 | [Персист журнала/результатов + профиль ошибок](../tasks/T103_journal-persist.md) | 10 | T101, T044 | `todo` | — |

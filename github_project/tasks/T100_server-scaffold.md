@@ -4,7 +4,7 @@
 
 - **Фаза:** 10 — Бэкенд (Fastify + SQLite + Drizzle + Zod + WS)
 - **Трек:** `backend`
-- **Статус:** `done`
+- **Статус:** `approved`
 - **Исполнитель:** agent-arena-01
 - **Зависимости:** T000, T001
 - **CEO-гейт:** нет
@@ -35,6 +35,8 @@ Fastify + Drizzle + SQLite: конфиг, миграции, seed, структу
 | 2026-09-08 | init | `todo` | задача импортирована в единый реестр |
 | 2026-09-08 | agent-arena-01 | `in_progress` | force: прямое назначение пользователя (vertical slice: shared+экраны phaser); deps approve позже |
 | 2026-09-08 | agent-arena-01 | `done` | vitest server 3/3: /health, /api/content/version, миграции на :memory: + smoke tsx curl /health |
+| 2026-09-08 | agent-arena-01 | `review` | PR #1 открыт |
+| 2026-09-08 | agent-arena-01 | `approved` | PR #1 merged в main; принято CEO |
 
 ## Команды статуса
 ```bash

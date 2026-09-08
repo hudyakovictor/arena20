@@ -6,7 +6,7 @@ _Phaser 4 игра: shell, график, Арена, Академия, Бест�
 
 | ID | Задача | Фаза | Зависимости | Статус | Исполнитель |
 |---|---|---|---|---|---|
-| T002 | [Модуль дизайн-токенов](../tasks/T002_design-tokens.md) | 0 | T000 | `done` | agent-arena-01 |
+| T002 | [Модуль дизайн-токенов](../tasks/T002_design-tokens.md) | 0 | T000 | `approved` | agent-arena-01 |
 | T004 | [Пайплайн сборки ассетов](../tasks/T004_asset-pipeline.md) | 0 | T000, T002, T003 | `todo` | — |
 | T010 | [Phaser 4 boot + Vite + Canvas](../tasks/T010_phaser-boot.md) | 1 | T000, T002 | `in_progress` | agent-arena-01 |
 | T011 | [Архитектура сцен и роутер](../tasks/T011_scene-arch.md) | 1 | T010 | `in_progress` | agent-arena-01 |

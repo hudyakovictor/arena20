@@ -17,9 +17,9 @@ _Репозиторий, монорепо-каркас, общие схемы, �
 
 | ID | Задача | Трек | Статус | Исполнитель | Обновлено | Гейт |
 |---|---|---|---|---|---|---|
-| T000 | [Каркас репозитория и монорепо](./tasks/T000_repo-scaffold.md) | `foundation` | `done` | agent-arena-01 | 2026-09-08 |  |
-| T001 | [Общие Zod-схемы домена](./tasks/T001_shared-schemas.md) | `shared` | `done` | agent-arena-01 | 2026-09-08 |  |
-| T002 | [Модуль дизайн-токенов](./tasks/T002_design-tokens.md) | `frontend` | `done` | agent-arena-01 | 2026-09-08 |  |
+| T000 | [Каркас репозитория и монорепо](./tasks/T000_repo-scaffold.md) | `foundation` | `approved` | agent-arena-01 | 2026-09-08 |  |
+| T001 | [Общие Zod-схемы домена](./tasks/T001_shared-schemas.md) | `shared` | `approved` | agent-arena-01 | 2026-09-08 |  |
+| T002 | [Модуль дизайн-токенов](./tasks/T002_design-tokens.md) | `frontend` | `approved` | agent-arena-01 | 2026-09-08 |  |
 | T003 | [Схема и валидатор asset-manifest](./tasks/T003_asset-manifest.md) | `shared` | `todo` | — | 2026-09-08 |  |
 | T004 | [Пайплайн сборки ассетов](./tasks/T004_asset-pipeline.md) | `frontend` | `todo` | — | 2026-09-08 |  |
 | T005 | [Финализация github_project (эта система)](./tasks/T005_agent-docs.md) | `qa` | `todo` | — | 2026-09-08 |  |
@@ -58,8 +58,8 @@ _Детерминированный генератор задач: модель 
 
 | ID | Задача | Трек | Статус | Исполнитель | Обновлено | Гейт |
 |---|---|---|---|---|---|---|
-| T030 | [Модель ситуации + content-pack](./tasks/T030_scenario-model.md) | `shared` | `done` | agent-arena-01 | 2026-09-08 |  |
-| T031 | [Обёртка seedrandom](./tasks/T031_prng.md) | `shared` | `done` | agent-arena-01 | 2026-09-08 |  |
+| T030 | [Модель ситуации + content-pack](./tasks/T030_scenario-model.md) | `shared` | `approved` | agent-arena-01 | 2026-09-08 |  |
+| T031 | [Обёртка seedrandom](./tasks/T031_prng.md) | `shared` | `approved` | agent-arena-01 | 2026-09-08 |  |
 | T032 | [scenario-gen (детерминизм + сложность 0–99)](./tasks/T032_scenario-gen.md) | `shared` | `todo` | — | 2026-09-08 |  |
 | T033 | [Профиль ошибок + адаптивная выдача](./tasks/T033_error-profile.md) | `shared` | `todo` | — | 2026-09-08 |  |
 | T034 | [Детерминизм турниров (server-fixed seed)](./tasks/T034_tournament-determinism.md) | `shared` | `todo` | — | 2026-09-08 |  |
@@ -134,7 +134,7 @@ _Сервер: схема БД, профили/прогресс, отдача с
 
 | ID | Задача | Трек | Статус | Исполнитель | Обновлено | Гейт |
 |---|---|---|---|---|---|---|
-| T100 | [Каркас сервера (Fastify)](./tasks/T100_server-scaffold.md) | `backend` | `done` | agent-arena-01 | 2026-09-08 |  |
+| T100 | [Каркас сервера (Fastify)](./tasks/T100_server-scaffold.md) | `backend` | `approved` | agent-arena-01 | 2026-09-08 |  |
 | T101 | [Профили и персист прогресса](./tasks/T101_profiles.md) | `backend` | `todo` | — | 2026-09-08 |  |
 | T102 | [Отдача сценариев/ассетов + версионность + хэш future](./tasks/T102_content-serving.md) | `backend` | `todo` | — | 2026-09-08 |  |
 | T103 | [Персист журнала/результатов + профиль ошибок](./tasks/T103_journal-persist.md) | `backend` | `todo` | — | 2026-09-08 |  |
@@ -177,5 +177,5 @@ _Каркас админ-панели и CRM (план+сборка позже),
 | T132 | [Фриз документации + чек-лист релиза](./tasks/T132_release-freeze.md) | `qa` | `todo` | — | 2026-09-08 | 🔴 |
 
 ## Итого
-- Задач: 67. Принято: 0 (0%).
+- Задач: 67. Принято: 6 (9%).
 - В работе: 15. На ревью: 0. Заблокировано: 0.
