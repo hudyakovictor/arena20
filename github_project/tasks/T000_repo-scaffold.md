@@ -4,7 +4,7 @@
 
 - **Фаза:** 0 — Фундамент и конвенции (Foundation)
 - **Трек:** `foundation`
-- **Статус:** `in_progress`
+- **Статус:** `done`
 - **Исполнитель:** agent-arena-01
 - **Зависимости:** —
 - **CEO-гейт:** нет
@@ -37,6 +37,7 @@
 |---|---|---|---|
 | 2026-09-08 | init | `todo` | задача импортирована в единый реестр |
 | 2026-09-08 | agent-arena-01 | `in_progress` | claim: scaffold monorepo + phaser vertical slice (user direct assignment: ekrany dlya phaser po prototipu) |
+| 2026-09-08 | agent-arena-01 | `done` | typecheck/lint/format/vitest/build/conventions green локально (29 тестов); plan CI pass; полный CI — proposed файл, ждёт workflows-права |
 
 ## Команды статуса
 ```bash

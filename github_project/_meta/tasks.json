@@ -303,7 +303,7 @@
       ],
       "ceo_gate": false,
       "note": "Не реализовывать игру здесь — только каркас и конвенции.",
-      "status": "in_progress",
+      "status": "done",
       "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
@@ -318,6 +318,12 @@
           "agent": "agent-arena-01",
           "status": "in_progress",
           "note": "claim: scaffold monorepo + phaser vertical slice (user direct assignment: ekrany dlya phaser po prototipu)"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "done",
+          "note": "typecheck/lint/format/vitest/build/conventions green локально (29 тестов); plan CI pass; полный CI — proposed файл, ждёт workflows-права"
         }
       ]
     },
@@ -342,8 +348,8 @@
       ],
       "ceo_gate": false,
       "note": "Обязателен strict; никаких any.",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -351,6 +357,18 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя (vertical slice: shared+экраны phaser); deps approve позже"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "done",
+          "note": "vitest shared/schemas.test.ts 4/4: валидный пак ok, невалидный падает, public режет future"
         }
       ]
     },
@@ -375,8 +393,8 @@
       ],
       "ceo_gate": false,
       "note": "Цвет — не единственный носитель статуса (см. UI-спец §9/§13).",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -384,6 +402,18 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя (vertical slice: shared+экраны phaser); deps approve позже"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "done",
+          "note": "vitest tokens 4/4 + check-conventions HEX-scan OK; woff2 x6 в бандле (каждый ≤24KB)"
         }
       ]
     },
@@ -511,8 +541,8 @@
       ],
       "ceo_gate": false,
       "note": "Стек Phaser 4 обязателен. Если Phaser 4 недоступен в реестре — задача BLOCKED, не заменять на Phaser 3.",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -520,6 +550,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -543,8 +579,8 @@
       ],
       "ceo_gate": false,
       "note": "",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -552,6 +588,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -576,8 +618,8 @@
       ],
       "ceo_gate": true,
       "note": "CEO-гейт: визуальная проверка оболочки.",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -585,6 +627,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -609,8 +657,8 @@
       ],
       "ceo_gate": false,
       "note": "",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -618,6 +666,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -642,8 +696,8 @@
       ],
       "ceo_gate": false,
       "note": "rexUI обязателен для игрового UI внутри сцены.",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -651,6 +705,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -676,8 +736,8 @@
       ],
       "ceo_gate": false,
       "note": "Zustand обязателен (без React).",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -685,6 +745,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -709,8 +775,8 @@
       ],
       "ceo_gate": false,
       "note": "Phaser Sound обязателен.",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -718,6 +784,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -741,8 +813,8 @@
       ],
       "ceo_gate": false,
       "note": "vite-plugin-pwa обязателен.",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -750,6 +822,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -774,8 +852,8 @@
       ],
       "ceo_gate": false,
       "note": "",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -783,6 +861,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -809,8 +893,8 @@
       ],
       "ceo_gate": true,
       "note": "CEO-гейт: график — визуальная проверка. Кастомный CandleChart обязателен (НЕ lightweight-charts).",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -818,6 +902,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -842,8 +932,8 @@
       ],
       "ceo_gate": false,
       "note": "",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -851,6 +941,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -977,8 +1073,8 @@
       ],
       "ceo_gate": false,
       "note": "",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -986,6 +1082,18 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя (vertical slice: shared+экраны phaser); deps approve позже"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "done",
+          "note": "vitest: fixture content-pack v0.1.0 валидируется contentPackSchema (2 сценария/8 скиллов/6 сущностей/4 протокола)"
         }
       ]
     },
@@ -1009,8 +1117,8 @@
       ],
       "ceo_gate": false,
       "note": "seedrandom обязателен.",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -1018,6 +1126,18 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя (vertical slice: shared+экраны phaser); deps approve позже"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "done",
+          "note": "vitest prng 5/5 incl. воспроизводимость по 1000 seed"
         }
       ]
     },
@@ -1171,8 +1291,8 @@
       ],
       "ceo_gate": true,
       "note": "CEO-гейт: Арена должна быть играбельна визуально.",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -1180,6 +1300,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -1203,8 +1329,8 @@
       ],
       "ceo_gate": false,
       "note": "",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -1212,6 +1338,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -1237,8 +1369,8 @@
       ],
       "ceo_gate": false,
       "note": "",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -1246,6 +1378,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -1269,8 +1407,8 @@
       ],
       "ceo_gate": false,
       "note": "",
-      "status": "todo",
-      "assignee": null,
+      "status": "in_progress",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -1278,6 +1416,12 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы)"
         }
       ]
     },
@@ -1858,8 +2002,8 @@
       ],
       "ceo_gate": false,
       "note": "Fastify+SQLite+Drizzle+Zod+WS обязательны (оставляем).",
-      "status": "todo",
-      "assignee": null,
+      "status": "done",
+      "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
         {
@@ -1867,6 +2011,18 @@
           "agent": "init",
           "status": "todo",
           "note": "задача импортирована в единый реестр"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "in_progress",
+          "note": "force: прямое назначение пользователя (vertical slice: shared+экраны phaser); deps approve позже"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "done",
+          "note": "vitest server 3/3: /health, /api/content/version, миграции на :memory: + smoke tsx curl /health"
         }
       ]
     },
