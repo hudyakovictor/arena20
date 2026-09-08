@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0B0C0D" />
+    <meta
+      name="description"
+      content="SIGNAL ARENA — игровой тренажёр качества торговых решений. Не биржа, не сигналы, не обещание дохода."
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <title>SIGNAL ARENA — тренажёр решений</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #0b0c0d;
+        overscroll-behavior: none;
+      }
+      #game {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #game canvas {
+        display: block;
+      }
+      #boot-fallback {
+        color: #989ea4;
+        font:
+          13px/1.5 system-ui,
+          sans-serif;
+        text-align: center;
+        padding: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game">
+      <div id="boot-fallback">Загрузка арены…<br />Рынок ищет оправдание. Подожди.</div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
