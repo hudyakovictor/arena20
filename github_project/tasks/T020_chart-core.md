@@ -4,8 +4,8 @@
 
 - **Фаза:** 2 — Свечной график (CandleChart на Graphics)
 - **Трек:** `frontend`
-- **Статус:** `in_progress`
-- **Исполнитель:** agent-arena-01
+- **Статус:** `done`
+- **Исполнитель:** agent-frontend-01
 - **Зависимости:** T014, T001
 - **CEO-гейт:** да — требуется визуальная приёмка CEO перед `approved`
 - **Обновлено:** 2026-09-08
@@ -36,6 +36,7 @@
 |---|---|---|---|
 | 2026-09-08 | init | `todo` | задача импортирована в единый реестр |
 | 2026-09-08 | agent-arena-01 | `in_progress` | force: прямое назначение пользователя; реализовано + unit/typecheck/build green, playwright-часть плана ждёт CI (в песочнице нет браузеров: CDN заблокированы) |
+| 2026-09-08 | agent-frontend-01 | `done` | CandleChart core done: Graphics layers, scaling, reveal mask, markers/levels/interactionZone; typecheck/build green |
 
 ## Команды статуса
 ```bash

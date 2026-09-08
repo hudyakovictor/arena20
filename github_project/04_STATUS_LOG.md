@@ -46,9 +46,9 @@ _Кастомный CandleChart: сетка, свечи из OHLCV, скейли
 
 | ID | Задача | Трек | Статус | Исполнитель | Обновлено | Гейт |
 |---|---|---|---|---|---|---|
-| T020 | [CandleChart core (Graphics)](./tasks/T020_chart-core.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 | 🔴 |
+| T020 | [CandleChart core (Graphics)](./tasks/T020_chart-core.md) | `frontend` | `done` | agent-frontend-01 | 2026-09-08 | 🔴 |
 | T021 | [Reveal скрытого future](./tasks/T021_chart-reveal.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
-| T022 | [Оверлеи графика](./tasks/T022_chart-overlay.md) | `frontend` | `todo` | — | 2026-09-08 |  |
+| T022 | [Оверлеи графика](./tasks/T022_chart-overlay.md) | `frontend` | `in_progress` | agent-frontend-01 | 2026-09-08 |  |
 | T023 | [Производительность графика](./tasks/T023_chart-perf.md) | `frontend` | `todo` | — | 2026-09-08 |  |
 | T024 | [Юнит-тесты CandleChart](./tasks/T024_chart-tests.md) | `qa` | `todo` | — | 2026-09-08 |  |
 

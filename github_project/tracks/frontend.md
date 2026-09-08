@@ -17,9 +17,9 @@ _Phaser 4 игра: shell, график, Арена, Академия, Угро�
 | T016 | [Звук (Phaser Sound) + настройки](../tasks/T016_sound.md) | 1 | T011, T015 | `in_progress` | agent-arena-01 |
 | T017 | [PWA (vite-plugin-pwa)](../tasks/T017_pwa.md) | 1 | T010 | `in_progress` | agent-arena-01 |
 | T018 | [Системные состояния (loading/offline/empty/error)](../tasks/T018_sys-states.md) | 1 | T014, T017 | `in_progress` | agent-arena-01 |
-| T020 | [CandleChart core (Graphics)](../tasks/T020_chart-core.md) | 2 | T014, T001 | `in_progress` | agent-arena-01 |
+| T020 | [CandleChart core (Graphics)](../tasks/T020_chart-core.md) | 2 | T014, T001 | `done` | agent-frontend-01 |
 | T021 | [Reveal скрытого future](../tasks/T021_chart-reveal.md) | 2 | T020 | `in_progress` | agent-arena-01 |
-| T022 | [Оверлеи графика](../tasks/T022_chart-overlay.md) | 2 | T020 | `todo` | — |
+| T022 | [Оверлеи графика](../tasks/T022_chart-overlay.md) | 2 | T020 | `in_progress` | agent-frontend-01 |
 | T023 | [Производительность графика](../tasks/T023_chart-perf.md) | 2 | T020, T021, T022 | `todo` | — |
 | T040 | [ArenaScene (полный экран задания)](../tasks/T040_arena-scene.md) | 4 | T014, T020, T030 | `in_progress` | agent-arena-01 |
 | T041 | [Захват решения + доказательства + протокол](../tasks/T041_decision-capture.md) | 4 | T040 | `in_progress` | agent-arena-01 |
