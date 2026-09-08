@@ -1,6 +1,6 @@
 # Трек `frontend`
 
-_Phaser 4 игра: shell, график, Арена, Академия, Бестиарий, Журнал, Турниры, Маркет, i18n (фазы 1,2,4–9,12)._
+_Phaser 4 игра: shell, график, Арена, Академия, Угрозы, Журнал, Турниры, Маркет, i18n (фазы 1,2,4–9,12)._
 
 > Сгенерировано из `_meta/tasks.json`. Не редактировать вручную.
 
@@ -30,7 +30,7 @@ _Phaser 4 игра: shell, график, Арена, Академия, Бест�
 | T047 | [Onboarding прогрессивного раскрытия](../tasks/T047_onboarding.md) | 4 | T040, T045, T046 | `todo` | — |
 | T050 | [AcademyScene (теория)](../tasks/T050_academy-scene.md) | 5 | T014, T030 | `todo` | — |
 | T051 | [Навигация Академии](../tasks/T051_academy-nav.md) | 5 | T050, T040 | `todo` | — |
-| T060 | [Grid Бестиария (lazy)](../tasks/T060_bestiary-grid.md) | 6 | T014, T004 | `todo` | — |
+| T060 | [Grid угроз (lazy)](../tasks/T060_bestiary-grid.md) | 6 | T014, T004 | `todo` | — |
 | T061 | [Детальный экран сущности](../tasks/T061_entity-detail.md) | 6 | T060 | `todo` | — |
 | T062 | [Интеграция SVG-иконок сущностей 24×24](../tasks/T062_entity-icons.md) | 6 | T004, T060 | `todo` | — |
 | T070 | [Журнал решений](../tasks/T070_journal.md) | 7 | T048, T044 | `todo` | — |

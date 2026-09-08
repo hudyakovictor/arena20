@@ -7,7 +7,7 @@
 |---|---|---|
 | `foundation` | Каркас репозитория, конвенции (фаза 0) | [tracks/foundation.md](./tracks/foundation.md) |
 | `shared` | Схемы, токены/манifest, движок сценариев, оценка (фазы 0,3,4-shared). Без React | [tracks/shared.md](./tracks/shared.md) |
-| `frontend` | Phaser 4 игра: shell, график, Арена, Академия, Бестиарий, Журнал, Турниры, Маркет, i18n (фазы 1,2,4–9,12) | [tracks/frontend.md](./tracks/frontend.md) |
+| `frontend` | Phaser 4 игра: shell, график, Арена, Академия, Угрозы, Журнал, Турниры, Маркет, i18n (фазы 1,2,4–9,12) | [tracks/frontend.md](./tracks/frontend.md) |
 | `backend` | Fastify/SQLite/Drizzle/Zod/WS сервер (фаза 10) | [tracks/backend.md](./tracks/backend.md) |
 | `content` | Авторство контента и copy (фаза 11) | [tracks/content.md](./tracks/content.md) |
 | `qa` | Тесты, бюджеты, матрица UI, i18n-гейт, релиз (фазы 0,2,3,4,10,12,13) | [tracks/qa.md](./tracks/qa.md) |

@@ -11,7 +11,7 @@
 - **Обновлено:** 2026-09-08
 
 ## Цель
-BootScene/PreloadScene/ShellScene + router между экранами (Arena/Academy/Bestiary/Journal/More) без React.
+BootScene/PreloadScene/ShellScene + router между экранами (Arena/Academy/Threats/Journal/More) без React.
 
 ## Критерии приёмки
 - [ ] Сцены загружаются лениво; ShellScene постоянна (top bar + bottom nav)

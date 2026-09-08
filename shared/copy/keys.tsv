@@ -1,0 +1,1553 @@
+key	scope	area	screen	ru	en	status	note
+app.tagline	mvp	app		ТРЕНАЖЁР РЕШЕНИЙ · НЕ БИРЖА	DECISION TRAINER · NOT AN EXCHANGE	ok	
+app.disclaimer	mvp	app		Игра не даёт торговых сигналов и не обещает дохода. Внутриигровые ресурсы не выводятся.	The game gives no trading signals and promises no income. In-game resources cannot be withdrawn.	ok	
+app.loading	mvp	app		Загрузка архива рыночных катастроф…	Loading the archive of market disasters…	ok	
+nav.home	mvp	nav		ГЛАВНАЯ	HOME	ok	
+nav.academy	mvp	nav		ОБУЧЕНИЕ	LEARN	ok	
+nav.arena	mvp	nav		ПРАКТИКА	PRACTICE	ok	
+nav.bestiary	mvp	nav		УГРОЗЫ	THREATS	ok	
+nav.more	mvp	nav		ЕЩЁ	MORE	ok	
+shell.scenarioProgress	mvp	shell		СЦЕНАРИЙ	SCENARIO	ok	
+shell.protocol	mvp	shell		ПРАВИЛО	RULE	ok	
+arena.brief	mvp	arena		БРИФИНГ	BRIEFING	ok	
+arena.task	mvp	arena		ЗАДАЧА	TASK	ok	
+arena.skills	mvp	arena		КАРТЫ НАВЫКОВ	SKILL CARDS	ok	
+arena.decisions	mvp	arena		РЕШЕНИЕ	DECISION	ok	REVIEW: прототип 4.2/4.3 — «ОСНОВНОЕ РЕШЕНИЕ»
+arena.confirm	mvp	arena		ЗАФИКСИРОВАТЬ РЕШЕНИЕ	LOCK DECISION	ok	
+arena.confirmHint	mvp	arena		Будущее скрыто. После фиксации — раскроем архив.	The future is hidden. After the lock — we open the archive.	ok	
+arena.step2	mvp	arena		ВТОРОЙ ШАГ	SECOND STEP	ok	
+arena.futureHidden	mvp	arena		БУДУЩЕЕ СКРЫТО	FUTURE HIDDEN	ok	
+arena.t0	mvp	arena		t0 · ТОЧКА РЕШЕНИЯ	t0 · DECISION POINT	ok	
+arena.unskill	mvp	arena		СНЯТЬ КАРТУ	REMOVE CARD	ok	
+arena.pause	mvp	arena		ПАУЗА	PAUSE	ok	
+arena.exit	mvp	arena		ПОКИНУТЬ СЦЕНАРИЙ	ABANDON SCENARIO	ok	REVIEW: прототип 4.14 — «Сохранить и выйти» (см. arena.exitYes)
+arena.exitHint	mvp	arena		Рынок подождёт. Он вообще никуда не торопится.	The market will wait. It is in no hurry at all.	ok	
+reveal.title	mvp	reveal		АРХИВ РАСКРЫТ	ARCHIVE OPENED	ok	
+reveal.play	mvp	reveal		ПРОКРУТИТЬ ПОСЛЕДСТВИЯ	PLAY CONSEQUENCES	ok	
+reveal.fact	mvp	reveal		РЫНОЧНЫЙ ФАКТ	MARKET FACT	ok	
+reveal.consequence	mvp	reveal		ПОСЛЕДСТВИЕ ДЕЙСТВИЯ	ACTION CONSEQUENCE	ok	
+reveal.quality	mvp	reveal		КАЧЕСТВО РЕШЕНИЯ	DECISION QUALITY	ok	
+reveal.next	mvp	reveal		СЛЕДУЮЩАЯ ОХОТА	NEXT HUNT	ok	
+reveal.review	mvp	reveal		РАЗБОР	BREAKDOWN	ok	
+reveal.rule	mvp	reveal		ПЕРЕНОСИМОЕ ПРАВИЛО	PORTABLE RULE	ok	
+verdict.agree	mvp	verdict		РЫНОК СОГЛАСИЛСЯ. ЭТО НЕ ЗНАЧИТ, ЧТО ТЫ БЫЛ ПРАВ.	THE MARKET AGREED. THAT DOES NOT MEAN YOU WERE RIGHT.	ok	
+verdict.disagree	mvp	verdict		РЫНОК НЕ СОГЛАСИЛСЯ. ЭТО НЕ ЗНАЧИТ, ЧТО ТЫ ОШИБСЯ.	THE MARKET DISAGREED. THAT DOES NOT MEAN YOU WERE WRONG.	ok	
+states.loading	mvp	states		ЗАГРУЗКА ДАННЫХ	LOADING DATA	ok	
+states.loadingSub	mvp	states		Рынок ищет оправдание. Подожди.	The market is looking for an excuse. Wait.	ok	
+states.offline	mvp	states		СВЯЗИ НЕТ	NO CONNECTION	ok	
+states.offlineSub	mvp	states		Хорошая новость: рынок тоже никуда не убежал.	Good news: the market is not going anywhere either.	ok	
+states.locked	mvp	states		ЗАПЕРТО	LOCKED	ok	
+states.lockedSub	mvp	states		Сущность пока считает тебя недостаточно удобной жертвой.	The entity still finds you an inconvenient victim.	ok	
+states.error	mvp	states		ДАННЫЕ НЕ ЗАГРУЖЕНЫ	DATA FAILED TO LOAD	ok	
+states.errorSub	mvp	states		Даже сервер иногда делает вид, что всё под контролем.	Even servers sometimes pretend everything is under control.	ok	
+states.retry	mvp	states		ПОВТОРИТЬ	RETRY	ok	
+states.empty	mvp	states		ЗДЕСЬ ПОКА ПУСТО	NOTHING HERE YET	ok	
+states.emptySub	mvp	states		Даже паника начинается с чистого листа.	Even panic starts with a blank sheet.	ok	
+states.saved	mvp	states		РЕЗУЛЬТАТ СОХРАНЁН	RESULT SAVED	ok	
+states.savedSub	mvp	states		Теперь ошибка официально принадлежит истории.	The mistake now officially belongs to history.	ok	
+states.noTrade	mvp	states		ВНЕ РЫНКА	FLAT	ok	
+states.noTradeSub	mvp	states		Сделка не открыта. Паника тоже.	No position opened. No panic either.	ok	
+academy.title	mvp	academy		АКАДЕМИЯ	ACADEMY	ok	
+academy.chapters	mvp	academy		ГЛАВЫ	CHAPTERS	ok	
+academy.sub	mvp	academy		Теория объясняет принцип. Практика проверяет, применил ли ты его в шуме.	Theory explains the principle. Practice checks whether you applied it in noise.	ok	
+bestiary.title	mvp	bestiary		УГРОЗЫ	THREATS	ok	
+bestiary.sub	mvp	bestiary		Сущность — не враг, которого убивают. Это давление, которое не пускают в решение.	An entity is not an enemy to kill. It is pressure to keep out of the decision.	ok	
+journal.title	mvp	journal		ЖУРНАЛ РЕШЕНИЙ	DECISION JOURNAL	ok	
+journal.sub	mvp	journal		Не свиток ошибок, а история: паттерны, сильные навыки, слабые зоны.	Not a scroll of errors, but history: patterns, strong skills, weak spots.	ok	
+tournament.title	mvp	tournament		ТУРНИРЫ	TOURNAMENTS	ok	
+tournament.sub	mvp	tournament		Один набор данных на всех. Победа — по качеству, скорость — только tie-break.	One dataset for everyone. Win by quality; speed is tie-break only.	ok	
+market.title	mvp	market		МАРКЕТ	MARKET	ok	REVIEW: прототип 3.1/9.1 — «МАГАЗИН»
+market.sub	mvp	market		Косметика и контент. Ответы, оценки и риск-лимиты не продаются.	Cosmetics and content. Answers, scores and risk limits are not for sale.	ok	
+profile.title	mvp	profile		ПРОФИЛЬ	PROFILE	ok	
+more.title	mvp	more		ЕЩЁ	MORE	ok	
+settings.title	mvp	settings		НАСТРОЙКИ	SETTINGS	ok	
+settings.sound	mvp	settings		ЗВУК	SOUND	ok	
+settings.reduceMotion	mvp	settings		МЕНЬШЕ ДВИЖЕНИЯ	REDUCE MOTION	ok	REVIEW: прототип 12.2 — «Сниженная анимация»
+settings.language	mvp	settings		ЯЗЫК	LANGUAGE	ok	REVIEW: прототип 12.2 — «Язык интерфейса»
+home.title	mvp	home		ГЛАВНАЯ	HOME	ok	
+home.continue	mvp	home		ПРОДОЛЖИТЬ ОХОТУ	CONTINUE THE HUNT	ok	REVIEW: прототип 3.1 — «ПРОДОЛЖИТЬ»
+home.daily	mvp	home		СЕГОДНЯ В АРХИВЕ	TODAY IN THE ARCHIVE	ok	REVIEW: прототип 3.1 — «ЕЖЕДНЕВНОЕ»
+common.back	mvp	common		НАЗАД	BACK	ok	REVIEW: прототип 4.2 — «Назад» строчными
+common.close	mvp	common		ЗАКРЫТЬ	CLOSE	ok	
+common.retry	mvp	common		ПОВТОРИТЬ	RETRY	ok	
+home.greet	mvp	home		Архив катастроф открыт. Выбирай, где сегодня ошибаться со вкусом.	The disaster archive is open. Pick where to be wrong with style today.	ok	
+home.resume	mvp	home		ПРОДОЛЖИТЬ СЦЕНАРИЙ	RESUME SCENARIO	ok	
+home.start	mvp	home		НАЧАТЬ ОХОТУ	START THE HUNT	ok	
+home.scenarios	mvp	home		СЦЕНАРИИ	SCENARIOS	ok	
+home.sections	mvp	home		РАЗДЕЛЫ	SECTIONS	ok	
+home.best	mvp	home		ЛУЧШЕЕ	BEST	ok	
+academy.topic	mvp	academy		ТЕМА	TOPIC	ok	
+academy.train	mvp	academy		ТРЕНИРОВАТЬ В АРЕНЕ	TRAIN IN THE ARENA	ok	
+academy.linked	mvp	academy		СВЯЗАННЫЕ НАВЫКИ	LINKED SKILLS	ok	
+academy.ch.risk.title	mvp	academy		Риск: размер имеет значение		ok	
+academy.ch.risk.body	mvp	academy		Риск определяется до входа: доля депозита, стоп, условие отмены. Рынок платит тем, кто переживает ошибки, а не тем, кто их избегает.		ok	
+academy.ch.structure.title	mvp	academy		Структура: читай следы, а не свечи		ok	
+academy.ch.structure.body	mvp	academy		Уровень, пробой, ретест, объём. Отдельная свеча врёт; структура из трёх событий врёт реже. Подтверждение обязательно.		ok	
+academy.ch.tf.title	mvp	academy		Таймфреймы: старшие решают		ok	
+academy.ch.tf.body	mvp	academy		Младший таймфрейм показывает шум красиво. Направление и уровни бери со старшего, точку входа — с младшего.		ok	
+academy.ch.noise.title	mvp	academy		Шум: карантин для новостей		ok	
+academy.ch.noise.body	mvp	academy		Заголовок — это эмоция с дедлайном. Новость уходит в карантин на сессию; решение — только по структуре и объёму.		ok	
+academy.ch.discipline.title	mvp	academy		Дисциплина: система больше сделки		ok	
+academy.ch.discipline.body	mvp	academy		Зелёная сделка мимо плана — красный флаг. Пауза после убытка, журнал, запрет на revenge: скучно, прибыльно, обязательно.		ok	
+academy.ch.plan.title	mvp	academy		План: отмена пишется заранее		ok	
+academy.ch.plan.body	mvp	academy		У каждой идеи есть условие «я неправ»: цена, время, событие. Нет условия отмены — нет идеи, есть надежда.		ok	
+bestiary.tell	mvp	bestiary		ПРИЗНАК	TELL	ok	
+bestiary.counter	mvp	bestiary		КОНТР-ПРИЁМ	COUNTER	ok	
+bestiary.train	mvp	bestiary		ОХОТИТЬСЯ В АРЕНЕ	HUNT IN THE ARENA	ok	REVIEW: прототип 6.2 — «Тренироваться против этой угрозы»
+bestiary.mastered	mvp	bestiary		ОСВОЕНА	MASTERED	ok	
+bestiary.seen	mvp	bestiary		ЗАМЕЧЕНА	SPOTTED	ok	
+journal.patterns	mvp	journal		ПОВТОРЯЮЩИЕСЯ ПАТТЕРНЫ	REPEATING PATTERNS	ok	
+journal.history	mvp	journal		ИСТОРИЯ РЕШЕНИЙ	DECISION HISTORY	ok	
+journal.repeat	mvp	journal		РЕКОМЕНДАЦИИ ПО ПОВТОРУ	REPLAY RECOMMENDATIONS	ok	
+journal.best	mvp	journal		ЛУЧШЕЕ КАЧЕСТВО	BEST QUALITY	ok	
+journal.fix	mvp	journal		ИСПРАВЛЕНИЕ	FIX	ok	
+journal.empty	mvp	journal		Пока пусто: пройди первый сценарий, и журнал начнёт коллекционировать твои паттерны.	Empty so far: clear your first scenario and the journal will collect your patterns.	ok	
+tourn.join	mvp	tourn		ВОЙТИ	ENTER	ok	
+tourn.joined	mvp	tourn		ТЫ ВНУТРИ	YOU ARE IN	ok	INFO: бейдж «ВЫ В ИГРЕ» (9.1) — отдельный ключ tourn.inGame
+tourn.board	mvp	tourn		ЛИДЕРБОРД	LEADERBOARD	ok	
+tourn.you	mvp	tourn		ТЫ	YOU	ok	
+tourn.note	mvp	tourn		Асинхронно: один набор данных на всех, победа по качеству. Скорость — только tie-break.	Async: one dataset for everyone, win by quality. Speed is tie-break only.	ok	
+tourn.rookie.title	mvp	tourn		ПЕСОЧНИЦА: ПЕРВАЯ КРОВЬ		ok	
+tourn.rookie.body	mvp	tourn		Два архивных сценария. Идеально для калибровки прицела.		ok	
+tourn.risk.title	mvp	tourn		КУБОК ХОЛОДНОЙ ГОЛОВЫ		ok	
+tourn.risk.body	mvp	tourn		Протокол «Сначала риск». Гоблины плеча не допускаются.		ok	
+market.buy	mvp	market		КУПИТЬ	BUY	ok	
+market.owned	mvp	market		КУПЛЕНО	OWNED	ok	
+market.balance	mvp	market		БАЛАНС	BALANCE	ok	
+market.noFunds	mvp	market		Не хватает кредитов. Арена платит за качество, а не за надежду.	Not enough credits. The arena pays for quality, not for hope.	ok	REVIEW: прототип 10.1 — «Недостаточно монет»
+market.bought	mvp	market		Куплено. Косметика не влияет на качество решений — только на стиль поражения.	Bought. Cosmetics never affect decision quality — only the style of defeat.	ok	
+market.i.theme-neon.title	mvp	market		Тема «Неоновая свалка»		ok	
+market.i.theme-neon.body	mvp	market		Косметическая тема интерфейса. Кислоты станет больше, ошибок — нет.		ok	
+market.i.avatar-golem.title	mvp	market		Аватар «Голем-якорь»		ok	
+market.i.avatar-golem.body	mvp	market		Тяжёлый силуэт для профиля. К старой цене больше не приковывает.		ok	
+market.i.season1.title	mvp	market		Сезонный набор «Паника-99»		ok	
+market.i.season1.body	mvp	market		Рамки и фоны сезона. Паника коллекционная, убытки — нет.		ok	
+profile.stats	mvp	profile		СТАТИСТИКА	STATS	ok	
+profile.ach	mvp	profile		ДОСТИЖЕНИЯ	ACHIEVEMENTS	ok	
+profile.completed	mvp	profile		СЦЕНАРИЕВ ЗАКРЫТО	SCENARIOS CLOSED	ok	
+ach.first.title	mvp	ach		Первая кровь		ok	
+ach.first.body	mvp	ach		Закрой первый сценарий — с любым качеством.		ok	
+ach.clean70.title	mvp	ach		Холодная голова		ok	
+ach.clean70.body	mvp	ach		Качество 70+ в любом сценарии.		ok	
+ach.hunter.title	mvp	ach		Охотник		ok	
+ach.hunter.body	mvp	ach		Закрой оба архивных сценария.		ok	
+ach.scholar.title	mvp	ach		Архивариус		ok	
+ach.scholar.body	mvp	ach		Открой три темы Академии.		ok	
+more.sections	mvp	more		ВСЕ РАЗДЕЛЫ	ALL SECTIONS	ok	REVIEW: прототип 12.1 — «РАЗДЕЛЫ»
+more.about	mvp	more		О ТРЕНАЖЁРЕ	ABOUT THE TRAINER	ok	
+more.aboutBody	mvp	more		SIGNAL ARENA — тренажёр качества решений на исторических ситуациях. Не биржа, не сигналы, не обещание дохода.	SIGNAL ARENA is a decision-quality trainer on historical situations. Not an exchange, not signals, not an income promise.	ok	
+more.legal	mvp	more		ПРАВОЕ И ДИСКЛЕЙМЕРЫ	LEGAL & DISCLAIMERS	ok	REVIEW: прототип 12.1/12.3 — «Правовая информация» / «ПРАВОВОЕ»
+more.legalBody	mvp	more		Обучающий тренажёр на исторических данных, а не инвестиционная рекомендация. Внутриигровые ресурсы не выводятся.	An educational trainer on historical data, not investment advice. In-game resources cannot be withdrawn.	ok	
+scen.mvp-001.context	mvp	scen		Актив три дня рос на новостях. Толпа празднует пробой. Объём на пробое — мертворождённый.		ok	REVIEW: прототип 4.x — другая формулировка
+scen.mvp-001.goal	mvp	scen		Реши до раскрытия архива: здесь есть сигнал — или только шум с фанфарами?		ok	REVIEW: прототип 4.x — другая формулировка
+scen.mvp-001.fact	mvp	scen		Пробой не удержался: цена вернулась под уровень за 6 часов, объём покупок иссяк.		ok	REVIEW: прототип 4.x — другая формулировка
+scen.mvp-001.source	mvp	scen		Архив · спот · 15m · датасет v0.1.0		ok	
+scen.mvp-001.d0	mvp	scen		Войти на пробое		ok	
+scen.mvp-001.d0r	mvp	scen		Вход в шум без подтверждения: пробой без объёма — классическая жертва толпе.		ok	
+scen.mvp-001.d1	mvp	scen		Ждать ретест		ok	REVIEW: прототип 4.x — другая формулировка
+scen.mvp-001.d1r	mvp	scen		Терпеливое решение: подтверждение ретестом отделяет сигнал от фанфар.		ok	
+scen.mvp-001.d2	mvp	scen		Сократить риск		ok	
+scen.mvp-001.d2r	mvp	scen		Осторожно, но без позиции сокращать нечего: действие мимо контекста.		ok	
+scen.mvp-001.d3	mvp	scen		Остаться вне рынка		ok	
+scen.mvp-001.d3r	mvp	scen		Вне рынка — тоже решение: нет подтверждения — нет сделки.		ok	
+scen.mvp-001.tab.chart	mvp	scen		Структура: три дня роста, пробой уровня. Объём на пробое ниже среднего.		ok	REVIEW: прототип 4.x — другая формулировка
+scen.mvp-001.tab.volume	mvp	scen		Объём покупок затухает три сессии подряд. Пробой случился на самом тонком баре.		ok	REVIEW: прототип 4.x — другая формулировка
+scen.mvp-001.tab.news	mvp	scen		Заголовки трубят о «новой эре». Новость — не сигнал, а well-timed шум.		ok	REVIEW: прототип 4.x — другая формулировка
+scen.mvp-001.tab.social	mvp	scen		Соцфон: эйфория. Индекс веры в график зашкаливает — толпа уже внутри.		ok	REVIEW: прототип 4.x — другая формулировка
+scen.mvp-001.step2q	mvp	scen		Какой риск допустим, если входишь?		ok	REVIEW: прототип 4.x — другая формулировка
+scen.mvp-001.s0	mvp	scen		0.5% — пережить ошибку		ok	REVIEW: прототип 4.x — другая формулировка
+scen.mvp-001.s0r	mvp	scen		Риск, с которым можно жить, даже если рынок идёт не туда.		ok	
+scen.mvp-001.s1	mvp	scen		2% — стандартная ставка		ok	REVIEW: прототип 4.x — другая формулировка
+scen.mvp-001.s1r	mvp	scen		Терпимо, но для неподтверждённого пробоя — щедрость за счёт депозита.		ok	
+scen.mvp-001.s2	mvp	scen		10% — пан или пропал		ok	REVIEW: прототип 4.x — другая формулировка
+scen.mvp-001.s2r	mvp	scen		Это не риск-менеджмент, а жертвоприношение с красивым названием.		ok	
+scen.mvp-002.context	mvp	scen		Ты в лонге от ретеста. Цена топчется у входа четвёртый час. Стоп близко, эго — ближе.		ok	
+scen.mvp-002.goal	mvp	scen		Позиция открыта. Реши: план жив — или ты уже усредняешь надежду?		ok	
+scen.mvp-002.fact	mvp	scen		Уровень удержали ещё 2 часа, затем — импульсный слив к стопам. План требовал выхода раньше.		ok	
+scen.mvp-002.source	mvp	scen		Архив · perp · 5m · датасет v0.1.0		ok	
+scen.mvp-002.d0	mvp	scen		Держать по плану		ok	REVIEW: прототип 4.9 — другая формулировка
+scen.mvp-002.d0r	mvp	scen		Дисциплина: условия отмены не сработали — система важнее страха.		ok	
+scen.mvp-002.d1	mvp	scen		Сократить половину		ok	REVIEW: прототип 4.9 — другая формулировка
+scen.mvp-002.d1r	mvp	scen		Сначала риск: фиксация части снимает давление и сохраняет голову.		ok	
+scen.mvp-002.d2	mvp	scen		Усреднить вход		ok	REVIEW: прототип 4.9 — другая формулировка
+scen.mvp-002.d2r	mvp	scen		Усреднение ошибки без плана: надежда — самая дорогая валюта.		ok	
+scen.mvp-002.d3	mvp	scen		Выйти полностью		ok	REVIEW: прототип 4.9 — другая формулировка
+scen.mvp-002.d3r	mvp	scen		Панический выход до отмены идеи: страх тоже умеет маскироваться под риск.		ok	
+scen.mvp-002.tab.chart	mvp	scen		Консолидация у точки входа. Структура пока цела, но импульс покупателя угас.		ok	
+scen.mvp-002.tab.position	mvp	scen		Позиция: лонг от ретеста, +0.4%. Стоп — за локальным минимумом, риск 1%.		ok	
+scen.mvp-002.tab.social	mvp	scen		Толпа требует «держать до луны». Стадо редко платит за твои стопы.		ok	
+skill.risk-first.title	mvp	skill		Сначала риск, потом вход		ok	
+skill.risk-first.body	mvp	skill		Определи, сколько готов потерять, до того как мечтаешь о прибыли.		ok	REVIEW: прототип 4.6 — «Сначала определи, сколько готов потерять и при каком условии идея отменяется. Только потом смотри на возможность.»
+skill.no-confirm.title	mvp	skill		Нет подтверждения — нет сделки		ok	
+skill.no-confirm.body	mvp	skill		Пробой без объёма и ретеста — это фанфары, а не сигнал.		ok	REVIEW: прототип 7.2 — «Гипотеза без доказательства стоит ровно столько, сколько ты за неё заплатишь.»
+skill.htf.title	mvp	skill		Проверь старший таймфрейм		ok	REVIEW: прототип 6.2/8.2 — «ПРОВЕРЬ СТАРШИЙ TF»
+skill.htf.body	mvp	skill		Младший ТФ врёт убедительно. Старший — реже и дороже.		ok	
+skill.news-noise.title	mvp	skill		Новость — не сигнал		ok	
+skill.news-noise.body	mvp	skill		Заголовок продаёт эмоции. Сигнал продаёт только цена с объёмом.		ok	
+skill.no-average.title	mvp	skill		Не усредняй ошибку		ok	
+skill.no-average.body	mvp	skill		Доливка к убытку без плана превращает ошибку в образ жизни.		ok	
+skill.flat-ok.title	mvp	skill		Вне рынка — тоже решение		ok	
+skill.flat-ok.body	mvp	skill		Пропуск сделки стоит ноль. Плохая сделка — всегда дороже.		ok	
+skill.invalidate.title	mvp	skill		Отмена идеи — заранее		ok	REVIEW: прототип 7.1 — «УСЛОВИЯ ОТМЕНЫ ИДЕИ»
+skill.invalidate.body	mvp	skill		Условие «я был неправ» пишется до входа, а не придумывается в просадке.		ok	
+skill.plan-profit.title	mvp	skill		Прибыль не оправдывает нарушение		ok	REVIEW: прототип 7.1 — «ПРИБЫЛЬ НЕ ОПРАВДЫВАЕТ НАРУШЕНИЕ ПЛАНА»
+skill.plan-profit.body	mvp	skill		Зелёная сделка мимо системы — всё равно красный флаг.		ok	
+entity.fake-breakout-phantom.body	mvp	entity		Рисует пробой, заманивает толпу, исчезает до ретеста.		ok	REVIEW: прототип 6.2 — «Показывает тебе выход там, где его нет. Вежливо. Перед самым закрытием двери.»
+entity.fake-breakout-phantom.tell	mvp	entity		Пробой уровня на затухающем объёме + эйфория в заголовках.		ok	
+entity.fake-breakout-phantom.counter	mvp	entity		Жди ретест. Нет подтверждения — нет сделки.		ok	
+entity.fomo-wraith.body	mvp	entity		Шепчет, что поезд уходит. Поезд обычно едет в депо.		ok	
+entity.fomo-wraith.tell	mvp	entity		Зуд «войти сейчас», хотя план требовал ждать.		ok	
+entity.fomo-wraith.counter	mvp	entity		Пауза 10 минут. Сигнал подождёт, призрак — нет.		ok	
+entity.leverage-goblin.body	mvp	entity		Предлагает плечо как shortcut к богатству. Путь ведёт к ликвидации.		ok	
+entity.leverage-goblin.tell	mvp	entity		Желание «ускориться» после серии хороших решений.		ok	
+entity.leverage-goblin.counter	mvp	entity		Фиксированный риск 0.5–1%. Гоблин голодает на диете.		ok	
+entity.headline-titan.body	mvp	entity		Метает заголовки-молнии. Каждая бьёт точно в дисциплину.		ok	
+entity.headline-titan.tell	mvp	entity		Решение хочется принять сразу после новости.		ok	
+entity.headline-titan.counter	mvp	entity		Новость — в карантин на одну сессию. Сначала график.		ok	
+entity.anchor-golem.body	mvp	entity		Приковывает к старой цене. «А ведь было по…» — его заклинание.		ok	
+entity.anchor-golem.tell	mvp	entity		Оценка сделки от прошлого экстремума, а не от текущего контекста.		ok	
+entity.anchor-golem.counter	mvp	entity		Переоцени позицию от текущей цены, как будто входишь сейчас.		ok	
+entity.revenge-wraith.body	mvp	entity		После убытка предлагает отыграться немедленно. Принимает только депозиты.		ok	
+entity.revenge-wraith.tell	mvp	entity		Злость после стопа и тяга «вернуть прямо сейчас».		ok	
+entity.revenge-wraith.counter	mvp	entity		Протокол «После убытка»: пауза, журнал, разбор. Потом — рынок.		ok	
+protocol.risk-first.title	mvp	protocol		Сначала риск	Risk first	ok	
+protocol.risk-first.rule	mvp	protocol		Оценивается управление риском: размер, стоп, отмена идеи.	Risk management is scored: size, stop, invalidation.	ok	
+protocol.evidence-only.title	mvp	protocol		Только доказательства	Evidence only	ok	
+protocol.evidence-only.rule	mvp	protocol		Решение должно опираться на факты вкладок, а не на шум.	The decision must rest on tab facts, not on noise.	ok	
+protocol.noise-quarantine.title	mvp	protocol		Шумовой карантин	Noise quarantine	ok	
+protocol.noise-quarantine.rule	mvp	protocol		Новости и соцфон игнорируются: только структура, объём и план.	News and sentiment ignored: structure, volume and plan only.	ok	
+protocol.flat-ok.title	mvp	protocol		Не входить — тоже решение	Flat is a decision	ok	
+protocol.flat-ok.rule	mvp	protocol		Воздержание при слабом сигнале оценивается наравне со сделкой.	Staying out on a weak signal scores on par with a trade.	ok	
+protocol.save-system.title	mvp	protocol		Сохранить систему	Keep the system	ok	
+protocol.save-system.rule	mvp	protocol		Оценивается верность торговому плану: без импровизаций и исключений.	Loyalty to the trading plan is scored: no improvisation, no exceptions.	ok	
+protocol.after-loss.title	mvp	protocol		После убытка	After a loss	ok	
+protocol.after-loss.rule	mvp	protocol		Серия после стопа: пауза, снижение риска, запрет на revenge.	A post-stop series: pause, smaller risk, no revenge.	ok	
+protocol.confidence.title	mvp	protocol		Проверка уверенности	Confidence check	ok	
+protocol.confidence.rule	mvp	protocol		Оценивается калибровка: уверенность должна совпадать с силой доказательств.	Calibration is scored: confidence must match the strength of evidence.	ok	
+arena.mode.title	mvp	arena		ПРАКТИКА	PRACTICE	ok	
+arena.mode.hero	mvp	arena		РЫНОК УЖЕ СЛУЧИЛСЯ. ОСТАЛОСЬ ТОЛЬКО ТВОЁ РЕШЕНИЕ.	THE MARKET ALREADY HAPPENED. ONLY YOUR DECISION IS LEFT.	ok	
+arena.mode.formats	mvp	arena		ФОРМАТ	FORMAT	ok	
+arena.mode.format.free	mvp	arena		Свободная тренировка	Free drill	ok	
+arena.mode.format.freeBody	mvp	arena		1 сценарий · 60–90 сек · подбор по слабым местам	1 scenario · 60–90 sec · matched to weak spots	ok	
+arena.mode.format.series	mvp	arena		Серия из 3	Series of 3	ok	
+arena.mode.format.seriesBody	mvp	arena		Одна тема, растущая сложность · 8–12 мин	One topic, rising difficulty · 8–12 min	ok	
+arena.mode.format.fix	mvp	arena		Исправление	Fix	ok	
+arena.mode.format.fixBody	mvp	arena		Целевая работа по повторяющейся ошибке	Targeted work on a repeating mistake	ok	
+arena.mode.choose	mvp	arena		Выбрать	Select	ok	
+arena.mode.rule	mvp	arena		ПРАВИЛО СЕССИИ	SESSION RULE	ok	
+arena.mode.ruleHint	mvp	arena		ВЛИЯЕТ НА ОЦЕНКУ	AFFECTS SCORING	ok	
+arena.mode.focus	mvp	arena		ФОКУС КОНТЕНТА	CONTENT FOCUS	ok	
+arena.mode.focus.all	mvp	arena		ВСЕ	ALL	ok	
+arena.mode.focus.structure	mvp	arena		СТРУКТУРА	STRUCTURE	ok	
+arena.mode.focus.noise	mvp	arena		ШУМ	NOISE	ok	
+arena.mode.focus.risk	mvp	arena		РИСК	RISK	ok	
+arena.mode.focus.psycho	mvp	arena		ПСИХО	PSYCHO	ok	
+arena.mode.focus.web3	mvp	arena		WEB3	WEB3	ok	
+arena.mode.start	mvp	arena		Начать →	Start →	ok	
+arena.mode.hashOk	mvp	arena		ХЭШ	HASH	ok	
+arena.brief.phase	mvp	arena		ФАЗА	PHASE	ok	
+arena.brief.timeframe	mvp	arena		ТАЙМФРЕЙМ	TIMEFRAME	ok	
+arena.brief.rule	mvp	arena		ПРАВИЛО	RULE	ok	
+arena.brief.difficulty	mvp	arena		СЛОЖНОСТЬ	DIFFICULTY	ok	
+arena.brief.preEntry	mvp	arena		До входа	Pre-entry	ok	
+arena.brief.inPosition	mvp	arena		Внутри позиции · t₀+3	In position · t₀+3	ok	REVIEW: прототип 4.9 — «ВНУТРИ ПОЗИЦИИ · t₀+3» капсом
+arena.brief.situation	mvp	arena		СИТУАЦИЯ · ИСТОРИЧЕСКАЯ	SITUATION · HISTORICAL	ok	
+arena.brief.tabs	mvp	arena		ИСТОЧНИКИ В СЦЕНАРИИ	SOURCES IN SCENARIO	ok	
+arena.brief.start	mvp	arena		К ЗАДАЧЕ →	TO THE TASK →	ok	REVIEW: прототип 4.2 — «К решению»
+arena.pressure	mvp	arena		ДАВЛЕНИЕ	PRESSURE	ok	
+arena.disclaimer	mvp	arena		НЕ ФИНРЕКОМЕНДАЦИЯ · ИСТОРИЧЕСКИЕ ДАННЫЕ · ИСХОД УЖЕ ЗАФИКСИРОВАН	NOT FINANCIAL ADVICE · HISTORICAL DATA · OUTCOME ALREADY FIXED	ok	
+arena.skillsApplied	mvp	arena		ПРИМЕНЕНО	APPLIED	ok	
+arena.of	mvp	arena		ИЗ	OF	ok	
+arena.moreSkills	mvp	arena		ЕЩЁ КАРТЫ — В АКАДЕМИИ	MORE CARDS LIVE IN THE ACADEMY	ok	
+arena.catalog.title	mvp	arena		ИСТОЧНИКИ СЦЕНАРИЯ	SCENARIO SOURCES	ok	
+arena.catalog.sub	mvp	arena		Не все нужны в каждом задании. Монеты открывают доступ к данным, но не к ответу.	Not all are needed in every task. Coins unlock data access, never the answer.	ok	
+arena.catalog.open	mvp	arena		открыто	open	ok	
+arena.catalog.coins	mvp	arena		монет	coins	ok	
+arena.catalog.level	mvp	arena		уровень	level	ok	
+arena.catalog.phaseOnly	mvp	arena		только в фазе «внутри»	in-position phase only	ok	
+arena.catalog.note	mvp	arena		Оплата даёт только доступ к данным. Правильный ответ, буст оценки и повышенный риск купить нельзя.	Payment buys data access only. Correct answers, score boosts and extra risk are not for sale.	ok	
+arena.skill.type	mvp	arena		ТИП	TYPE	ok	
+arena.skill.mastery	mvp	arena		МАСТЕРСТВО	MASTERY	ok	
+arena.skill.used	mvp	arena		ПРИМЕНЕНА	APPLIED	ok	
+arena.skill.times	mvp	arena		РАЗ	TIMES	ok	
+arena.skill.avgQuality	mvp	arena		СРЕДНЕЕ КАЧЕСТВО	AVG QUALITY	ok	
+arena.skill.studyIn	mvp	arena		ГДЕ ИЗУЧАЕТСЯ	STUDIED IN	ok	
+arena.skill.toAcademy	mvp	arena		В Академию	To Academy	ok	
+arena.skill.apply	mvp	arena		Применить	Apply	ok	
+arena.skill.kindName.reading	mvp	arena		ЧТЕНИЕ	READING	ok	
+arena.skill.kindName.decision	mvp	arena		РЕШЕНИЕ	DECISION	ok	
+arena.skill.kindName.protection	mvp	arena		ЗАЩИТА	PROTECTION	ok	
+arena.skill.cardOf.reading	mvp	arena		КАРТА ЧТЕНИЯ	READING CARD	ok	
+arena.skill.cardOf.decision	mvp	arena		КАРТА РЕШЕНИЯ	DECISION CARD	ok	
+arena.skill.cardOf.protection	mvp	arena		КАРТА ЗАЩИТЫ	PROTECTION CARD	ok	
+arena.confirm.selected	mvp	arena		ВЫБРАНО	SELECTED	ok	
+arena.confirm.changeable	mvp	arena		можно изменить до фиксации	can be changed before the lock	ok	
+arena.confirm.change	mvp	arena		Изменить	Change	ok	
+arena.confirm.lockNote	mvp	arena		Фиксация необратима: дальше — раскрытие.	Locking is final: the reveal comes next.	ok	REVIEW: прототип 4.7 — «После фиксации продолжение будет раскрыто и изменения невозможны.»
+arena.reveal.layerFact	mvp	arena		СЛОЙ 1 · ФАКТ РЫНКА	LAYER 1 · MARKET FACT	ok	
+arena.reveal.layerConsequence	mvp	arena		СЛОЙ 2 · ПОСЛЕДСТВИЕ ТВОЕГО ПОВЕДЕНИЯ	LAYER 2 · CONSEQUENCE OF YOUR BEHAVIOUR	ok	
+arena.reveal.speed	mvp	arena		СКОРОСТЬ	SPEED	ok	
+arena.reveal.replay	mvp	arena		▶ ПОВТОРИТЬ	▶ REPLAY	ok	INFO: «▶» — заменить SVG-иконкой в коде (значение текстом)
+arena.reveal.frame	mvp	arena		КАДР	FRAME	ok	
+arena.volume.book	mvp	arena		СТРУКТУРА ЛИКВИДНОСТИ	LIQUIDITY STRUCTURE	ok	
+arena.volume.asks	mvp	arena		ASKS	ASKS	ok	
+arena.volume.bids	mvp	arena		BIDS	BIDS	ok	
+arena.volume.wall	mvp	arena		КИТОВАЯ СТЕНА	WHALE WALL	ok	
+arena.volume.wallBody	mvp	arena		выше уровня пробоя	above the breakout level	ok	
+arena.volume.spread	mvp	arena		СПРЕД	SPREAD	ok	
+arena.volume.breakVol	mvp	arena		ОБЪЁМ НА ПРОБОЕ	BREAKOUT VOLUME	ok	
+arena.volume.toAvg	mvp	arena		К СРЕДНЕМУ	VS AVERAGE	ok	
+verdict.step	mvp	verdict		ШАГ	STEP	ok	
+verdict.nextStep	mvp	verdict		ДАЛЕЕ	NEXT	ok	
+verdict.breakdown	mvp	verdict		РАЗБОР: ФАКТ → ЛОГИКА → ПРАВИЛО	BREAKDOWN: FACT → LOGIC → RULE	ok	
+verdict.logic	mvp	verdict		ЛОГИКА	LOGIC	ok	
+verdict.sources	mvp	verdict		ИСТОЧНИКИ И МЕТОДИКА	SOURCES & METHOD	ok	
+verdict.dataset	mvp	verdict		ДАТАСЕТ	DATASET	ok	
+verdict.content	mvp	verdict		КОНТЕНТ	CONTENT	ok	
+verdict.method	mvp	verdict		МЕТОДИКА	METHOD	ok	
+verdict.methodBody	mvp	verdict		Исторический отрезок зафиксирован заранее: датасет, точка t₀ и продолжение проверяются по хэшу. Оценка — по логике, риску и дисциплине, а не по направлению цены.	The historical slice is fixed in advance: dataset, t₀ and continuation are hash-checked. Scoring rewards logic, risk and discipline — not price direction.	ok	
+verdict.hash	mvp	verdict		ХЭШ БУДУЩЕГО	FUTURE HASH	ok	
+verdict.dim.context	mvp	verdict		КОНТЕКСТ	CONTEXT	ok	
+verdict.dim.evidence	mvp	verdict		ДОКАЗАТЕЛЬСТВА	EVIDENCE	ok	
+verdict.dim.action	mvp	verdict		ДЕЙСТВИЕ	ACTION	ok	
+verdict.dim.risk	mvp	verdict		РИСК	RISK	ok	
+verdict.dim.discipline	mvp	verdict		ДИСЦИПЛИНА	DISCIPLINE	ok	
+scen.mvp-001.tf	mvp	scen		15M	15M	ok	
+scen.mvp-002.tf	mvp	scen		5M	5M	ok	
+skill.risk-first.short	mvp	skill		СНАЧАЛА РИСК	RISK FIRST	ok	
+skill.no-confirm.short	mvp	skill		БЕЗ ОБЪЁМА — НЕТ	NO VOLUME — NO	ok	REVIEW: прототип 4.2 — «НЕТ ОБЪЁМА — НЕТ СДЕЛКИ»
+skill.htf.short	mvp	skill		СТАРШИЙ TF	HIGHER TF	ok	
+skill.news-noise.short	mvp	skill		НОВОСТЬ ≠ СИГНАЛ	NEWS ≠ SIGNAL	ok	REVIEW: прототип 4.3/4.9 — «НОВОСТЬ — НЕ СИГНАЛ» (тире вместо ≠)
+skill.no-average.short	mvp	skill		НЕ УСРЕДНЯЙ	NEVER AVERAGE	ok	
+skill.flat-ok.short	mvp	skill		ВНЕ РЫНКА	STAY FLAT	ok	
+skill.invalidate.short	mvp	skill		ОТМЕНА ЗАРАНЕЕ	INVALIDATE EARLY	ok	
+skill.plan-profit.short	mvp	skill		ПЛАН > ПРИБЫЛИ	PLAN > PROFIT	ok	REVIEW: прототип 4.9 — «ПЛАН ВАЖНЕЕ ПРИБЫЛИ» (слова вместо >)
+app.brand	mvp	app	1.1	SIGNAL ARENA		draft	Вордмарк; сейчас захардкожен в PreloadScene
+app.updating	mvp	app	1.1	Обновление датасета		draft	Состояние 1.1
+app.datasetLine	mvp	app	1.1	Датасет {v} · хэш проверен		draft	{v}: версия датасета, подставляется в коде
+app.boot.loading	mvp	app	1.1	Загрузка		draft	
+app.boot.netErr	mvp	app	1.1	Ошибка сети		draft	Состояние
+auth.step	mvp	auth	1.2	ШАГ 1 ИЗ 3 · ДОСТУП		draft	
+auth.title	mvp	auth	1.2	ВХОД БЕСПЛАТНЫЙ		draft	
+auth.sub	mvp	auth	1.2	Выход обычно дороже. Но здесь он тоже бесплатный.		draft	
+auth.apple	mvp	auth	1.2	Продолжить с Apple		draft	Иконка — SVG, в тексте её нет
+auth.google	mvp	auth	1.2	Продолжить с Google		draft	Иконка — SVG, в тексте её нет
+auth.or	mvp	auth	1.2	ИЛИ		draft	
+auth.guest	mvp	auth	1.2	Играть без аккаунта · 3 сценария		draft	
+auth.consent	mvp	auth	1.2	Продолжая, вы соглашаетесь с тем, что игра — обучающий тренажёр на исторических данных, а не инвестиционная рекомендация.		draft	
+auth.docs	mvp	auth	1.2	Условия · Конфиденциальность		draft	Ссылки на документы
+auth.returnTitle	mvp	auth	1.2			todo	Состояние «Возврат»: заголовок для вернувшегося игрока
+auth.returnSub	mvp	auth	1.2			todo	Состояние «Возврат»: подзаголовок про сохранённый прогресс
+auth.upgradeTitle	mvp	auth	1.2			todo	«Гость → апгрейд»: заголовок нуджа после 3 сценариев
+auth.upgradeBody	mvp	auth	1.2			todo	«Гость → апгрейд»: тело нуджа
+auth.upgradeCta	mvp	auth	1.2			todo	«Гость → апгрейд»: кнопка
+calib.step	mvp	calib	1.3	ШАГ 2 ИЗ 3 КАЛИБРОВКА		draft	Стрелка «назад» — SVG-кнопка, в тексте её нет
+calib.wipeTitle	mvp	calib	1.3	СКОЛЬКО РАЗ ТЕБЯ УЖЕ ЛИКВИДИРОВАЛИ?		draft	
+calib.wipeSub	mvp	calib	1.3	От ответа не зависит ни оценка, ни доступ. Зависит только длина объяснений.		draft	
+calib.wipe.0	mvp	calib	1.3	Ни разу. Я тут первый день		draft	REVIEW: в прототипе 1.3 — «Ни раза» (опечатка)
+calib.wipe.1	mvp	calib	1.3	Пару раз. Запомнилось		draft	
+calib.wipe.2	mvp	calib	1.3	Регулярно. Ищу систему		draft	
+calib.wipe.3	mvp	calib	1.3	Торгую профессионально		draft	
+calib.focusTitle	mvp	calib	1.3	ЧТО ТРЕНИРУЕШЬ В ПЕРВУЮ ОЧЕРЕДЬ		draft	Варианты — calib.topic.* (свой набор, не arena.mode.focus.*)
+calib.topic.entries	mvp	calib	1.3	Входы		draft	
+calib.topic.hold	mvp	calib	1.3	Удержание		draft	
+calib.topic.psycho	mvp	calib	1.3	Психология		draft	
+calib.topic.news	mvp	calib	1.3	Шум и новости		draft	
+calib.topic.web3	mvp	calib	1.3	Web3-риски		draft	
+calib.skip	mvp	calib	1.3	Пропустить		draft	
+calib.next	mvp	calib	1.3	Дальше		draft	
+calib.limitToast	mvp	calib	1.3	Лимит {n} достигнут		draft	
+ob.title	mvp	ob	2.1	ОНБОРДИНГ		draft	Крестик закрытия — SVG-кнопка; мой текст
+ob.hint	mvp	ob	2.1	ПОДСКАЗКА		draft	Рубрика карточки-подсказки; мой текст
+ob.s1.hint	mvp	ob	2.1	Сначала читаешь ситуацию. Потом всё остальное.		draft	; мой текст
+ob.s2.hint	mvp	ob	2.2	График обрезан на t₀. Будущее зафиксировано заранее.		draft	; мой текст
+ob.s3.hint	mvp	ob	2.3	Второй источник может спорить с первым.		draft	; мой текст
+ob.s4.hint	mvp	ob	2.4	Карта не даёт ответ. Она даёт вопрос.		draft	; мой текст
+ob.s5.hint	mvp	ob	2.5	Четыре варианта. Не входить — тоже решение.		draft	; мой текст
+ob.s6.hint	mvp	ob	2.6	Убыток может получить 100. Прибыль может получить 20.		draft	; мой текст
+ob.s7.hint	mvp	ob	2.7	Дополнительный шаг бывает не всегда. Это норма.		draft	; мой текст
+ob.s8.hint	mvp	ob	2.8	Угрозы — давление, а не враги с HP.		draft	; мой текст
+ob.s9.hint	mvp	ob	2.9	Правило говорит, за что тебя оценят.		draft	; мой текст
+ob.s10.hint	mvp	ob	2.10	Каркас открыт полностью. Дальше будет только тише и сложнее.		draft	; мой текст
+ob.s1.title	mvp	ob	2.1			todo	Короткая подпись шага для прогресса, напр. СИТУАЦИЯ
+ob.s2.title	mvp	ob	2.2			todo	Короткая подпись шага для прогресса, напр. ГРАФИК
+ob.s3.title	mvp	ob	2.3			todo	Короткая подпись шага для прогресса, напр. ИСТОЧНИКИ
+ob.s4.title	mvp	ob	2.4			todo	Короткая подпись шага для прогресса, напр. КАРТА
+ob.s5.title	mvp	ob	2.5			todo	Короткая подпись шага для прогресса, напр. РЕШЕНИЕ
+ob.s6.title	mvp	ob	2.6			todo	Короткая подпись шага для прогресса, напр. РАЗБОР
+ob.s7.title	mvp	ob	2.7			todo	Короткая подпись шага для прогресса, напр. ШАГ 2
+ob.s8.title	mvp	ob	2.8			todo	Короткая подпись шага для прогресса, напр. УГРОЗЫ
+ob.s9.title	mvp	ob	2.9			todo	Короткая подпись шага для прогресса, напр. ПРАВИЛО
+ob.s10.title	mvp	ob	2.10			todo	Короткая подпись шага для прогресса, напр. КАРКАС
+ob.skip	mvp	ob	2.1	Пропустить объяснения		draft	; мой текст
+ob.toArena	mvp	ob	2.10	В Практику		draft	Финальный CTA шага 10; мой текст
+ob.next	mvp	ob	2.1	Дальше		draft	; мой текст
+ob.noScore	mvp	ob	2.1	Без оценки и без штрафов до шага 6		draft	; мой текст
+home.hero	mvp	home	3.1	СЕГОДНЯ РЫНОК СНОВА ПЕРЕСМАТРИВАЕТ РЕАЛЬНОСТЬ.		draft	Ротация из контент-пака: нужно 7+ вариантов, ключ один
+home.streak	mvp	home	3.1	Серия {days} · качество решений за неделю {q} / 100		draft	{days}: «7 дней» с плюрализацией (см. units.day); {q}: число
+home.scenarioOf	mvp	home	3.1	СЦЕНАРИЙ {n}/{total}		draft	Компонуется в коде
+home.seriesLeft	mvp	home	3.1	Правило: {rule} · осталось {n} сценария		draft	{rule}: название протокола; {n}: плюрализуется (units.scenario)
+home.seriesOf	mvp	home	3.1	Серия из {n} · {topic}		draft	
+home.more	mvp	home	3.1	Дальше →		draft	
+home.modes	mvp	home	3.1	РЕЖИМЫ		draft	
+home.mode.arena.sub	mvp	home	3.1	сценарии и решения		draft	Заголовок — nav.arena
+home.mode.academy.sub	mvp	home	3.1	теория → практика		draft	Заголовок — nav.academy
+home.mode.threats.sub	mvp	home	3.1	{n} из {total} угроз		draft	Заголовок — nav.bestiary
+home.mode.journal.sub	mvp	home	3.1	{n} паттерна в работе		draft	Заголовок — home.mode.journal.title; плюрализуется
+home.mode.journal.title	mvp	home	3.1	ЖУРНАЛ		draft	Короткое имя в сетке режимов; полное — journal.title
+home.mode.tourn.sub	mvp	home	3.1	окно закроется {d}		draft	Заголовок — tournament.title; {d}: «2 д» (units.time)
+home.mode.market.sub	mvp	home	3.1	только косметика		draft	Заголовок — market.title
+home.daily.lesson	mvp	home	3.1	Урок дня · {title}		draft	{title}: название урока
+home.daily.lessonMeta	mvp	home	3.1	{dur} · +{xp} XP		draft	{dur}: «60–90 сек»; {xp}: число
+home.daily.ready	mvp	home	3.1	ГОТОВ		draft	Статус карточки
+home.daily.fix	mvp	home	3.1	Исправление · {code}		draft	{code}: код паттерна, напр. E-007
+home.daily.fixMeta	mvp	home	3.1	{title} · {done}/{total}		draft	
+home.daily.active	mvp	home	3.1	АКТИВНА		draft	Статус карточки
+home.daily.tournMeta	mvp	home	3.1	{done} из {total} сценариев сдано		draft	
+home.daily.tournTitle	mvp	home	3.1	Турнир · {name}		draft	
+home.footnote	mvp	home	3.1	Не финрекомендация · исторические ситуации · будущее зафиксировано		draft	
+home.first.title	mvp	home	3.1			todo	Состояние «Первый вход»: заголовок hero-блока
+home.first.body	mvp	home	3.1			todo	Состояние «Первый вход»: подзаголовок
+home.streakRisk	mvp	home	3.1	Серия сгорит через {h} — добей урок дня.		draft	Мой текст; {h}: «5 ч» (units.time)
+home.paused	mvp	home	3.1	Сессия на паузе		draft	Состояние; кнопка возврата — home.resume
+home.streakDanger	mvp	home	3.1	Серия в опасности		draft	Состояние
+home.allDone	mvp	home	3.1	На сегодня всё. Архив подождёт до завтра.		draft	Мой текст; состояние «Всё выполнено»
+notif.title	mvp	notif	3.2	УВЕДОМЛЕНИЯ		draft	Шестерёнка — SVG-кнопка
+notif.newCount	mvp	notif	3.2	{n} НОВЫХ		draft	Плюрализуется: 1 НОВОЕ / 3 НОВЫХ
+notif.tab.all	mvp	notif	3.2	ВСЕ		draft	
+notif.tab.progress	mvp	notif	3.2	ПРОГРЕСС		draft	
+notif.tab.tournaments	mvp	notif	3.2	ТУРНИРЫ		draft	
+notif.tab.system	mvp	notif	3.2	СИСТЕМА		draft	
+notif.group.new	mvp	notif	3.2	НОВОЕ		draft	
+notif.group.earlier	mvp	notif	3.2	РАНЬШЕ		draft	
+notif.evt.chapterDone.title	mvp	notif	3.2	Глава {n} закрыта		draft	
+notif.evt.chapterDone.body	mvp	notif	3.2	+{coins} монет и новая угроза в списке угроз		draft	{coins} плюрализуется (units.coin)
+notif.evt.tournWindow.title	mvp	notif	3.2	Окно турнира закроется		draft	
+notif.evt.tournWindow.body	mvp	notif	3.2	{name} · сдано {done} из {total}		draft	
+notif.evt.patternRepeat.title	mvp	notif	3.2	Паттерн повторился {n}-й раз		draft	
+notif.evt.patternRepeat.body	mvp	notif	3.2	{code} · {title}		draft	
+notif.evt.newSkill.title	mvp	notif	3.2	Новая карта навыка		draft	
+notif.evt.newSkill.body	mvp	notif	3.2	«{title}»		draft	
+notif.evt.dataset.title	mvp	notif	3.2	Датасет обновлён до v{v}		draft	
+notif.evt.dataset.body	mvp	notif	3.2	{n} ситуаций · хеши пересчитаны		draft	
+notif.evt.weekDone.title	mvp	notif	3.2	Неделя {n} завершена		draft	
+notif.evt.weekDone.body	mvp	notif	3.2	Место {place} из {total} · качество {q}		draft	
+notif.empty	mvp	notif	3.2	Пока тихо		draft	Мой текст; состояние «Пусто»
+notif.emptySub	mvp	notif	3.2	Учебные события появятся здесь: прогресс, окна турниров, разборы.		draft	Мой текст
+notif.allRead	mvp	notif	3.2	Всё прочитано		draft	Мой текст; состояние «Всё прочитано»
+notif.hasNew	mvp	notif	3.2	Есть новые		draft	Состояние
+search.title	mvp	search	3.3	ПОИСК ПО ВСЕМУ ПРОДУКТУ		draft	Крестик — SVG-кнопка
+search.placeholder	mvp	search	3.3	Главы, угрозы, карты, правила…		draft	Мой текст; плейсхолдер поля
+search.tab.all	mvp	search	3.3	ВСЕ		draft	Счётчики компонуются в коде
+search.tab.chapters	mvp	search	3.3	ГЛАВЫ		draft	
+search.tab.threats	mvp	search	3.3	УГРОЗЫ		draft	
+search.tab.cards	mvp	search	3.3	КАРТЫ		draft	
+search.tab.journal	mvp	search	3.3	ЖУРНАЛ		draft	
+search.lessonOf	mvp	search	3.3	урок {n} из {total}		draft	
+search.skillMeta	mvp	search	3.3	карта навыка · мастерство {n}/3		draft	
+search.ruleRef	mvp	search	3.3	Правило · {title}		draft	
+search.ruleUsed	mvp	search	3.3	применён в {n} сценариях		draft	Плюрализуется (units.scenario)
+search.journalRef	mvp	search	3.3	Запись журнала · {code}		draft	
+search.journalMeta	mvp	search	3.3	{n} повторов · исправление		draft	Плюрализуется
+search.hint	mvp	search	3.3	Введи запрос: тема, угроза, карта или правило.		draft	Мой текст; состояние «Пустой запрос»
+search.none	mvp	search	3.3	Ничего не найдено		draft	Мой текст
+search.noneSub	mvp	search	3.3	Попробуй короче: «пробой», «объём», «стоп».		draft	Мой текст
+search.hidden	mvp	search	3.3	Скрыто античитом		draft	Античит §15: идентификаторы скрыты до завершения
+search.fair	mvp	search	3.3	Идентификаторы активного сценария в поиске скрыты до завершения — античит §15.		draft	
+search.hasResults	mvp	search	3.3	Есть результаты		draft	Состояние
+search.threatRow	mvp	search	3.3	{cat} · стадия {n}		draft	{cat}: bestiary.catGroup.* строчными в коде
+search.silhouetteRow	mvp	search	3.3	{cat} · силуэт		draft	{cat}: bestiary.catGroup.* строчными в коде
+ob.zoneEmpty	mvp	ob	1.3	ЗОНА БРАУЗЕРА ЗАРЕЗЕРВИРОВАНА, НО ПУСТА		draft	
+ob.active	mvp	ob	1.3	Активный шаг		draft	Состояние
+ob.hidden	mvp	ob	1.3	Объяснения скрыты		draft	Состояние
+ob.skipped	mvp	ob	1.3	Шаг пропущен		draft	Состояние
+boot.legal.add	mvp	boot	1.1	Игра не даёт торговых сигналов и не обещает дохода. Внутригровые ресурсы не выводятся.		draft	
+home.patTitle	mvp	home	3.1	ПАТТЕРНЫ		draft	
+calib.focusMax	mvp	calib	1.3	МАКС {n}		draft	
+arena.mode.emptyTitle	mvp	arena	4.1	Нет новых сценариев		draft	
+arena.mode.emptyBody	mvp	arena	4.1	Новых ситуаций нет. Повтори старые — качество важнее количества.		draft	Мой текст
+arena.mode.st.free	mvp	arena	4.1	Свободная		draft	Состояние; полное название — arena.mode.format.free
+arena.mode.st.series	mvp	arena	4.1	Серия		draft	Состояние; полное название — arena.mode.format.series
+arena.brief.of	mvp	arena	4.2	СЦЕНАРИЙ {n}/{total}		draft	Компонуется в коде
+arena.brief.hidden	mvp	arena	4.2	СКРЫТО ДО ОТВЕТА		draft	
+arena.brief.hiddenList	mvp	arena	4.2	Точная дата · инструмент · оригинальные заголовки · уникальные цифры · ссылки на источники		draft	
+arena.brief.criteria	mvp	arena	4.2	ЧТО ОЦЕНИВАЕТСЯ		draft	Далее 5 измерений (verdict.dim.*)
+arena.brief.tournHidden	mvp	arena	4.2	Турнирный (таймер скрыт)		draft	
+arena.brief.fixMode	mvp	arena	4.2	С активной fix-миссией		draft	Состояние
+arena.archiveSealed	mvp	arena	4.2	АРХИВ · t₀ ЗАФИКСИРОВАН		draft	
+arena.decisionsHint	mvp	arena	4.3	ВСЕГДА 4 · ПОСТОЯННОЕ МЕСТО		draft	Подпись секции решений
+arena.volume.missing	mvp	arena	4.4	Данные недоступны в архиве		draft	Состояние вкладки
+arena.volume.marked	mvp	arena	4.4	Аномалия отмечена игроком		draft	Состояние «Аномалия отмечена игроком»
+arena.sel.none	mvp	arena	4.3	Ничего не выбрано		draft	
+arena.sel.card	mvp	arena	4.3	Карта применена		draft	
+arena.sel.picked	mvp	arena	4.3	Вариант выбран		draft	
+arena.sel.locked	mvp	arena	4.3	Ответ зафиксирован		draft	
+arena.liveThreat	mvp	arena	4.3	Активная угроза · уровень {n}		draft	
+arena.threatTag	mvp	arena	4.3	УГРОЗА		draft	Чип активной угрозы
+arena.snapshot	mvp	arena	4.4	ВКЛАДКА {tab} · КРАТКИЙ СЛЕПОК		draft	{tab}: название вкладки
+arena.catalog.desc.chart	mvp	arena	4.5	График и структура рынка		draft	
+arena.catalog.desc.higher-tf	mvp	arena	4.5	Старшие таймфреймы		draft	
+arena.catalog.desc.volume	mvp	arena	4.5	Объём и ликвидность		draft	
+arena.catalog.desc.news	mvp	arena	4.5	Новостной фон		draft	
+arena.catalog.desc.social	mvp	arena	4.5	Социальный сентимент		draft	
+arena.catalog.desc.macro	mvp	arena	4.5	Макроконтекст		draft	
+arena.catalog.desc.onchain	mvp	arena	4.5	On-chain и Web3-данные		draft	
+arena.catalog.desc.position	mvp	arena	4.5	История текущей позиции		draft	
+arena.catalog.desc.journal	mvp	arena	4.5	Мои правила и журнал		draft	
+arena.catalog.noCoins	mvp	arena	4.5	Не хватает монет		draft	Состояние «Недостаточно монет»
+arena.catalog.locked	mvp	arena	4.5	Откроется на уровне {n}		draft	
+arena.catalog.allOpen	mvp	arena	4.5	Всё открыто		draft	Состояние
+arena.catalog.somePaid	mvp	arena	4.5	Есть платные		draft	Состояние
+arena.catalog.blocked	mvp	arena	4.5	Заблокировано уровнем		draft	Состояние
+arena.tabsAvail	mvp	arena	4.5	{n} ДОСТУПНА		draft	Плюрализуется: 1 доступна / 2 доступны
+arena.skill.locked	mvp	arena	4.6	Закрыта		draft	Подпись строки при уровне-локе
+arena.skill.lockedCost	mvp	arena	4.6	{n} монет		draft	Плюрализуется (units.coin)
+arena.skill.maxed	mvp	arena	4.6	МАСТЕРСТВО МАКС		draft	
+arena.skill.banned	mvp	arena	4.6	Недоступна в этом правиле		draft	
+arena.skill.opened	mvp	arena	4.6	Открыта		draft	Состояние
+arena.confirm.lock	mvp	arena	4.7	Зафиксировать решение		draft	
+arena.confirm.reselect	mvp	arena	4.7	Повторный выбор		draft	Состояние
+arena.confirm.locked	mvp	arena	4.7	Зафиксировано		draft	Состояние
+arena.step2.of	mvp	arena	4.8	ШАГ {n} ИЗ {total}		draft	
+arena.step2.affects	mvp	arena	4.8	влияет на блок «{dim}»		draft	{dim}: название измерения строчными
+arena.step2.confirm	mvp	arena	4.8	Подтвердить и раскрыть рынок		draft	Кнопка явного подтверждения (сейчас тап = выбор)
+arena.step2.blocked	mvp	arena	4.8	Заблокировано правилом		draft	
+arena.step2.title	mvp	arena	4.8	ДОПОЛНИТЕЛЬНЫЙ ШАГ		draft	
+arena.step2.none	mvp	arena	4.8	Условия не заданы		draft	
+arena.intel.source	mvp	arena	4.9	ИСТОЧНИК {letter}		draft	{letter}: A/B/C
+arena.intel.trust	mvp	arena	4.9	Надёжность {n}%		draft	
+arena.inpos.newsHit	mvp	arena	4.9	НОВОСТЬ ПРИШЛА ПОСЛЕ ВХОДА. КАК ВСЕГДА.		draft	Заголовок фазы; в будущем — scen.*.midnews.title
+arena.inpos.changed	mvp	arena	4.9	План был. Контекст изменился. План об этом не предупреждали.		draft	Подзаголовок фазы; в будущем — scen.*.midnews.body
+arena.intel.evt.news	mvp	arena	4.9	Новость		draft	Тип события в ленте
+arena.intel.evt.move	mvp	arena	4.9	Резкое движение		draft	Тип события в ленте
+arena.intel.evt.silence	mvp	arena	4.9	Тишина		draft	Тип события в ленте
+arena.threatsLive	mvp	arena	4.9	{n} угрозы активны		draft	Капитализация и плюрализация — в коде
+arena.reveal.title	mvp	arena	4.10	РАСКРЫТИЕ		draft	
+arena.reveal.opened	mvp	arena	4.10	ПРОДОЛЖЕНИЕ РАСКРЫТО		draft	
+arena.reveal.playing	mvp	arena	4.10	Анимация идёт		draft	
+arena.reveal.noAnim	mvp	arena	4.10	Анимация отключена в настройках		draft	
+arena.reveal.toVerdict	mvp	arena	4.10	К оценке качества решения		draft	Кнопка перехода к слою 3
+arena.reveal.factOf	mvp	arena	4.10	ФАКТ {n} ИЗ {total}		draft	Переиспользуется в 4.11
+arena.reveal.t0	mvp	arena	4.10	t₀ · точка решения		draft	Подпись маркера на графике
+arena.reveal.action	mvp	arena	4.10	ДЕЙСТВИЕ		draft	
+arena.reveal.outcome	mvp	arena	4.10	ИСХОД РЫНКА		draft	Значение — контент (напр. «Ложный пробой»)
+arena.reveal.sealed	mvp	arena	4.10	Продолжение было зафиксировано до твоего ответа. Хэш совпадает — данные не подменены.		draft	
+arena.reveal.paused	mvp	arena	4.10	Пауза		draft	
+arena.reveal.done	mvp	arena	4.10	Завершено		draft	
+verdict.rewardLine	mvp	verdict	4.11	+{xp} XP · +{coins} МОНЕТ · СЕРИЯ {days}		draft	{days} плюрализуется (units.day)
+verdict.criteria	mvp	verdict	4.11	КРИТЕРИИ		draft	
+verdict.weights	mvp	verdict	4.11	ВЕСА ИЗ БРИФИНГА		draft	
+verdict.lost	mvp	verdict	4.11	ГДЕ ПОТЕРЯНО		draft	
+verdict.loss.repeat	mvp	verdict	4.11	Повтор № {n} · тег {code}		draft	
+verdict.loss.fix	mvp	verdict	4.11	FIX		draft	Кнопка перехода к исправлению
+verdict.logged	mvp	verdict	4.11	ЗАПИСАНО В ЖУРНАЛ		draft	
+verdict.skillUp	mvp	verdict	4.11	КАРТА УКРЕПЛЕНА		draft	
+verdict.quality	mvp	verdict	4.11	КАЧЕСТВО РЕШЕНИЯ		draft	
+verdict.band.highName	mvp	verdict	4.11	Высокая оценка		draft	
+verdict.band.midName	mvp	verdict	4.11	Средняя		draft	
+verdict.band.lowName	mvp	verdict	4.11	Низкая		draft	
+verdict.band.high	mvp	verdict	4.11	РЕШЕНИЕ, С КОТОРЫМ МОЖНО ЖИТЬ		draft	
+verdict.band.highSub	mvp	verdict	4.11	Рынок шёл не туда, куда ты думал. Решение от этого не стало хуже.		draft	
+verdict.band.mid	mvp	verdict	4.11			todo	Заголовок средней оценки
+verdict.band.midSub	mvp	verdict	4.11			todo	Подзаголовок средней оценки
+verdict.band.low	mvp	verdict	4.11			todo	Заголовок низкой оценки
+verdict.band.lowSub	mvp	verdict	4.11			todo	Подзаголовок низкой оценки
+verdict.dimName.context	mvp	verdict	4.11	Учёт контекста		draft	Длинное имя измерения (короткое — verdict.dim.*)
+verdict.dimName.evidence	mvp	verdict	4.11	Работа с доказательствами		draft	
+verdict.dimName.action	mvp	verdict	4.11	Выбор действия		draft	
+verdict.dimName.risk	mvp	verdict	4.11	Управление риском		draft	
+verdict.dimName.discipline	mvp	verdict	4.11	Дисциплина		draft	
+verdict.carryRule	mvp	verdict	4.11	ПЕРЕНОСИМОЕ ПРАВИЛО		draft	
+verdict.act.review	mvp	verdict	4.11	Разбор		draft	Сетка действий 2×2
+verdict.act.sources	mvp	verdict	4.11	Источники		draft	
+verdict.act.journal	mvp	verdict	4.11	В журнал		draft	
+verdict.act.next	mvp	verdict	4.11	Следующее		draft	
+verdict.edge.loss100	mvp	verdict	4.11	Убыток при оценке 100		draft	Состояние
+verdict.edge.win20	mvp	verdict	4.11	Прибыль при оценке 20		draft	Состояние
+verdict.alt	mvp	verdict	4.12	ЧТО БЫЛО БЫ		draft	
+verdict.altRow	mvp	verdict	4.12	{text} · качество {q}		draft	{text}: исход ветки
+verdict.alt.yours	mvp	verdict	4.12	Ваш выбор		draft	
+verdict.alt.best	mvp	verdict	4.12	Идеальный путь		draft	
+verdict.alt.worst	mvp	verdict	4.12	Сценарий разрушения		draft	
+verdict.threats	mvp	verdict	4.12	УГРОЗЫ В ЭТОЙ СИТУАЦИИ		draft	Стадии — ключи bestiary.stage.*
+verdict.depth.full	mvp	verdict	4.12	Разбор полный		draft	
+verdict.depth.short	mvp	verdict	4.12	Сжатый (высокий уровень)		draft	
+verdict.depth.deep	mvp	verdict	4.12	Расширенный (повторная ошибка)		draft	
+verdict.opened	mvp	verdict	4.13	РАСКРЫТО		draft	
+verdict.nowTitle	mvp	verdict	4.13	ТЕПЕРЬ МОЖНО		draft	
+verdict.nowBody	mvp	verdict	4.13	Сценарий завершён. Идентификаторы больше не скрыты.		draft	
+verdict.inst	mvp	verdict	4.13	ИНСТРУМЕНТ		draft	Значение — контент (напр. BTC-PERP)
+verdict.tf	mvp	verdict	4.13	ТАЙМФРЕЙМ		draft	
+verdict.period	mvp	verdict	4.13	ПЕРИОД		draft	
+verdict.t0point	mvp	verdict	4.13	ТОЧКА t₀		draft	
+verdict.integrity	mvp	verdict	4.13	ДАННЫЕ И ЦЕЛОСТНОСТЬ		draft	
+verdict.dataSource	mvp	verdict	4.13	Источник данных		draft	
+verdict.dataSourceVal	mvp	verdict	4.13	Агрегатор OHLCV · архивный снимок		draft	
+verdict.rulesTitle	mvp	verdict	4.13	Правила оценки		draft	
+verdict.rulesVal	mvp	verdict	4.13	версия {v} · открыты		draft	
+verdict.press	mvp	verdict	4.13	НОВОСТНЫЕ ИСТОЧНИКИ		draft	
+verdict.linksOn	mvp	verdict	4.13	ССЫЛКИ АКТИВНЫ		draft	
+verdict.tournHold	mvp	verdict	4.13	Сценарий в турнире (раскрытие после закрытия окна)		draft	
+verdict.closedState	mvp	verdict	4.13	Закрыто (до ответа)		draft	Состояние
+legal.edu	mvp	legal	4.13	Материал предоставлен в образовательных целях. Исторические результаты не гарантируют будущих.		draft	
+arena.pauseTitle	mvp	arena	4.14	Пауза		draft	
+arena.pauseSub	mvp	arena	4.14	РЫНОК ПОДОЖДЁТ. ОН УЖЕ ЗАКРЫЛСЯ В 2021 ГОДУ.		draft	Подзаголовок шторки паузы
+arena.resume	mvp	arena	4.14	Продолжить		draft	Кнопки пока нет в шторке — ключ на будущее
+arena.pauseRules	mvp	arena	4.14	Правила оценки		draft	Кнопки пока нет в шторке — ключ на будущее
+arena.pauseA11y	mvp	arena	4.14	Настройки доступности		draft	Кнопки пока нет в шторке — ключ на будущее
+arena.exitTitle	mvp	arena	4.14	Выйти из сценария?		draft	Мой текст; подтверждение выхода
+arena.exitBody	mvp	arena	4.14	Выход без фиксации не штрафуется. При возврате будет тот же сценарий и та же версия данных.		draft	
+arena.exitYes	mvp	arena	4.14	Сохранить и выйти		draft	
+arena.exitNo	mvp	arena	4.14	Остаться		draft	Мой текст
+arena.autopause	mvp	arena	4.14	Автопауза при потере фокуса		draft	
+scen.mvp-001.carryRule	mvp	scen	4.11	Нет подтверждения — нет сделки. Правило работает на любом активе и любом таймфрейме.		draft	Контент: переносимое правило сценария; 4.11 и 4.12 показывают одно правило
+arena.mode.dataset	mvp	arena	4.1	Датасет v{v} · {n} ситуаций · будущее зафиксировано		draft	Хвост «ХЭШ» — arena.mode.hashOk
+arena.catalog.maxTabs	mvp	arena	4.5	Максимум {n} вкладок.		draft	
+arena.skill.timesMany	mvp	arena	4.6	{n} раза		draft	2–4; 1 → skill.times, 5+ → «раз» — плюрализация в коде
+verdict.factIs	mvp	verdict	4.11	Факт:		draft	Метка строки факта в мини-разборе
+verdict.logicIs	mvp	verdict	4.11	Логика:		draft	Метка строки логики в мини-разборе
+verdict.act.proceed	mvp	verdict	4.12	Продолжить		draft	
+verdict.sourcesTitle	mvp	verdict	4.13	ИСТОЧНИКИ		draft	
+verdict.dataVer	mvp	verdict	4.13	Версия датасета		draft	
+verdict.dataVerVal	mvp	verdict	4.13	v{v} · {n} ситуаций		draft	
+verdict.hashOf	mvp	verdict	4.13	Хэш скрытого продолжения		draft	
+verdict.hashVal	mvp	verdict	4.13	{hash} · проверен		draft	Галка — SVG
+verdict.contentVer	mvp	verdict	4.13	Версия контента		draft	
+scen.mvp-001.revealTitle	mvp	scen	4.10	ЦЕНА ВЕРНУЛАСЬ В ДИАПАЗОН ЗА 7 СВЕЧЕЙ.		draft	Контент: заголовок слоя 1
+scen.mvp-001.revealBody	mvp	scen	4.10	Рынок не был против тебя. Ему просто нужна была ликвидность.		draft	Контент: тело слоя 1
+scen.mvp-001.outcome	mvp	scen	4.10	Ложный пробой		draft	Контент: исход рынка
+scen.mvp-001.d1c	mvp	scen	4.10	Ты ждал ретест и не вошёл: условие подтверждения так и не появилось. Позиции нет, ошибки тоже.		draft	Контент: последствие выбора d1 (слой 2)
+scen.mvp-001.d0c	mvp	scen	4.10			todo	Контент: последствие выбора d0 (слой 2)
+scen.mvp-001.d2c	mvp	scen	4.10			todo	Контент: последствие выбора d2 (слой 2)
+scen.mvp-001.d3c	mvp	scen	4.10			todo	Контент: последствие выбора d3 (слой 2)
+scen.mvp-001.logic	mvp	scen	4.12	Движение без участия объёма не имеет того, кто будет его продолжать. Такой пробой чаще собирает стопы, а не начинает тренд.		draft	Контент: строка логики в разборе
+scen.mvp-001.alt.2	mvp	scen	4.12	Проверить старший TF		draft	Контент: ветка C (A/B переиспользуют d0/d1)
+scen.mvp-001.alt.3	mvp	scen	4.12	Усреднить с плечом		draft	Контент: ветка D
+scen.mvp-001.press.0.name	mvp	scen	4.13	Заявление регулятора		draft	Контент: источник
+scen.mvp-001.press.0.meta	mvp	scen	4.13	официальный релиз · надёжность 95%		draft	Контент
+scen.mvp-001.press.1.name	mvp	scen	4.13	Агентство		draft	Контент: источник
+scen.mvp-001.press.1.meta	mvp	scen	4.13	новостная лента · 80%		draft	Контент
+scen.mvp-001.press.2.name	mvp	scen	4.13	Анонимный канал		draft	Контент: источник
+scen.mvp-001.press.2.meta	mvp	scen	4.13	соцсети · 25%		draft	Контент
+scen.mvp-002.midnews.0	mvp	scen	4.9	Регулятор выразил обеспокоенность		draft	Контент: новость после входа
+scen.mvp-002.midnews.1	mvp	scen	4.9	Крупный адрес переместил средства		draft	Контент: новость после входа
+scen.mvp-002.midnews.2	mvp	scen	4.9	Анонимный канал обещает разворот		draft	Контент: новость после входа
+arena.pause.a11y	mvp	arena	4.14	Настройки доступности		draft	
+arena.alterTitle	mvp	arena	4.12	АЛЬТЕРНАТИВНЫЕ ВЕТКИ		draft	
+arena.tab.fact	mvp	arena	4.10	ФАКТ		draft	
+arena.verdict.ruleDesc	mvp	arena	4.11	Если подтверждение объёмом не появилось до закрытия свечи — идея отменяется без обсуждения.		draft	Текст активного правила в вердикте
+arena.verdict.lossEx	mvp	arena	4.11	Убыток при оценке {n}		draft	
+arena.verdict.profitEx	mvp	arena	4.11	Прибыль при оценке {n}		draft	
+academy.current	mvp	academy	5.1	ТЕКУЩАЯ ГЛАВА		draft	
+academy.continueLesson	mvp	academy	5.1	Продолжить урок {n} из {total}		draft	
+academy.map	mvp	academy	5.1	КАРТА ГЛАВ		draft	
+academy.chaptersOf	mvp	academy	5.1	{n} ГЛАВ		draft	Плюрализуется: 1 глава / 3 главы / 7 глав
+academy.retired	mvp	academy	5.1	закрыта · вышла из ротации		draft	
+academy.lessonsOf	mvp	academy	5.1	{done} из {total} уроков		draft	
+academy.unlocksAfter	mvp	academy	5.1	откроется после главы {n}		draft	
+academy.ongoing	mvp	academy	5.1	ИДЁТ		draft	Статус главы
+academy.daily	mvp	academy	5.1	УРОК ДНЯ		draft	
+academy.dailyMeta	mvp	academy	5.1	{dur} · серия {days}		draft	{dur}: «3 мин»; {days} плюрализуется
+academy.begin	mvp	academy	5.1	НАЧАТЬ		draft	
+academy.filterTitle	mvp	academy	5.1	ПОИСК ПО ТЕМАМ		draft	Фильтры переиспользуют arena.mode.focus.*
+academy.notDone	mvp	academy	5.1	НЕ ПРОЙДЕНО		draft	
+academy.tree.rule	mvp	academy	5.2	Глава закроется, когда все {n} тем проверены на практике. После этого темы выходят из ротации.		draft	
+academy.tree.card	mvp	academy	5.2	карта		draft	Подпись связанной карты темы
+academy.tree.rewardTitle	mvp	academy	5.2	ОТКРОЕТСЯ ПОСЛЕ ЗАКРЫТИЯ ГЛАВЫ		draft	
+academy.tree.reward	mvp	academy	5.2	+{coins} МОНЕТ · УГРОЗА: {name}		draft	
+academy.tree.toCheck	mvp	academy	5.2	Проверка мастерства		draft	
+academy.tree.nextTopic	mvp	academy	5.2	Следующая тема		draft	
+academy.tree.ready	mvp	academy	5.2	Готова к проверке		draft	Состояние темы
+academy.lesson.of	mvp	academy	5.3	УРОК {n} ИЗ {total}		draft	Крестик и меню — SVG-кнопки
+academy.lesson.dur	mvp	academy	5.3	~{sec} СЕК		draft	
+academy.lesson.thesis	mvp	academy	5.3	ТЕЗИС		draft	
+academy.lesson.true	mvp	academy	5.3	Что верно		draft	Тело — контент урока
+academy.lesson.false	mvp	academy	5.3	Что ложно		draft	Тело — контент урока
+academy.lesson.linked	mvp	academy	5.3	СВЯЗАННАЯ КАРТА		draft	
+academy.lesson.mastery	mvp	academy	5.3	Мастерство {n}/3		draft	
+academy.lesson.repeat	mvp	academy	5.3	Повторить		draft	
+academy.lesson.toPractice	mvp	academy	5.3	К практике →		draft	
+academy.practice.title	mvp	academy	5.4	ПРАКТИКА УРОКА		draft	
+academy.practice.noScore	mvp	academy	5.4	БЕЗ ОЦЕНКИ		draft	
+academy.practice.rule	mvp	academy	5.4	Один вопрос, четыре варианта. Формат такой же, как в Практике.		draft	
+academy.practice.onlyNew	mvp	academy	5.4	ТОЛЬКО ИЗУЧАЕМАЯ		draft	Подпись доступной карты
+academy.practice.emptySlot	mvp	academy	5.4	слот пуст		draft	
+academy.practice.right	mvp	academy	5.4	Верно		draft	Состояние ответа
+academy.practice.wrong	mvp	academy	5.4	Неверно		draft	Состояние ответа
+academy.practice.up	mvp	academy	5.4	Мастерство повышено		draft	
+academy.check.title	mvp	academy	5.5	ПРОВЕРКА МАСТЕРСТВА		draft	Стрелка и «?» — SVG-кнопки
+academy.check.ready	mvp	academy	5.5	ГОТОВНОСТЬ К ПРОВЕРКЕ		draft	Процент компонуется в коде
+academy.check.need	mvp	academy	5.5	Нужно {n}% по каждому критерию		draft	
+academy.check.reqs	mvp	academy	5.5	ТРЕБОВАНИЯ		draft	
+academy.check.rTopics	mvp	academy	5.5	Все {n} тем главы пройдены		draft	
+academy.check.rQuality	mvp	academy	5.5	{n} сценария с качеством ≥ {q}		draft	Плюрализуется (units.scenario)
+academy.check.rClean	mvp	academy	5.5	Ошибка {code} не повторялась {n} сценариев		draft	
+academy.check.rCard	mvp	academy	5.5	Карта «{title}»: мастерство {n}/3		draft	
+academy.check.format	mvp	academy	5.5	ФОРМАТ ПРОВЕРКИ		draft	
+academy.check.formatBody	mvp	academy	5.5	3 сценария подряд с гидрой ликвидности. Правило задано системой, подсказок нет, вкладок 5.		draft	В прототипе «задан» — исправлено на «задано»
+academy.check.rows.scenarios	mvp	academy	5.5	СЦЕНАРИЕВ		draft	
+academy.check.rows.threshold	mvp	academy	5.5	ПОРОГ		draft	
+academy.check.rows.thresholdVal	mvp	academy	5.5	{n} по всем		draft	
+academy.check.rows.tries	mvp	academy	5.5	ПОПЫТКИ		draft	
+academy.check.rows.triesVal	mvp	academy	5.5	без лимита		draft	
+academy.check.rows.cost	mvp	academy	5.5	СТОИМОСТЬ		draft	
+academy.check.rows.costVal	mvp	academy	5.5	бесплатно		draft	
+academy.check.fair	mvp	academy	5.5	Проверку нельзя купить, ускорить или пропустить за монеты.		draft	
+academy.check.train	mvp	academy	5.5	Тренироваться		draft	
+academy.check.start	mvp	academy	5.5	Начать проверку		draft	
+academy.check.failed	mvp	academy	5.5	Провалена. Штрафа нет — тренируйся и возвращайся.		draft	Состояние «Провалена»
+academy.check.passed	mvp	academy	5.5	Глава закрыта		draft	Мой текст; состояние «Закрыта»
+academy.chapterOf	mvp	academy	3.3	Глава {n} · {title}		draft	Ссылка на главу из поиска
+academy.doneTail	mvp	academy	4.6	пройдено		draft	Хвост строки «ГДЕ ИЗУЧАЕТСЯ»
+academy.chapterShort	mvp	academy	4.6, 5.5	ГЛАВА {n}		draft	
+academy.lessonsRange	mvp	academy	4.6	уроки {a}–{b}		draft	
+academy.fair	mvp	academy	5.1	Теория открывает практику, а не наоборот		draft	
+academy.closedReward	mvp	academy	5.1	Закрытая глава → крупная награда монетами + новая угроза		draft	
+academy.allDone	mvp	academy	5.1	Всё пройдено		draft	Состояние
+academy.tree.retired	mvp	academy	5.2	Закрытая тема выходит из ротации		draft	
+academy.ch4.t.0	mvp	academy	5.2	Объём как данные		draft	Контент: тема главы 4
+academy.ch4.t.1	mvp	academy	5.2	Средние и всплески		draft	Контент: тема главы 4
+academy.ch4.t.2	mvp	academy	5.2	Стакан и стены		draft	Контент: тема главы 4
+academy.ch4.t.3	mvp	academy	5.2	ЛИКВИДНОСТЬ		draft	Контент: тема главы 4
+academy.ch4.t.4	mvp	academy	5.2	Пробой без объёма		draft	Контент: тема главы 4
+academy.ch4.t.5	mvp	academy	5.2	НЕТ ПОДТВЕРЖДЕНИЯ		draft	Контент: тема главы 4
+academy.ch4.t.6	mvp	academy	5.2	Охота за стопами		draft	Контент: тема главы 4
+academy.ch4.t.7	mvp	academy	5.2	Слиппаж и исполнение		draft	Контент: тема главы 4
+academy.ch4.t.8	mvp	academy	5.2	ЛИМИТ РИСКА		draft	Контент: тема главы 4
+academy.ch4.t.9	mvp	academy	5.2	Корреляции ликвидности		draft	Контент: тема главы 4
+academy.ch4.t.10	mvp	academy	5.2	ПРОВЕРЬ TF		draft	Контент: тема главы 4
+academy.ch4.l5.thesis	mvp	academy	5.3	ОБЪЁМ НЕ ПОКАЗЫВАЕТ НАПРАВЛЕНИЕ. ОН ПОКАЗЫВАЕТ УЧАСТИЕ.		draft	Контент: тезис урока 5
+academy.ch4.l5.caption	mvp	academy	5.3	Сравнение: два пробоя одного уровня, разный объём		draft	Контент: подпись примера
+academy.ch4.l5.true	mvp	academy	5.3	Всплеск объёма говорит о том, что в движении есть участники.		draft	Контент: «что верно»
+academy.ch4.l5.false	mvp	academy	5.3	Высокий объём не означает, что движение продолжится.		draft	Контент: «что ложно»
+academy.lesson.st.theory	mvp	academy	5.3	Теория		draft	Состояние
+academy.lesson.st.reread	mvp	academy	5.3	Повторное чтение		draft	Состояние
+academy.ch4.l5p.title	mvp	academy	5.4	ОБЪЁМ КАК ПОДТВЕРЖДЕНИЕ		draft	Контент: заголовок практики
+academy.ch4.l5p.q	mvp	academy	5.4	НАЙДИ МЕСТО, ГДЕ ОБЪЁМ СОЛГАЛ.		draft	Контент: вопрос практики
+academy.ch4.l5p.o.0	mvp	academy	5.4	Свеча 3 · всплеск без продолжения		draft	Контент: вариант
+academy.ch4.l5p.o.1	mvp	academy	5.4	Свеча 7 · рост объёма на теле		draft	Контент: вариант
+academy.ch4.l5p.o.2	mvp	academy	5.4	Свеча 12 · пробой на сухом объёме		draft	Контент: вариант
+academy.ch4.l5p.o.3	mvp	academy	5.4	Объём не солгал нигде		draft	Контент: вариант
+academy.practice.st.question	mvp	academy	5.4	Вопрос		draft	Состояние
+academy.check.notReady	mvp	academy	5.5	Не готов		draft	Состояние
+academy.check.running	mvp	academy	5.5	Проверка идёт		draft	Состояние
+academy.chapterHead	mvp	academy	5.2	ГЛАВА {n} {title}		draft	Шапка 5.2; без «·»
+bestiary.of	mvp	bestiary	6.1	{n} ИЗ {total}		draft	
+bestiary.revealed	mvp	bestiary	6.1	РАСКРЫТО		draft	
+bestiary.activeNow	mvp	bestiary	6.1	{n} АКТИВНЫ		draft	
+bestiary.filter.all	mvp	bestiary	6.1	ВСЕ		draft	Счётчики компонуются в коде
+bestiary.cat.market-structure	mvp	bestiary	6.1	СИГНАЛЫ		draft	
+bestiary.cat.emotions-behaviour	mvp	bestiary	6.1	ЭМОЦИИ		draft	
+bestiary.cat.narratives-info	mvp	bestiary	6.1	НАРРАТИВЫ		draft	
+bestiary.cat.risk-exposure	mvp	bestiary	6.1	РИСК		draft	
+bestiary.cat.web3-infra	mvp	bestiary	6.1	WEB3		draft	
+bestiary.catGroup.market-structure	mvp	bestiary	6.1	СИГНАЛЫ И СТРУКТУРА		draft	
+bestiary.catGroup.emotions-behaviour	mvp	bestiary	6.1	ЭМОЦИИ И ПОВЕДЕНИЕ		draft	
+bestiary.catGroup.narratives-info	mvp	bestiary	6.1	НАРРАТИВЫ И ШУМ		draft	Мой текст; в прототипе группа не показана
+bestiary.catGroup.risk-exposure	mvp	bestiary	6.1	РИСК И ПЛЕЧО		draft	Мой текст; в прототипе группа не показана
+bestiary.catGroup.web3-infra	mvp	bestiary	6.1	WEB3-ЛОВУШКИ		draft	Мой текст; в прототипе группа не показана
+bestiary.catOf	mvp	bestiary	6.1	{n} ИЗ {total}		draft	
+bestiary.stage.silhouette	mvp	bestiary	6.1	СИЛУЭТ		draft	
+bestiary.stageLabel	mvp	bestiary	6.1	стадия		draft	Номер стадии — римскими в коде (I/II/III)
+bestiary.closed	mvp	bestiary	6.1	ЗАКРЫТО		draft	
+bestiary.meetIn	mvp	bestiary	6.1	встреть в сценарии		draft	
+bestiary.footnote	mvp	bestiary	6.1	Угрозы — язык описания давлений и ловушек. У них нет HP и боёв, их нельзя убить.		draft	
+bestiary.empty	mvp	bestiary	6.1	Ты пока никого не встретил. Угрозы проявятся в первых сценариях.		draft	Мой текст; состояние «Пусто»
+bestiary.allOpen	mvp	bestiary	6.1	Все угрозы раскрыты. Архив признал тебя своим.		draft	Мой текст; состояние «Всё раскрыто»
+bestiary.stageOf	mvp	bestiary	6.2	СТАДИЯ {n}		draft	{n}: римская цифра в коде
+bestiary.stat.pressure	mvp	bestiary	6.2	ДАВЛЕНИЕ		draft	
+bestiary.stat.meetings	mvp	bestiary	6.2	ВСТРЕЧ		draft	
+bestiary.stat.avgq	mvp	bestiary	6.2	СР. КАЧЕСТВО		draft	
+bestiary.stat.cat	mvp	bestiary	6.2	КАТЕГОРИЯ		draft	Значение — bestiary.cat.*
+bestiary.signs	mvp	bestiary	6.2	ПРИЗНАКИ ПОЯВЛЕНИЯ		draft	Пункты — контент (см. паттерн entity.*.signs в README)
+bestiary.counters	mvp	bestiary	6.2	КАРТЫ-КОНТРМЕРЫ		draft	Карты — контент; тип — arena.skill.kindName.*
+bestiary.seenIn	mvp	bestiary	6.2	ГДЕ ВСТРЕЧАЛСЯ		draft	
+bestiary.seenRow	mvp	bestiary	6.2	Сценарий {n} · качество {q}		draft	Время — units.time.*
+bestiary.open	mvp	bestiary	6.2	ОТКРЫТЬ		draft	
+bestiary.liveNow	mvp	bestiary	6.2	Активна сейчас		draft	Состояние
+bestiary.unknown	mvp	bestiary	6.3	НЕИЗВЕСТНАЯ УГРОЗА		draft	
+bestiary.nameHidden	mvp	bestiary	6.3	ИМЯ СКРЫТО		draft	
+bestiary.nameHiddenSub	mvp	bestiary	6.3	Ты ещё не сталкивался с этим достаточно больно, чтобы запомнить.		draft	
+bestiary.stageProgress	mvp	bestiary	6.3	{cur} / {max}		draft	Напр. «0 / III»
+bestiary.howTo	mvp	bestiary	6.3	КАК ОТКРЫТЬ		draft	
+bestiary.unlock.chapter	mvp	bestiary	6.3	Закрыть главу {n} Обучения		draft	В прототипе опечатка «Обучении» — исправлено
+bestiary.unlock.progress	mvp	bestiary	6.3	прогресс {done}/{total}		draft	
+bestiary.unlock.meet	mvp	bestiary	6.3	Встретить в сценарии уровня {n}+		draft	
+bestiary.unlock.current	mvp	bestiary	6.3	текущий {n}		draft	
+bestiary.unlock.noBuy	mvp	bestiary	6.3	Не покупается за монеты		draft	
+bestiary.unlock.byDesign	mvp	bestiary	6.3	по дизайну		draft	
+bestiary.footnoteLow	mvp	bestiary	6.3	На низкой готовности угрозы не называются прямо: сначала опыт, потом имя.		draft	
+bestiary.toChapter	mvp	bestiary	6.3	К главе {n} Обучения		draft	В прототипе опечатка «Обучении» — исправлено
+bestiary.condDone	mvp	bestiary	6.3	Условие выполнено		draft	
+bestiary.opening	mvp	bestiary	6.3	Открывается		draft	
+collection.title	mvp	collection	7.1	КОЛЛЕКЦИЯ		draft	
+collection.filter.all	mvp	collection	7.1	ВСЕ		draft	Счётчики компонуются в коде
+collection.filter.reading	mvp	collection	7.1	ЧТЕНИЕ		draft	
+collection.filter.decision	mvp	collection	7.1	РЕШЕНИЕ		draft	
+collection.filter.protection	mvp	collection	7.1	ЗАЩИТА		draft	
+collection.filter.locked	mvp	collection	7.1	ЗАКРЫТЫЕ		draft	
+collection.opened	mvp	collection	7.1	ОТКРЫТЫ		draft	Тип карты переиспользует arena.skill.kindName.*
+collection.of	mvp	collection	7.1	{n} ИЗ {total}		draft	
+collection.lockedTitle	mvp	collection	7.1	ЗАКРЫТЫ		draft	
+collection.unlockLevel	mvp	collection	7.1	уровень {n}		draft	
+collection.unlocksAt	mvp	collection	7.1	откроется на		draft	Обрывок из прототипа; проверить при вёрстке
+collection.footnote	mvp	collection	7.1	Карты не дают преимущества в оценке и не покупаются. Они — язык твоих принципов.		draft	
+collection.empty	mvp	collection	7.1	Карт пока нет. Первая откроется в онбординге.		draft	Мой текст; состояние «Пусто»
+collection.mastery	mvp	collection	7.2	МАСТЕРСТВО {n}/3		draft	
+collection.uses	mvp	collection	7.2	ПРИМЕНЕНИЙ		draft	
+collection.avgq	mvp	collection	7.2	СР. КАЧЕСТВО		draft	
+collection.when	mvp	collection	7.2	КОГДА ПРИМЕНЯТЬ		draft	Пункты — контент (см. паттерн skill.*.when в README)
+collection.masteryPath	mvp	collection	7.2	ПРОГРЕСС МАСТЕРСТВА		draft	
+collection.m1	mvp	collection	7.2	Уровень 1 · применить {n} раза		draft	
+collection.m2	mvp	collection	7.2	Уровень 2 · качество ≥ {q} в {n} сценариях		draft	
+collection.m3	mvp	collection	7.2	Уровень 3 · применить против {n} разных угроз		draft	
+collection.mProgress	mvp	collection	7.2	{done} из {total} угроз: {names}		draft	
+collection.linked	mvp	collection	7.2	СВЯЗАННОЕ		draft	Ссылки компонуются: глава / угроза / правило
+collection.toTheory	mvp	collection	7.2	В теорию		draft	
+collection.train	mvp	collection	7.2	Тренировать		draft	
+collection.lockedState	mvp	collection	7.2	Закрытая карта		draft	Состояние (arena.skill.locked — короткий бейдж «Закрыта»)
+collection.ruleTitle	mvp	collection	7.3	ПРАВИЛО		draft	
+collection.ruleSub	mvp	collection	7.3	Правило не даёт бонусов. Оно меняет веса критериев и делает дисциплину измеримой.		draft	В прототипе «Он меняет» — исправлено на «Оно»
+collection.weight.risk-first	mvp	collection	7.3	Риск 30 · действие 15		draft	
+collection.weight.evidence-only	mvp	collection	7.3	Доказательства 30		draft	
+collection.weight.noise-quarantine	mvp	collection	7.3	Соцфон не учитывается		draft	
+collection.weight.flat-ok	mvp	collection	7.3	Отказ оценивается наравне		draft	
+collection.weight.save-system	mvp	collection	7.3	Дисциплина 25		draft	
+collection.weight.after-loss	mvp	collection	7.3	Контекст и риск выше		draft	
+collection.weight.confidence	mvp	collection	7.3	Нужно обоснование выбора		draft	
+collection.ruleActive	mvp	collection	7.3	АКТИВЕН		draft	
+collection.rulePick	mvp	collection	7.3	ВЫБРАТЬ		draft	
+collection.ruleFoot	mvp	collection	7.3	Правило выбирается до старта сессии и не меняется внутри сценария. В турнире правило одно для всех.		draft	В прототипе «один» — исправлено на «одно»
+collection.ruleFixed	mvp	collection	7.3	Задан системой		draft	Состояние; согласуется со «статус»
+bestiary.footnoteLowShort	mvp	bestiary	6.1	На низкой готовности угроза не называется прямо		draft	
+bestiary.partial	mvp	bestiary	6.1	Частично раскрыто		draft	Состояние
+bestiary.openedIs	mvp	bestiary	6.2	Раскрыта {n}		draft	{n}: римская цифра стадии в коде
+entity.fake-breakout-phantom.sign.0	mvp	entity	6.2	Цена вышла за уровень без роста объёма		draft	Контент: признак появления
+entity.fake-breakout-phantom.sign.1	mvp	entity	6.2	Старший таймфрейм остаётся в диапазоне		draft	Контент: признак появления
+entity.fake-breakout-phantom.sign.2	mvp	entity	6.2	Социальный фон резко единодушен		draft	Контент: признак появления
+bestiary.unlockNote	mvp	bestiary	6.3	Угрозы открываются опытом и закрытыми главами		draft	
+collection.view.list	mvp	collection	7.1	Список		draft	Состояние вида
+collection.view.typeFilter	mvp	collection	7.1	Фильтр по типу		draft	Состояние вида
+skill.no-confirm.when.0	mvp	skill	7.2	Сигнал есть, но второго подтверждения нет		draft	Контент: когда применять
+skill.no-confirm.when.1	mvp	skill	7.2	Старший таймфрейм противоречит идее		draft	Контент: когда применять
+skill.no-confirm.when.2	mvp	skill	7.2	Социальный фон заменяет данные		draft	Контент: когда применять
+collection.linkRule	mvp	collection	7.2	ПРАВИЛО: {title}		draft	Формат ссылки на правило
+collection.ruleOn	mvp	collection	7.3	Выбран		draft	Состояние
+collection.ruleOff	mvp	collection	7.3	Не выбран		draft	Состояние
+journal.hero	mvp	journal	8.1	ТЫ НЕ СЛУЧАЙНЫЙ. ТЫ ПОСЛЕДОВАТЕЛЬНЫЙ.		draft	
+journal.heroSub	mvp	journal	8.1	За {n} решений система нашла {m} устойчивых паттерна.		draft	{m} плюрализуется
+journal.sev.crit	mvp	journal	8.1	КРИТИЧНЫЕ		draft	Счётчики компонуются в коде
+journal.sev.major	mvp	journal	8.1	ЗНАЧИМЫЕ		draft	
+journal.sev.minor	mvp	journal	8.1	МЕЛКИЕ		draft	
+journal.sev.fixed	mvp	journal	8.1	ИСПРАВЛЕННЫЕ		draft	
+pattern.e-007.title	mvp	pattern	8.1	Решение до проверки старшего TF		draft	Контент: заголовок паттерна; варианты «…старшего таймфрейма» в 4.11 и 8.2 — унифицировать
+pattern.e-012.title	mvp	pattern	8.1	Вход после одной новости		draft	Контент: заголовок паттерна
+pattern.e-021.title	mvp	pattern	8.1	Смена плана после убытка		draft	Контент: заголовок паттерна
+pattern.e-004.title	mvp	pattern	8.1	Отказ от ожидания без причины		draft	Контент: заголовок паттерна
+pattern.e-030.title	mvp	pattern	8.1	Недоценка слиппажа		draft	Контент: заголовок паттерна
+journal.patMeta	mvp	journal	8.1	{code} · {n}× · последний раз {ago}		draft	{ago}: units.time
+journal.patFixed	mvp	journal	8.1	{code} · исправлено		draft	
+journal.patFix	mvp	journal	8.1	FIX {done}/{total}		draft	
+journal.watching	mvp	journal	8.1	НАБЛЮДЕНИЕ		draft	
+journal.byDims	mvp	journal	8.1	ДИСЦИПЛИНА ПО КРИТЕРИЯМ		draft	Измерения — verdict.dim.*
+journal.lastN	mvp	journal	8.1	ПОСЛЕДНИЕ {n}		draft	
+journal.foot	mvp	journal	8.1	Журнал не считает прибыль. Он считает, сколько раз ты нарушил свой же план.		draft	
+journal.tooFew	mvp	journal	8.1	Нужно хотя бы {n} решений — пока {m}.		draft	Мой текст; состояние «Данных мало»
+journal.allFixed	mvp	journal	8.1	Всё исправлено. Нарушать план стало нечем.		draft	Мой текст; состояние «Всё исправлено»
+journal.sevOf	mvp	journal	8.2	{sev} · {n} ПОВТОРОВ		draft	{sev}: journal.sev.* в нужном падеже — согласовать
+pattern.e-007.body	mvp	pattern	8.2	Ты видишь возможность и боишься её проверить, чтобы она не перестала быть возможностью.		draft	Контент: тело паттерна
+pattern.e-012.body	mvp	pattern	8.2			todo	Контент: тело паттерна E-012
+pattern.e-021.body	mvp	pattern	8.2			todo	Контент: тело паттерна E-021
+pattern.e-004.body	mvp	pattern	8.2			todo	Контент: тело паттерна E-004
+pattern.e-030.body	mvp	pattern	8.2			todo	Контент: тело паттерна E-030
+journal.p.repeats	mvp	journal	8.2	ПОВТОРОВ		draft	
+journal.p.avgq	mvp	journal	8.2	СР. КАЧЕСТВО		draft	
+journal.p.last	mvp	journal	8.2	ПОСЛЕДНИЙ		draft	Значение — units.time
+journal.p.dim	mvp	journal	8.2	КРИТЕРИЙ		draft	Значение — verdict.dim.*
+journal.p.cause	mvp	journal	8.2	ПРИЧИНА		draft	
+pattern.e-007.cause	mvp	pattern	8.2	В 4 из 5 случаев решение принято в первые 8 секунд после появления ситуации и при открытой вкладке «Соцфон».		draft	Контент: причина паттерна
+pattern.e-012.cause	mvp	pattern	8.2			todo	Контент: причина паттерна E-012
+pattern.e-021.cause	mvp	pattern	8.2			todo	Контент: причина паттерна E-021
+pattern.e-004.cause	mvp	pattern	8.2			todo	Контент: причина паттерна E-004
+pattern.e-030.cause	mvp	pattern	8.2			todo	Контент: причина паттерна E-030
+journal.p.linked	mvp	journal	8.2	СВЯЗАННЫЕ УГРОЗЫ И КАРТЫ		draft	Ссылки компонуются из контента
+journal.fixOf	mvp	journal	8.2	{done} ИЗ {total}		draft	
+pattern.e-007.fix.0	mvp	pattern	8.2	Сценарий с правилом «Только доказательства»		draft	Контент: шаг fix-миссии
+pattern.e-007.fix.1	mvp	pattern	8.2	Сценарий с конфликтом таймфреймов		draft	Контент: шаг fix-миссии
+pattern.e-007.fix.2	mvp	pattern	8.2	Сценарий без вкладки «Соцфон»		draft	Контент: шаг fix-миссии
+journal.p.history	mvp	journal	8.2	История		draft	
+journal.p.continueFix	mvp	journal	8.2	Продолжить fix-миссию		draft	
+journal.fixActive	mvp	journal	8.2	Миссия активна		draft	
+journal.fixDone	mvp	journal	8.2	Миссия завершена		draft	
+journal.patBack	mvp	journal	8.2	Паттерн вернулся		draft	
+journal.f.all	mvp	journal	8.3	ВСЕ		draft	Счётчики компонуются в коде
+journal.f.arena	mvp	journal	8.3	ПРАКТИКА		draft	
+journal.f.academy	mvp	journal	8.3	ОБУЧЕНИЕ		draft	
+journal.f.tourn	mvp	journal	8.3	ТУРНИР		draft	
+journal.sortQ	mvp	journal	8.3	КАЧЕСТВО ↓		draft	
+journal.row.scen	mvp	journal	8.3	Сценарий {n} · {topic}		draft	{topic}: тема сценария из контента
+journal.row.meta	mvp	journal	8.3	{decision} · v{v} · {rule}		draft	
+journal.row.tourn	mvp	journal	8.3	Турнир · Раунд {n}		draft	
+journal.row.metaNoRule	mvp	journal	8.3	{decision} · v{v}		draft	
+journal.noRule	mvp	journal	8.3	без правила		draft	
+journal.row.lesson	mvp	journal	8.3	Обучение · глава {ch} урок {n}		draft	
+journal.row.right	mvp	journal	8.3	Практика · верно		draft	
+journal.row.wrong	mvp	journal	8.3	Практика · неверно		draft	Мой текст; симметрично right
+journal.immutable	mvp	journal	8.3	История неизменяема. Она хранит версию датасета и правил оценки на момент решения.		draft	
+journal.export	mvp	journal	8.3	Экспорт истории		draft	
+tourn.active	mvp	tourn	9.1	АКТИВНЫЙ ТУРНИР		draft	
+tourn.weekTitle	mvp	tourn	9.1	{name} · НЕДЕЛЯ {n}		draft	
+tourn.closesIn	mvp	tourn	9.1	Закрытие через {t} · {n} сценариев		draft	{t}: «2 д 14 ч» (units.time)
+tourn.inGame	mvp	tourn	9.1	ВЫ В ИГРЕ		draft	Бейдж активной карточки (tourn.joined — для строк списка)
+tourn.doneOf	mvp	tourn	9.1	Пройдено {done} из {total}		draft	
+tourn.continueRound	mvp	tourn	9.1	Продолжить раунд {n}		draft	
+tourn.open	mvp	tourn	9.1	ОТКРЫТЫЕ ЗАЯВКИ		draft	
+tourn.ruleFixed	mvp	tourn	9.1	Правило задано · старт через {t}		draft	REVIEW: в прототипе 9.1 — «Правило задан» (опечатка)
+tourn.scenHidden	mvp	tourn	9.1	{n} сценариев · таймер скрыт		draft	
+tourn.needLevel	mvp	tourn	9.1	требует уровень {n}+		draft	
+tourn.free	mvp	tourn	9.1	БЕСПЛАТНО		draft	
+tourn.available	mvp	tourn	9.1	ДОСТУПНО		draft	
+tourn.past	mvp	tourn	9.1	ЗАВЕРШЁННЫЕ		draft	
+tourn.pastRow	mvp	tourn	9.1	Место {place} из {total} · качество {q}		draft	
+tourn.results	mvp	tourn	9.1	ИТОГИ		draft	
+tourn.speedNote	mvp	tourn	9.1	Скорость не даёт очков. Она только разводит равные результаты.		draft	
+tourn.none	mvp	tourn	9.1	Нет активных турниров. Открытые заявки — ниже.		draft	Мой текст; состояние «Нет активных»
+tourn.locked	mvp	tourn	9.1	Нужен уровень {n}		draft	
+tourn.brief.sub	mvp	tourn	9.2	ОДИН ДАТАСЕТ НА ВСЕХ. ОТГОВОРКИ ЗАКОНЧИЛИСЬ.		draft	
+tourn.brief.scenarios	mvp	tourn	9.2	СЦЕНАРИЕВ		draft	
+tourn.brief.dataset	mvp	tourn	9.2	ДАТАСЕТ		draft	
+tourn.brief.rule	mvp	tourn	9.2	ПРАВИЛО		draft	Значение — protocol.*.title
+tourn.brief.timer	mvp	tourn	9.2	ТАЙМЕР		draft	
+tourn.hidden	mvp	tourn	9.2	скрыт		draft	
+tourn.brief.tabs	mvp	tourn	9.2	ВКЛАДОК		draft	
+tourn.tabsOf	mvp	tourn	9.2	{n} из {total}		draft	
+tourn.brief.tries	mvp	tourn	9.2	ПОПЫТКИ		draft	
+tourn.fair	mvp	tourn	9.2	ЦЕЛОСТНОСТЬ		draft	
+tourn.fairHash	mvp	tourn	9.2	Хэш скрытого будущего		draft	
+tourn.published	mvp	tourn	9.2	ОПУБЛИКОВАН		draft	
+tourn.hashNote	mvp	tourn	9.2	{hash} · опубликован до открытия окна		draft	
+tourn.howWin	mvp	tourn	9.2	КАК ОПРЕДЕЛЯЕТСЯ МЕСТО		draft	
+tourn.win1	mvp	tourn	9.2	Качество решений		draft	Номера 1–4 — в коде/в главе? здесь без номеров
+tourn.win1sub	mvp	tourn	9.2	сумма 0–100 по {n} сценариям		draft	
+tourn.win2	mvp	tourn	9.2	Соблюдение правила		draft	
+tourn.win2sub	mvp	tourn	9.2	штраф за нарушение		draft	
+tourn.win3	mvp	tourn	9.2	Работа с доказательствами		draft	
+tourn.win3sub	mvp	tourn	9.2	какие вкладки были открыты		draft	
+tourn.win4	mvp	tourn	9.2	Скорость		draft	
+tourn.win4sub	mvp	tourn	9.2	только при полном равенстве		draft	
+tourn.startRound	mvp	tourn	9.2	Начать раунд {n}		draft	
+tourn.before	mvp	tourn	9.2	До старта		draft	
+tourn.live	mvp	tourn	9.2	В процессе		draft	
+tourn.closed	mvp	tourn	9.2	Окно закрыто		draft	
+tourn.boardOf	mvp	tourn	9.3	{n} УЧАСТНИКОВ		draft	Заголовок — tourn.board
+tourn.tab.all	mvp	tourn	9.3	ОБЩИЙ		draft	
+tourn.tab.friends	mvp	tourn	9.3	ДРУЗЬЯ		draft	
+tourn.division	mvp	tourn	9.3	ДИВИЗИОН {n}		draft	
+tourn.rowClean	mvp	tourn	9.3	Правило соблюдено · доказательства {n}/{total}		draft	Галка ✓ запрещена конвенциями — словами
+tourn.rowFaster	mvp	tourn	9.3	· быстрее		draft	Суффикс строки при равенстве
+tourn.rowViol	mvp	tourn	9.3	Правило {n} нарушение · доказательства {m}/{total}		draft	{n} плюрализуется
+tourn.youAs	mvp	tourn	9.3	ВЫ · {id}		draft	Строка игрока (tourn.you — короткое «ТЫ»)
+tourn.order	mvp	tourn	9.3	ПОРЯДОК СРАВНЕНИЯ		draft	
+tourn.orderVal	mvp	tourn	9.3	1 КАЧЕСТВО · 2 ПРАВИЛО · 3 ДОКАЗАТЕЛЬСТВА · 4 СКОРОСТЬ		draft	
+tourn.orderNote	mvp	tourn	9.3	Скорость влияет только при полном совпадении трёх предыдущих критериев — пункты 2 и 3 развели места {a} и {b}.		draft	
+tourn.prizeNote	mvp	tourn	9.3	Награды турнира косметические и контентные. Никаких выводимых активов.		draft	
+tourn.final	mvp	tourn	9.3	Итоговый		draft	
+tourn.prelim	mvp	tourn	9.3	Предварительный		draft	
+tourn.hiddenUntilClose	mvp	tourn	9.3	Скрыт до закрытия окна		draft	
+tourn.myResult	mvp	tourn	9.4	МОЙ РЕЗУЛЬТАТ		draft	
+tourn.myPlace	mvp	tourn	9.4	МЕСТО {place} / {total}		draft	
+tourn.topQ	mvp	tourn	9.4	ТОП {n}% ПО КАЧЕСТВУ		draft	
+tourn.mySub	mvp	tourn	9.4	Одно нарушение правила стоило тебе одного места.		draft	
+tourn.byRound	mvp	tourn	9.4	ПО РАУНДАМ		draft	
+tourn.roundRow	mvp	tourn	9.4	Раунд {n} · {topic}		draft	
+tourn.roundClean	mvp	tourn	9.4	правило		draft	Галка — SVG
+tourn.prizes	mvp	tourn	9.4	НАГРАДЫ		draft	
+tourn.prizeLine	mvp	tourn	9.4	+{xp} XP · +{coins} МОНЕТ · ЗНАК: {name}		draft	
+tourn.sourcesOpen	mvp	tourn	9.4	Источники всех {n} сценариев открыты после закрытия окна турнира.		draft	
+tourn.reviewRounds	mvp	tourn	9.4	Разбор раундов		draft	
+tourn.done	mvp	tourn	9.4	Завершён		draft	
+tourn.unfinished	mvp	tourn	9.4	Незавершён		draft	Мой текст
+tourn.dq	mvp	tourn	9.4	Дисквалификация		draft	
+tourn.dqBody	mvp	tourn	9.4			todo	Пояснение дисквалификации игроку
+journal.hasPatterns	mvp	journal	8.1	Есть паттерны		draft	Состояние
+journal.view.list	mvp	journal	8.3	Список		draft	Состояние вида
+journal.view.modeFilter	mvp	journal	8.3	Фильтр по режиму		draft	Состояние вида
+pattern.e-007.short	mvp	pattern	3.1	вход без подтверждения		draft	Контент: короткая подпись паттерна для карточек
+pattern.e-012.short	mvp	pattern	3.1			todo	Контент: короткая подпись паттерна E-012
+pattern.e-021.short	mvp	pattern	3.1			todo	Контент: короткая подпись паттерна E-021
+pattern.e-004.short	mvp	pattern	3.1			todo	Контент: короткая подпись паттерна E-004
+pattern.e-030.short	mvp	pattern	3.1			todo	Контент: короткая подпись паттерна E-030
+tourn.dry.title	mvp	tourn	9.1	СУХОЙ ОБЪЁМ		draft	Контент: название турнира
+tourn.dry.body	mvp	tourn	9.1			todo	Контент: описание турнира
+tourn.discipline.title	mvp	tourn	9.1	ДИСЦИПЛИНА ПОСЛЕ УБЫТКА		draft	Контент: название турнира
+tourn.discipline.body	mvp	tourn	9.1			todo	Контент: описание турнира
+tourn.web3.title	mvp	tourn	9.1	WEB3-ГИГИЕНА		draft	Контент: название турнира
+tourn.web3.body	mvp	tourn	9.1			todo	Контент: описание турнира
+tourn.leagueLine	mvp	tourn	9.1	ЛИГА СЕЗОНА · ДИВИЗИОН {n}		draft	
+tourn.timerCalm	mvp	tourn	9.1	Таймер не создаёт панику: может быть скрыт		draft	
+tourn.headerTitle	mvp	tourn	9.2	{name} НЕДЕЛЯ {n}		draft	Заголовок шапки 9.2 (без «·»)
+market.tab.shop	mvp	market	10.1	МАГАЗИН		draft	
+market.tab.pass	mvp	market	10.1	ПАСС		draft	
+market.tab.pro	mvp	market	10.1	ПОДПИСКА		draft	
+market.tab.authors	mvp	market	10.1	АВТОРЫ		draft	
+market.tab.wallet	mvp	market	10.1	КОШЕЛЁК		draft	
+market.cosmetic	mvp	market	10.1	КОСМЕТИКА		draft	
+market.i.frame-dry.title	mvp	market	10.1	РАМКА КАРТ «СУХОЙ ОБЪЁМ»		draft	Контент: товар
+market.i.frame-dry.body	mvp	market	10.1			todo	Контент: описание товара
+market.i.avatar-skeleton.title	mvp	market	10.1	АВАТАР «СПОКОЙНЫЙ СКЕЛЕТ»		draft	Контент: товар
+market.i.avatar-skeleton.body	mvp	market	10.1			todo	Контент: описание товара
+market.i.theme-gazeta.title	mvp	market	10.1	ТЕМА ИНТЕРФЕЙСА «ГАЗЕТА»		draft	Контент: товар
+market.i.theme-gazeta.body	mvp	market	10.1			todo	Контент: описание товара
+market.i.stamp-clean.title	mvp	market	10.1	ШТАМП ЖУРНАЛА «НЕ ВИНОВАТ»		draft	Контент: товар
+market.i.stamp-clean.body	mvp	market	10.1			todo	Контент: описание товара
+market.i.pack-liquidity.title	mvp	market	10.1	НАБОР СЦЕНАРИЕВ «ЛИКВИДНОСТЬ 2019–21»		draft	Контент: товар
+market.i.pack-liquidity.body	mvp	market	10.1			todo	Контент: описание товара
+market.i.extra-tab.title	mvp	market	10.1	ДОП. ВКЛАДКА НА СЦЕНАРИЙ		draft	Контент: товар
+market.i.extra-tab.body	mvp	market	10.1	разовое открытие данных		draft	Контент: товар
+market.packOf	mvp	market	10.1	+{n} исторических ситуаций		draft	
+market.packLock	mvp	market	10.1	{n} ситуаций · требует главу {ch}		draft	
+market.closed	mvp	market	10.1	ЗАКРЫТО		draft	
+market.preview	mvp	market	10.1	ПРЕВЬЮ		draft	
+market.contentExt	mvp	market	10.1	РАСШИРЕНИЯ КОНТЕНТА		draft	
+market.never	mvp	market	10.1	ЗАПРЕЩЕНО ПРОДАВАТЬ		draft	
+market.never.0	mvp	market	10.1	готовые правильные ответы		draft	
+market.never.1	mvp	market	10.1	буст оценки и рейтинга		draft	
+market.never.2	mvp	market	10.1	повышенные лимиты риска		draft	
+market.never.3	mvp	market	10.1	базовые защитные знания		draft	
+market.never.4	mvp	market	10.1	лутбоксы, влияющие на качество		draft	
+market.never.5	mvp	market	10.1	сигналы и прогнозы		draft	
+market.foot	mvp	market	10.1	Все покупки косметические. Разочарование — бесплатно.		draft	
+market.pass.title	mvp	market	10.2	СИГНАЛ-ПАСС		draft	
+market.pass.season	mvp	market	10.2	СЕЗОН {n} · «{name}»		draft	
+market.pass.left	mvp	market	10.2	До конца сезона {t}		draft	{t}: units.time
+market.pass.of	mvp	market	10.2	{n} / {total}		draft	
+market.pass.track	mvp	market	10.2	ТРЕК НАГРАД		draft	
+market.pass.tracks	mvp	market	10.2	БЕСПЛАТНО / PRO		draft	
+market.pass.rw.0	mvp	market	10.2	Рамка карт		draft	Контент сезона 1
+market.pass.rw.1	mvp	market	10.2	80 монет		draft	Контент сезона 1
+market.pass.rw.2	mvp	market	10.2	Аватар		draft	Контент сезона 1
+market.pass.rw.3	mvp	market	10.2	Набор сценариев		draft	Контент сезона 1
+market.pass.rw.4	mvp	market	10.2	Штамп журнала		draft	Контент сезона 1
+market.pass.free	mvp	market	10.2	БЕСПЛ		draft	
+market.pass.pro	mvp	market	10.2	PRO		draft	
+market.pass.price	mvp	market	10.2	ЦЕНА PRO-ПАССА		draft	
+market.pass.for	mvp	market	10.2	ПРОГРЕСС ЗА		draft	
+market.pass.forWhat	mvp	market	10.2	качество		draft	
+market.pass.notOn	mvp	market	10.2	НЕ ВЛИЯЕТ НА		draft	
+market.pass.notWhat	mvp	market	10.2	оценку		draft	
+market.pass.burn	mvp	market	10.2	СГОРАЕТ		draft	
+market.pass.burnNo	mvp	market	10.2	нет, контент остаётся		draft	
+market.pass.fair	mvp	market	10.2	Пасс не ускоряет обучение и не повышает оценку. Он только меняет внешний вид и объём контента.		draft	
+market.pass.buy	mvp	market	10.2	Оформить PRO-пасс · {price}		draft	
+market.pass.stateFree	mvp	market	10.2	Бесплатный трек		draft	
+market.pass.statePro	mvp	market	10.2	PRO активен		draft	
+market.pass.ended	mvp	market	10.2	Сезон завершён		draft	
+market.pro.hero	mvp	market	10.3	PRO НЕ ДЕЛАЕТ ТЕБЯ УМНЕЕ. ОН ДАЁТ БОЛЬШЕ МАТЕРИАЛА ДЛЯ ОШИБОК.		draft	
+market.pro.month	mvp	market	10.3	МЕСЯЦ		draft	
+market.pro.year	mvp	market	10.3	ГОД		draft	
+market.pro.pick	mvp	market	10.3	Выбрать		draft	
+market.pro.included	mvp	market	10.3	ВХОДИТ		draft	
+market.pro.in.0	mvp	market	10.3	Без дневного лимита сценариев		draft	
+market.pro.in.1	mvp	market	10.3	Расширенная аналитика журнала		draft	
+market.pro.in.2	mvp	market	10.3	Доступ к архиву сезонных наборов		draft	
+market.pro.in.3	mvp	market	10.3	Косметические рамки и темы		draft	
+market.pro.never	mvp	market	10.3	НЕ ВХОДИТ НИКОГДА		draft	
+market.pro.out.0	mvp	market	10.3	Правильные ответы и подсказки		draft	
+market.pro.out.1	mvp	market	10.3	Повышение оценки или места в турнире		draft	
+market.pro.out.2	mvp	market	10.3	Приоритет в лидерборде		draft	
+market.pro.cancel	mvp	market	10.3	Отмена в любое время. Купленный контент остаётся доступным.		draft	
+market.pro.none	mvp	market	10.3	Нет подписки		draft	
+market.pro.active	mvp	market	10.3	Активна		draft	
+market.pro.until	mvp	market	10.3	Отменена (доступ до {date})		draft	
+market.auth.status	mvp	market	10.4	СТАТУС ФУНКЦИИ		draft	
+market.auth.mvpNote	mvp	market	10.4	В MVP раздел виден, но наполняется только редакцией. Открытые загрузки выключены.		draft	
+market.auth.afterMvp	mvp	market	10.4	ПОСЛЕ MVP МОДЕРАЦИЯ ОБЯЗАТЕЛЬНА		draft	
+market.auth.editorial	mvp	market	10.4	РЕДАКЦИОННЫЕ НАБОРЫ		draft	
+market.auth.metaOpen	mvp	market	10.4	{n} ситуаций · методика открыта		draft	
+market.auth.metaSrc	mvp	market	10.4	{n} ситуаций · источники указаны		draft	
+market.auth.reqs	mvp	market	10.4	ТРЕБОВАНИЯ К ЛЮБОМУ НАБОРУ		draft	
+market.auth.req.0	mvp	market	10.4	Исторические данные с указанием источника и t₀		draft	
+market.auth.req.1	mvp	market	10.4	Зафиксированное продолжение и его хэш		draft	
+market.auth.req.2	mvp	market	10.4	Правила оценки без авторской импровизации		draft	
+market.auth.req.3	mvp	market	10.4	Запрет на сигналы и прогнозы		draft	
+market.auth.noMarket	mvp	market	10.4	Открытый маркетплейс исключён из MVP по §17.		draft	В прототипе опечатка «магазинплейс» — исправлено
+market.auth.stub	mvp	market	10.4	Заглушка MVP		draft	
+market.auth.live	mvp	market	10.4	Каталог активен		draft	
+market.wallet.coins	mvp	market	10.5	МОНЕТЫ		draft	
+market.wallet.coinsSub	mvp	market	10.5	игровая, невыводимая		draft	
+market.wallet.laterTag	mvp	market	10.5	вне MVP · только метка		draft	
+market.wallet.rules	mvp	market	10.5	ПРАВИЛА ЭКОНОМИКИ		draft	
+market.wallet.rule.0	mvp	market	10.5	XP и ранг нельзя передать или продать		draft	
+market.wallet.rule.1	mvp	market	10.5	Монеты тратятся только внутри игры		draft	
+market.wallet.rule.2	mvp	market	10.5	Внешний токен не входит в MVP		draft	
+market.wallet.rule.3	mvp	market	10.5	Моста «прогресс → токен» не существует		draft	
+market.wallet.history	mvp	market	10.5	ИСТОРИЯ ОПЕРАЦИЙ		draft	
+market.op.chapter	mvp	market	10.5	Закрытие главы {n}		draft	
+market.op.tourn	mvp	market	10.5	Турнир {name}		draft	
+market.op.item	mvp	market	10.5	{title}		draft	Название купленного товара
+market.op.tab	mvp	market	10.5	Доп. вкладка · сценарий {n}		draft	
+market.op.streak	mvp	market	10.5	Серия {days}		draft	{days} плюрализуется
+market.wallet.notFinance	mvp	market	10.5	Не финансовый сервис. Внутренние балансы не являются активом и не подлежат обмену.		draft	
+market.wallet.zero	mvp	market	10.5	Нулевой баланс		draft	
+market.wallet.emptyHist	mvp	market	10.5	История пуста		draft	
+profile.levelLine	mvp	profile	11.1	Уровень {lvl} · Сценариев {n} · Серия {days}		draft	{days} плюрализуется
+profile.xpTo	mvp	profile	11.1	{cur} / {need} XP до уровня {next}		draft	
+profile.cap99	mvp	profile	11.1	Уровень 99 не гарантирован никому. Это не цель, а граница.		draft	
+profile.byDims	mvp	profile	11.1	КАЧЕСТВО ПО КРИТЕРИЯМ		draft	Измерения — verdict.dim.*
+profile.avgOf	mvp	profile	11.1	СРЕДНЕЕ ЗА {n}		draft	
+profile.c.cards	mvp	profile	11.1	КАРТ ОТКРЫТО		draft	Число компонуется в коде
+profile.c.threats	mvp	profile	11.1	УГРОЗ		draft	
+profile.c.chapters	mvp	profile	11.1	ГЛАВ ЗАКРЫТО		draft	
+profile.c.fixed	mvp	profile	11.1	ИСПРАВЛЕНО ПАТТЕРНОВ		draft	
+profile.season	mvp	profile	11.1	СЕЗОН И ЛИГА		draft	
+profile.divOf	mvp	profile	11.1	Дивизион {div} · сезон {s}		draft	
+profile.divSub	mvp	profile	11.1	Повышение дивизиона зависит от качества решений, а не от частоты игры.		draft	
+profile.toAch	mvp	profile	11.1	Достижения и знаки		draft	
+profile.rookie	mvp	profile	11.1	Пока пусто. Первые цифры появятся после трёх сценариев.		draft	Мой текст; состояние «Новичок»
+profile.achOf	mvp	profile	11.2	{n} ИЗ {total}		draft	Заголовок — profile.ach; шеринг — share.open
+profile.achGot	mvp	profile	11.2	ПОЛУЧЕННЫЕ		draft	
+ach.flat10.title	mvp	ach	11.2	ВНЕ РЫНКА		draft	Контент: достижение
+ach.flat10.body	mvp	ach	11.2	10 отказов с оценкой 80+		draft	Контент: достижение
+ach.risk20.title	mvp	ach	11.2	СНАЧАЛА РИСК		draft	Контент: достижение
+ach.risk20.body	mvp	ach	11.2	20 сценариев без нарушений		draft	Контент: достижение
+ach.honest.title	mvp	ach	11.2	ЧЕСТНЫЙ ЖУРНАЛ		draft	Контент: достижение
+ach.honest.body	mvp	ach	11.2	исправлен 1 паттерн		draft	Контент: достижение
+ach.streak7.title	mvp	ach	11.2	СЕРИЯ 7		draft	Контент: достижение
+ach.streak7.body	mvp	ach	11.2	7 дней подряд		draft	Контент: достижение
+ach.chapter3.title	mvp	ach	11.2	ГЛАВА 3		draft	Контент: достижение
+ach.chapter3.body	mvp	ach	11.2	закрыта полностью		draft	Контент: достижение
+ach.top5.title	mvp	ach	11.2	ТОП 5%		draft	Контент: достижение
+ach.top5.body	mvp	ach	11.2	турнир Неделя 37		draft	Контент; уточнить: конкретная неделя или паттерн
+ach.noRepeat.title	mvp	ach	11.2	БЕЗ ПОВТОРОВ		draft	Контент: достижение
+ach.noRepeat.body	mvp	ach	11.2	30 сценариев без E-007		draft	Контент: достижение
+ach.allChapters.title	mvp	ach	11.2	ВСЕ ГЛАВЫ		draft	Контент: достижение
+ach.allChapters.body	mvp	ach	11.2	7 из 7		draft	Контент: достижение
+ach.collector.title	mvp	ach	11.2	СОБИРАТЕЛЬ		draft	Контент: достижение
+ach.collector.body	mvp	ach	11.2	32 угрозы		draft	Контент: достижение
+profile.badge	mvp	profile	11.2	ЗНАК		draft	
+profile.achLocked	mvp	profile	11.2	ЗАКРЫТЫЕ		draft	
+profile.achFair	mvp	profile	11.2	Ни одно достижение не выдаётся за частоту сделок или виртуальную доходность.		draft	
+profile.achEmpty	mvp	profile	11.2	Пока пусто. Первое достижение — «Первая кровь».		draft	Мой текст; состояние «Пусто»
+profile.achAll	mvp	profile	11.2	Всё получено. Архив гордится.		draft	Мой текст; состояние «Всё получено»
+more.rulesRow	mvp	more	12.1	ПРАВИЛА		draft	
+more.sub.patterns	mvp	more	12.1	{n} паттерна		draft	{n} плюрализуется
+more.sub.rules	mvp	more	12.1	{n} доступно		draft	
+more.sub.tournActive	mvp	more	12.1	{n} активный		draft	
+more.sub.pass	mvp	more	12.1	пасс {n}/{total}		draft	
+more.sub.level	mvp	more	12.1	уровень {n}		draft	
+more.sub.collection	mvp	more	12.1	{n} / {total}		draft	
+more.service	mvp	more	12.1	СЕРВИС		draft	
+more.sub.settings	mvp	more	12.1	язык, доступность, данные		draft	
+more.sub.notif	mvp	more	12.1	серия, турниры, урок дня		draft	
+more.scoring	mvp	more	12.1	Правила оценки		draft	
+more.sub.scoring	mvp	more	12.1	открытая методика		draft	
+more.sub.legal	mvp	more	12.1	дисклеймеры, оферта		draft	
+more.support	mvp	more	12.1	Поддержка и обратная связь		draft	
+more.sub.support	mvp	more	12.1	ошибки в сценариях		draft	
+settings.ver	mvp	settings	12.2	ВЕРСИЯ {v} · {build}		draft	
+settings.region	mvp	settings	12.2	ЯЗЫК И РЕГИОН		draft	
+settings.langName.ru	mvp	settings	12.2	Русский		draft	
+settings.langName.en	mvp	settings	12.2	English		draft	
+settings.dateFmt	mvp	settings	12.2	Формат дат и времени		draft	
+settings.dateFmtVal	mvp	settings	12.2	DD.MM · 24ч · UTC+3		draft	
+settings.units	mvp	settings	12.2	Единицы цен		draft	
+settings.unitsSrc	mvp	settings	12.2	как в источнике		draft	
+settings.a11y	mvp	settings	12.2	ДОСТУПНОСТЬ		draft	
+settings.bigText	mvp	settings	12.2	Увеличенный текст		draft	
+settings.contrast	mvp	settings	12.2	Высокий контраст		draft	
+settings.cbPalette	mvp	settings	12.2	Цветослепые палитры графика		draft	
+settings.noTimers	mvp	settings	12.2	Отключить таймеры в турнирах		draft	
+settings.data	mvp	settings	12.2	ДАННЫЕ И ПРОЗРАЧНОСТЬ		draft	
+settings.showDataset	mvp	settings	12.2	Показывать версию датасета на экране задания		draft	
+settings.showHash	mvp	settings	12.2	Показывать хэш скрытого будущего		draft	
+settings.export	mvp	settings	12.2	Экспорт журнала решений		draft	
+settings.exportFmt	mvp	settings	12.2	CSV / JSON		draft	
+settings.wipe	mvp	settings	12.2	Удалить аккаунт и данные		draft	
+settings.wipeWarn	mvp	settings	12.2	необратимо		draft	
+settings.fair	mvp	settings	12.2	Настройки не влияют на сложность и оценку. Отключение таймера разрешено всем.		draft	
+legal.mustRead	mvp	legal	12.3	ОБЯЗАТЕЛЬНО К ПОКАЗУ		draft	
+legal.hero	mvp	legal	12.3	ЭТО НЕ ФИНАНСОВАЯ РЕКОМЕНДАЦИЯ.		draft	
+legal.heroSub	mvp	legal	12.3	Игра учит качеству решений на исторических данных и не даёт сигналов, прогнозов и инвестиционных советов.		draft	
+legal.notTitle	mvp	legal	12.3	ЧЕМ ПРОДУКТ НЕ ЯВЛЯЕТСЯ		draft	
+legal.not.0	mvp	legal	12.3	Торговым терминалом и симулятором биржи		draft	
+legal.not.1	mvp	legal	12.3	Демо-счётом или брокером		draft	
+legal.not.2	mvp	legal	12.3	Игрой play-to-earn с выводом средств		draft	
+legal.not.3	mvp	legal	12.3	Сервисом сигналов и прогнозов		draft	
+legal.not.4	mvp	legal	12.3	Казино или азартной игрой на деньги		draft	
+legal.docs	mvp	legal	12.3	ДОКУМЕНТЫ		draft	
+legal.doc.terms	mvp	legal	12.3	Пользовательское соглашение		draft	
+legal.doc.privacy	mvp	legal	12.3	Политика обработки данных		draft	
+legal.doc.refunds	mvp	legal	12.3	Правила покупок и возвратов		draft	
+legal.doc.scoring	mvp	legal	12.3	Методика оценки решений		draft	
+legal.doc.sources	mvp	legal	12.3	Источники исторических данных		draft	
+legal.doc.sourcesSub	mvp	legal	12.3	перечень		draft	
+legal.satire	mvp	legal	12.3	Сатира касается поведения рынка и индустрии, а не конкретных пострадавших людей.		draft	
+legal.doc.termsBody	mvp	legal	12.3			todo	Полный текст документа
+legal.doc.privacyBody	mvp	legal	12.3			todo	Полный текст документа
+legal.doc.refundsBody	mvp	legal	12.3			todo	Полный текст документа
+legal.doc.scoringBody	mvp	legal	12.3			todo	Полный текст документа
+legal.doc.sourcesBody	mvp	legal	12.3			todo	Полный текст документа
+legal.accept	mvp	legal	12.3	Принимаю		draft	
+legal.firstRun	mvp	legal	12.3	Продолжая, ты принимаешь документы выше.		draft	Мой текст; состояние «Первый запуск»
+push.of	mvp	push	12.4	{n} ИЗ {total} ВКЛ		draft	Заголовок — notif.title
+push.types	mvp	push	12.4	ТИПЫ СОБЫТИЙ		draft	
+push.evt.lesson	mvp	push	12.4	Урок дня готов		draft	
+push.evt.lessonSub	mvp	push	12.4	ежедневно 10:00		draft	
+push.evt.streak	mvp	push	12.4	Серия в опасности		draft	
+push.evt.streakSub	mvp	push	12.4	за 3 ч до обнуления		draft	
+push.evt.tourn	mvp	push	12.4	Закрытие окна турнира		draft	
+push.evt.tournSub	mvp	push	12.4	за 6 ч		draft	
+push.evt.content	mvp	push	12.4	Новые сценарии и главы		draft	
+push.evt.contentSub	mvp	push	12.4	при выходе		draft	
+push.evt.support	mvp	push	12.4	Ответ поддержки		draft	
+push.evt.supportSub	mvp	push	12.4	по событию		draft	
+push.evt.promo	mvp	push	12.4	Акции магазина		draft	
+push.evt.promoSub	mvp	push	12.4	не чаще 1 раза в неделю		draft	
+push.quiet	mvp	push	12.4	РЕЖИМ ТИШИНЫ		draft	
+push.from	mvp	push	12.4	НАЧАЛО		draft	
+push.to	mvp	push	12.4	КОНЕЦ		draft	
+push.days	mvp	push	12.4	ДНИ		draft	Названия дней — common.wd.*
+push.daily	mvp	push	12.4	ежедневно		draft	
+push.channel	mvp	push	12.4	КАНАЛ		draft	
+push.channelVal	mvp	push	12.4			todo	Значение канала (пуш/внутриигровые)
+push.banned	mvp	push	12.4	ЗАПРЕЩЁННЫЕ ФОРМАТЫ		draft	В прототипе «ЗАПРЕЩЕННЫЕ» без Ё — нормализовано
+push.ban.0	mvp	push	12.4	Сообщения о «упущенной выгоде»		draft	
+push.ban.1	mvp	push	12.4	Ложная срочность и таймеры в пушах		draft	
+push.ban.2	mvp	push	12.4	Давление на возврат после проигрыша		draft	
+push.save	mvp	push	12.4	Сохранить		draft	
+push.allOff	mvp	push	12.4	Всё выключено		draft	
+push.quietOn	mvp	push	12.4	Режим тишины активен		draft	
+market.i.pack-news.title	mvp	market	10.1	НАБОР СЦЕНАРИЕВ «НОВОСТНЫЕ ШОКИ»		draft	Контент: товар
+market.i.pack-news.body	mvp	market	10.1			todo	Контент: описание товара
+market.i.pack-liquidity.short	mvp	market	10.4	ЛИКВИДНОСТЬ 2019–21		draft	Контент: короткое имя набора
+market.i.pack-news.short	mvp	market	10.4	НОВОСТНЫЕ ШОКИ		draft	Контент: короткое имя набора
+market.neverNote	mvp	market	10.1	Нельзя продавать ответы, бусты, лимиты риска, сигналы		draft	
+market.view.catalog	mvp	market	10.1	Каталог		draft	Состояние вида
+market.wallet.hasBalance	mvp	market	10.5	Есть баланс		draft	Состояние
+profile.level.mid	mvp	profile	11.1	Уровень средний		draft	Состояние
+profile.level.high	mvp	profile	11.1	Высокий уровень		draft	Состояние
+profile.achPartial	mvp	profile	11.2	Частично		draft	Состояние
+more.collectionRow	mvp	more	12.1	КОЛЛЕКЦИЯ КАРТ		draft	Строка раздела (заголовок экрана — collection.title)
+more.st.badged	mvp	more	12.1	С бейджами уведомлений		draft	Состояние
+settings.a11yOn	mvp	settings	12.2	Режим доступности включён		draft	Состояние
+push.st.on	mvp	push	12.4	Включено		draft	Состояние
+ea.title	later	ea	13.1	EARLY ACCESS		draft	Секция — app.chapter
+ea.alphaHero	later	ea	13.1	АЛЬФА. ВСЁ РАБОТАЕТ НЕ ТАК, КАК БУДЕТ.		draft	
+ea.alphaSub	later	ea	13.1	Ранние участники видят статус разработки и помогают выбрать, что делать дальше.		draft	
+ea.myStatus	later	ea	13.1	СТАТУС УЧАСТНИКА		draft	
+ea.status	later	ea	13.1	Статус		draft	
+ea.status.early	later	ea	13.1	EARLY PLAYER		draft	
+ea.confirmed	later	ea	13.1	подтверждён		draft	
+ea.byAdmin	later	ea	13.1	выдан админом		draft	
+ea.histNum	later	ea	13.1	Номер в истории		draft	
+ea.histNumVal	later	ea	13.1	#{n}		draft	
+ea.disclaimer	later	ea	13.1	Не инвестиция · 18+ · токена нет · roadmap может меняться		draft	
+ea.st.none	later	ea	13.1	Обычный игрок		draft	
+ea.nostatus	later	ea	13.1	Без статуса		draft	
+ea.st.founder	later	ea	13.1	Founder + Premium		draft	
+ea.st.error	later	ea	13.1	Проверка статуса не ответила		draft	
+ea.tab.intro	later	ea	13.2	INTRO		draft	
+ea.tab.status	later	ea	13.3	STATUS		draft	
+ea.tab.help	later	ea	13.4	HELP		draft	
+ea.tab.benefits	later	ea	13.5	BENEFITS		draft	
+ea.tab.roadmap	later	ea	13.6	ROADMAP		draft	
+ea.tab.token	later	ea	13.7	TOKEN		draft	
+ea.tab.cta	later	ea	13.8	CTA		draft	
+ea.next	later	ea	13.2	Дальше →		draft	
+ea.intro.hero	later	ea	13.2	SIGNAL ARENA · PROOF OF SKILL		draft	
+ea.intro.sub	later	ea	13.2	Ты внутри ранней альфа-версии. Игра уже работает, но часть систем ещё в разработке.		draft	
+ea.intro.checking	later	ea	13.2	ЧТО МЫ ПРОВЕРЯЕМ СЕЙЧАС		draft	
+ea.intro.check.0	later	ea	13.2	Насколько интересен основной игровой цикл		draft	
+ea.intro.check.1	later	ea	13.2	Возвращаются ли игроки		draft	
+ea.intro.check.2	later	ea	13.2	Какие режимы развивать первыми		draft	
+ea.intro.can	later	ea	13.2	ЧТО МОЖНО ДЕЛАТЬ		draft	
+ea.intro.can.0	later	ea	13.2	Играть бесплатно		draft	
+ea.intro.can.1	later	ea	13.2	Приглашать друзей		draft	
+ea.intro.can.2	later	ea	13.2	Делиться проектом		draft	
+ea.intro.can.3	later	ea	13.2	Отправлять обратную связь		draft	
+ea.intro.note	later	ea	13.2	Ранние участники получат особый статус и внутриигровые преимущества согласно правилам программы.		draft	
+ea.st.working	later	ea	13.3	ЧТО УЖЕ РАБОТАЕТ		draft	
+ea.st.ready	later	ea	13.3	ГОТОВНОСТЬ АЛЬФЫ 7 ИЗ 7 БАЗОВЫХ		draft	
+ea.st.done	later	ea	13.3	готово		draft	
+ea.st.item.proto	later	ea	13.3	Игровой прототип		draft	
+ea.st.item.cycle	later	ea	13.3	Базовый игровой цикл		draft	
+ea.st.item.tutor	later	ea	13.3	Обучающие сценарии		draft	
+ea.st.item.profile	later	ea	13.3	Профиль игрока		draft	
+ea.st.item.results	later	ea	13.3	Результаты матчей		draft	
+ea.st.item.ref	later	ea	13.3	Реферальные ссылки		draft	
+ea.st.item.fb	later	ea	13.3	Сбор обратной связи		draft	
+ea.st.wip	later	ea	13.3	В РАЗРАБОТКЕ		draft	
+ea.st.wip.0	later	ea	13.3	Серверные награды за рефералов		draft	
+ea.st.wip.1	later	ea	13.3	Лидерборды недели и месяца		draft	
+ea.st.wip.2	later	ea	13.3	Автокарточки результата		draft	
+ea.st.wip.3	later	ea	13.3	Расширенная статистика Premium		draft	
+ea.st.p1	later	ea	13.3	P1		draft	
+ea.st.p2	later	ea	13.3	P2		draft	
+ea.st.note	later	ea	13.3	Некоторые функции могут изменяться во время альфа-теста.		draft	
+ea.help.title	later	ea	13.4	КАК ПОМОЧЬ		draft	
+ea.help.of	later	ea	13.4	Выполнено {done} из {total} · награды начисляет сервер		draft	
+ea.help.step.0	later	ea	13.4	Пройди обучение		draft	
+ea.help.step.1	later	ea	13.4	Сыграй несколько матчей		draft	
+ea.help.step.2	later	ea	13.4	Пригласи знакомого		draft	
+ea.help.step.3	later	ea	13.4	Поделись результатом		draft	
+ea.help.step.4	later	ea	13.4	Отправь отзыв или баг-репорт		draft	
+ea.help.of33	later	ea	13.4	{n} из {m}		draft	
+ea.help.todo	later	ea	13.4	не сделано		draft	
+ea.help.done	later	ea	13.4	ГОТОВО		draft	
+ea.help.now	later	ea	13.4	СЕЙЧАС		draft	
+ea.help.wait	later	ea	13.4	ЖДЁТ		draft	
+ea.help.quick	later	ea	13.4	БЫСТРЫЕ ДЕЙСТВИЯ		draft	Кнопки — share.open и feedback.open
+ea.help.note	later	ea	13.4	Награды начисляются за реальные действия и могут быть ограничены правилами защиты от накрутки.		draft	
+ea.ben.title	later	ea	13.5	ЧТО ПОЛУЧАЮТ РАННИЕ УЧАСТНИКИ		draft	
+ea.ben.note	later	ea	13.5	Статус выдаётся сервером и отображается в профиле		draft	
+ea.ben.status	later	ea	13.5	Статус раннего игрока		draft	
+ea.ben.statusSub	later	ea	13.5	активен		draft	
+ea.ben.premium	later	ea	13.5	Пожизненный Premium		draft	
+ea.ben.premiumSub	later	ea	13.5	если подтверждён в админ-системе		draft	
+ea.ben.tests	later	ea	13.5	Приоритетный доступ к закрытым тестам		draft	
+ea.ben.testsSub	later	ea	13.5	по очереди		draft	
+ea.ben.cosmetic	later	ea	13.5	Дополнительные косметические награды		draft	
+ea.ben.cosmeticSub	later	ea	13.5	только внешний вид		draft	
+ea.ben.polls	later	ea	13.5	Участие в опросах о развитии		draft	
+ea.ben.pollsSub	later	ea	13.5	ежемесячно		draft	
+ea.ben.record	later	ea	13.5	Запись в истории ранних участников		draft	
+ea.ben.recordSub	later	ea	13.5	номер #0148		draft	
+ea.ben.not	later	ea	13.5	НЕ ВХОДИТ В СТАТУС		draft	
+ea.ben.notBody	later	ea	13.5	Преимущества в оценке, подсказки ответов, доход, доля в проекте.		draft	
+ea.ben.foot	later	ea	13.5	Состав функций может уточняться до публичного релиза.		draft	
+ea.road.s1	later	ea	13.6	ЭТАП 1 · АЛЬФА		draft	
+ea.road.s1when	later	ea	13.6	сейчас		draft	
+ea.road.s1body	later	ea	13.6	Проверка основного игрового цикла и обучение игроков		draft	
+ea.road.s1kpi	later	ea	13.6	10K–50K MAU · D30 больше 3%		draft	
+ea.road.s2	later	ea	13.6	ЭТАП 2 · БЕТА		draft	
+ea.road.s2when	later	ea	13.6	месяцы 6–18		draft	
+ea.road.s2body	later	ea	13.6	Профили, лидерборды, реферальная система, аналитика, контент		draft	
+ea.road.s2kpi	later	ea	13.6	50K–200K MAU · D30 больше 6%		draft	
+ea.road.s3	later	ea	13.6	ЭТАП 3 · МОНЕТИЗАЦИЯ		draft	
+ea.road.s3when	later	ea	13.6	месяцы 12–24		draft	
+ea.road.s3body	later	ea	13.6	Платные цифровые функции через поддерживаемые Telegram-инструменты		draft	
+ea.road.s3kpi	later	ea	13.6	$100K–500K/год · Premium 5–10%		draft	
+ea.road.s4	later	ea	13.6	ЭТАП 4 · WEB3-ИССЛЕДОВАНИЕ		draft	
+ea.road.s4when	later	ea	13.6	месяцы 18–36		draft	
+ea.road.s4body	later	ea	13.6	Изучение NFT, токена и TON только после проверки продукта, экономики, безопасности и юридической модели.		draft	Полный текст — в прототипе он виден целиком
+ea.road.s4kpi	later	ea	13.6	200K–1M MAU · $500K–2M/год		draft	
+ea.road.s5	later	ea	13.6	ЭТАП 5 · МАСШТАБИРОВАНИЕ		draft	
+ea.road.s5when	later	ea	13.6	месяцы 36+		draft	
+ea.road.s5body	later	ea	13.6	Веб-версия, дополнительные платформы, сервисы и партнёрские интеграции		draft	
+ea.road.s5kpi	later	ea	13.6	1M–5M MAU · $1M–5M/год		draft	
+ea.road.foot	later	ea	13.6	Roadmap может меняться: отзывы игроков · техническая осуществимость · наличие финансирования · юридические требования.		draft	
+ea.tok.hero	later	ea	13.7	ТОКЕНА НЕТ. И ЭТО НЕ ОПЕЧАТКА.		draft	
+ea.tok.body1	later	ea	13.7	Сейчас у Signal Arena нет запущенного токена, NFT-контракта или кошелька для получения токенов.		draft	
+ea.tok.body2	later	ea	13.7	Блокчейн рассматривается как возможный слой для отдельных цифровых активов и подтверждения владения. Сначала проверяем, нужен ли он игре.		draft	
+ea.tok.not	later	ea	13.7	РАННЕЕ УЧАСТИЕ НЕ ОЗНАЧАЕТ		draft	
+ea.tok.no.0	later	ea	13.7	Гарантированный airdrop		draft	
+ea.tok.no.1	later	ea	13.7	Гарантированную цену		draft	
+ea.tok.no.2	later	ea	13.7	Гарантированный листинг		draft	
+ea.tok.no.3	later	ea	13.7	Обещанную прибыль		draft	
+ea.tok.no.4	later	ea	13.7	Право на долю в проекте		draft	
+ea.tok.goals	later	ea	13.7	РЕАЛИСТИЧНЫЕ ЦЕЛИ		draft	
+ea.tok.goalsSub	later	ea	13.7	по бенчмаркам		draft	
+ea.tok.y1	later	ea	13.7	Год 1		draft	
+ea.tok.y2	later	ea	13.7	Год 2		draft	
+ea.tok.y3	later	ea	13.7	Год 3		draft	
+ea.tok.survive	later	ea	13.7	93% GameFi-проектов проваливаются. Наша цель — попасть в топ-10% выживших.		draft	
+ea.tok.foot	later	ea	13.7	Это не инвестиция. Цифровые товары с внутриигровой утилитой могут обесцениться. Только 18+. Проверяйте локальные законы.		draft	В прототипе обрезано на «Проверяй» — дописано
+ea.cta.hero	later	ea	13.8	ГОТОВ ПОМОЧЬ?		draft	
+ea.cta.sub	later	ea	13.8	Пройди первый матч и отправь Signal Arena человеку, которому может быть интересен такой формат.		draft	
+ea.cta.learn	later	ea	13.8	ПРОЙТИ ОБУЧЕНИЕ		draft	
+ea.cta.share	later	ea	13.8	ПОДЕЛИТЬСЯ ИГРОЙ		draft	
+ea.cta.feedback	later	ea	13.8	ОТПРАВИТЬ ОТЗЫВ		draft	
+ea.cta.channel	later	ea	13.8	ПОДПИСАТЬСЯ НА КАНАЛ		draft	Стрелка ↗ запрещена — внешняя SVG-иконка
+ea.cta.where	later	ea	13.8	КУДА ВЕДЁТ КАЖДАЯ КНОПКА		draft	
+ea.cta.row.learn	later	ea	13.8	Обучение		draft	
+ea.cta.row.learnTo	later	ea	13.8	закрыть панель → tutorial		draft	
+ea.cta.row.shareTo	later	ea	13.8	панель шеринга		draft	Название кнопки — share.open
+ea.cta.row.fb	later	ea	13.8	Отзыв		draft	
+ea.cta.row.fbTo	later	ea	13.8	внешняя форма		draft	
+ea.cta.row.ch	later	ea	13.8	Канал		draft	
+ea.cta.row.chTo	later	ea	13.8	новая вкладка Telegram		draft	
+ea.cta.foot	later	ea	13.8	Панель можно открыть снова в профиле и в разделе «Ещё».		draft	
+share.open	mvp	share	9.4, 11.2, 13.4	Поделиться		draft	Кнопка входа в шеринг на экранах 9.4, 11.2, 13.4
+share.title	later	share	14.1	ПОДЕЛИТЬСЯ РЕЗУЛЬТАТОМ		draft	Закрытие — common.close
+feedback.open	mvp	feedback	13.4	Отправить отзыв		draft	Кнопка входа в фидбек (EA HELP)
+feedback.title	mvp	feedback	15.1	ОБРАТНАЯ СВЯЗЬ		draft	Закрытие — common.close
+ea.mainAction	later	ea	13.1	ГЛАВНОЕ ДЕЙСТВИЕ		draft	
+ea.startTrain	later	ea	13.1	Начать тренировку		draft	
+ea.st.firstShow	later	ea	13.2	Первый показ		draft	Автооткрытие
+ea.st.manual	later	ea	13.2	Открыта вручную		draft	
+ea.st.alpha	later	ea	13.3	Альфа		draft	
+ea.st.beta	later	ea	13.3	Бета		draft	Часть строк переезжает вверх
+ea.help.allDone	later	ea	13.4	Все шаги выполнены		draft	
+ea.help.manualReview	later	ea	13.4	Награда на ручной проверке		draft	
+ea.road.alpha	later	ea	13.6	Альфа активна		draft	
+ea.road.beta	later	ea	13.6	Бета активна		draft	
+ea.road.moved	later	ea	13.6	Этап сдвинут		draft	
+ea.tok.stAlpha	later	ea	13.7	Альфа (токена нет)		draft	
+ea.tok.stResearch	later	ea	13.7	Исследование объявлено		draft	
+ea.tok.stTerms	later	ea	13.7	Условия опубликованы отдельно		draft	
+ea.cta.stFresh	later	ea	13.8	Обучение не пройдено		draft	
+ea.cta.stDone	later	ea	13.8	Обучение пройдено		draft	Первая кнопка становится вторичной
+share.alphaTag	later	share	14.1	АЛЬФА		draft	
+share.lastMatch	later	share	14.1	ТВОЙ ПОСЛЕДНИЙ МАТЧ		draft	
+share.mode	later	share	14.1	Режим		draft	
+share.result	later	share	14.1	Результат		draft	
+share.yourLink	later	share	14.1	ТВОЯ ССЫЛКА		draft	
+share.refLink	later	share	14.1	РЕФЕРАЛЬНАЯ ССЫЛКА		draft	
+share.codeNote	later	share	14.1	КОД 6–8 СИМВОЛОВ СОЗДАЁТСЯ ПРИ ПЕРВОМ ВХОДЕ		draft	
+share.copyLink	later	share	14.1	СКОПИРОВАТЬ ССЫЛКУ		draft	
+share.toTelegram	later	share	14.1	ПОДЕЛИТЬСЯ В TELEGRAM		draft	Стрелка — SVG
+share.makeCard	later	share	14.1	СОЗДАТЬ КАРТОЧКУ		draft	
+share.fairNote	later	share	14.1	Ссылка одна на все время. Награды начисляются только за реальные действия друга.		draft	
+share.hasMatch	later	share	14.1	Есть матч		draft	
+share.noMatch	later	share	14.1	Матчей ещё нет		draft	Блок заменяется приглашением в обучение
+share.copied	later	share	14.1	Ссылка скопирована		draft	Тост 2 с
+share.offline	later	share	14.1	Оффлайн		draft	
+share.card.title	later	share	14.2	КАРТОЧКА РЕЗУЛЬТАТА		draft	
+share.card.size	later	share	14.2	{w}×{h}		draft	
+share.card.headline	later	share	14.2	РЫНОК ПРИНЯЛ МОЁ РЕШЕНИЕ.		draft	Текст на карточке
+share.card.chartNote	later	share	14.2	ГРАФИК СИТУАЦИИ · СТАТИЧНЫЙ SVG		draft	
+share.card.formats	later	share	14.2	ФОРМАТЫ		draft	
+share.card.f.post	later	share	14.2	ПОСТ		draft	
+share.card.f.story	later	share	14.2	СТОРИС		draft	
+share.card.f.link	later	share	14.2	ЛИНК-ПРЕВЬЮ		draft	
+share.card.save	later	share	14.2	СОХРАНИТЬ И ОТПРАВИТЬ		draft	
+share.card.back	later	share	14.2	Назад к шерингу		draft	
+share.card.techNote	later	share	14.2	Карточка собирается на клиенте из SVG-шаблона: шрифты в кривые, фон растровый WebP до 120 КБ.		draft	
+share.card.generating	later	share	14.2	Генерация		draft	
+share.card.ready	later	share	14.2	Готово		draft	
+share.card.error	later	share	14.2	Ошибка генерации		draft	Текстовый фолбэк
+share.ref.title	later	share	14.3	ПРИГЛАСИ ДРУГА		draft	
+share.ref.both	later	share	14.3	НАГРАДЫ ОБОИМ		draft	
+share.ref.hero	later	share	14.3	ПРИГЛАСИ ТОГО, КОМУ ЭТО ДЕЙСТВИТЕЛЬНО ИНТЕРЕСНО.		draft	
+share.ref.table	later	share	14.3	ТАБЛИЦА НАГРАД		draft	
+share.ref.evt.tutor	later	share	14.3	Завершил обучение		draft	
+share.ref.evt.first	later	share	14.3	Первый матч		draft	
+share.ref.rw.0	later	share	14.3	+{xp} XP + косметика		draft	
+share.ref.evt.back	later	share	14.3	Возврат на следующий день		draft	
+share.ref.rw.1	later	share	14.3	+{xp} XP + бустер		draft	
+share.ref.you	later	share	14.3	тебе		draft	
+share.ref.friend	later	share	14.3	другу		draft	Компонуется «тебе · другу»
+share.ref.yours	later	share	14.3	ТВОИ ПРИГЛАШЁННЫЕ		draft	В прототипе без Ё — нормализовано
+share.ref.total	later	share	14.3	{n} всего		draft	
+share.ref.invited	later	share	14.3	Приглашено		draft	
+share.ref.active	later	share	14.3	Активных		draft	
+share.ref.reward	later	share	14.3	Награда		draft	
+share.ref.friendN	later	share	14.3	Друг {n}		draft	
+share.ref.st.both	later	share	14.3	обучение и первый матч		draft	
+share.ref.st.one	later	share	14.3	обучение		draft	
+share.ref.st.none	later	share	14.3	ещё не начал		draft	
+share.ref.waiting	later	share	14.3	ждём		draft	
+share.ref.share	later	share	14.3	Поделиться ссылкой		draft	
+share.ref.fair	later	share	14.3	Награды начисляются только за реальные действия. Защита от накрутки работает на сервере и игроку не видна.		draft	
+share.ref.none	later	share	14.3	Нет приглашённых		draft	
+share.ref.hasActive	later	share	14.3	Есть активные		draft	
+share.ref.pending	later	share	14.3	Награда на проверке		draft	Строка серая
+alpha.envTag	later	alpha	15.1	DEMO / LOCAL		draft	
+alpha.xp	later	alpha	15.1	XP		draft	Заголовок блока — profile.stats
+alpha.level	later	alpha	15.1	УРОВЕНЬ		draft	
+alpha.matches	later	alpha	15.1	МАТЧЕЙ		draft	
+alpha.wins	later	alpha	15.1	ПОБЕД		draft	
+alpha.streak	later	alpha	15.1	СЕРИЯ		draft	
+alpha.skill	later	alpha	15.1	SKILL		draft	
+alpha.refs	later	alpha	15.1	РЕФЕРАЛЫ		draft	Счётчики — share.ref.invited/active/reward
+alpha.more	later	alpha	15.1	подробнее		draft	
+alpha.achOf	later	alpha	15.1	{n} из {total}		draft	Заголовок — profile.ach
+alpha.token	later	alpha	15.1	SIGNAL TOKEN		draft	Текст без баланса
+alpha.btn.share	later	alpha	15.1	SHARE		draft	
+alpha.btn.settings	later	alpha	15.1	SETTINGS		draft	
+alpha.noServer	later	alpha	15.1	Нет связи с сервером		draft	
+alpha.premium.title	later	alpha	15.2	FOUNDER PREMIUM		draft	
+alpha.premium.status	later	alpha	15.2	СТАТУС		draft	
+alpha.premium.lifetime	later	alpha	15.2	СТАТУС АКТИВЕН ПОЖИЗНЕННО		draft	
+alpha.premium.body	later	alpha	15.2	Выдан администрацией как раннему участнику. Включить его из игры нельзя.		draft	
+alpha.premium.gives	later	alpha	15.2	ЧТО ДАЁТ		draft	
+alpha.premium.gives.0	later	alpha	15.2	Отключение рекламы (в будущей версии)		draft	
+alpha.premium.gives.1	later	alpha	15.2	Дополнительные косметические слоты		draft	
+alpha.premium.gives.2	later	alpha	15.2	Расширенная статистика		draft	
+alpha.premium.gives.3	later	alpha	15.2	Ранний доступ к режимам		draft	
+alpha.premium.gives.4	later	alpha	15.2	Повышенный лимит тренировочных попыток		draft	
+alpha.premium.gives.5	later	alpha	15.2	Значок Founder		draft	
+alpha.premium.gives.6	later	alpha	15.2	Доступ к закрытым событиям		draft	
+alpha.premium.denies	later	alpha	15.2	ЧЕГО НЕ ДАЁТ		draft	
+alpha.premium.denies.0	later	alpha	15.2	Бесконечный фарм токенов		draft	
+alpha.premium.denies.1	later	alpha	15.2	Экономические преимущества		draft	
+alpha.premium.denies.2	later	alpha	15.2	Влияние на оценку решений		draft	
+alpha.premium.foot	later	alpha	15.2	Статус проверяется при каждом запуске через Telegram. Если проверка не прошла, премиум-блоки просто не показываются.		draft	
+alpha.premium.on	later	alpha	15.2	Статус активен		draft	
+alpha.premium.off	later	alpha	15.2	Статуса нет		draft	Экран поясняет, как его получают
+alpha.premium.failed	later	alpha	15.2	Проверка не прошла		draft	
+feedback.alphaTag	mvp	feedback	15.3	АЛЬФА		draft	
+feedback.hero	mvp	feedback	15.3	СКАЖИ, ГДЕ БОЛЬНО.		draft	
+feedback.heroSub	mvp	feedback	15.3	Один точный отзыв полезнее ста лайков.		draft	
+feedback.row.form	mvp	feedback	15.3	внешняя форма		draft	
+feedback.row.bug	mvp	feedback	15.3	Сообщить об ошибке		draft	
+feedback.row.bugForm	mvp	feedback	15.3	форма баг-репорта		draft	
+feedback.row.poll	mvp	feedback	15.3	Пройти опрос месяца		draft	
+feedback.row.pollMeta	mvp	feedback	15.3	5 вопросов · 2 минуты		draft	
+feedback.row.channel	mvp	feedback	15.3	Канал проекта		draft	
+feedback.row.channelSub	mvp	feedback	15.3	новости и отчёты		draft	
+feedback.row.chat	mvp	feedback	15.3	Чат участников		draft	
+feedback.row.chatSub	mvp	feedback	15.3	обсуждение решений		draft	
+feedback.tips	mvp	feedback	15.3	ЧТО ПОЛЕЗНО НАПИСАТЬ		draft	
+feedback.tipsBody	mvp	feedback	15.3	Где было непонятно · на каком экране бросил · что хочется играть дальше · что выглядит нечестно		draft	
+feedback.extNote	mvp	feedback	15.3	Внешние ссылки открываются в новой вкладке. Подписка не требуется для наград.		draft	
+feedback.sentToday	mvp	feedback	15.3	Отзыв уже отправлен сегодня		draft	
+feedback.pollOff	mvp	feedback	15.3	Опрос недоступен		draft	
+common.on	mvp	common	12.2, 12.4	ВКЛ		draft	Состояние тумблера
+common.off	mvp	common	12.2, 12.4	ВЫКЛ		draft	Состояние тумблера
+common.wd.mon	mvp	common	12.4	Пн		draft	Выбор дней режима тишины
+common.wd.tue	mvp	common	12.4	Вт		draft	
+common.wd.wed	mvp	common	12.4	Ср		draft	
+common.wd.thu	mvp	common	12.4	Чт		draft	
+common.wd.fri	mvp	common	12.4	Пт		draft	
+common.wd.sat	mvp	common	12.4	Сб		draft	
+common.wd.sun	mvp	common	12.4	Вс		draft	
+app.chapter	mvp	app	1.1–13.1	{n} · {title}		draft	Метка секции в шапке (напр. «1 · ГЛАВНАЯ», «12 · РАННИЙ ДОСТУП»)
+app.chapSub	mvp	app	4.3–4.13	{n} · {title} · {sub}		draft	Метка подсекции (напр. «3 · ПРАКТИКА · РЕШЕНИЕ»)
+units.time.sec	mvp	units	—	{n} сек		draft	Длительности; плюрализация — в коде
+units.time.min	mvp	units	—	{n} мин		draft	
+units.time.hour	mvp	units	—	{n} ч		draft	
+units.time.day	mvp	units	—	{n} д		draft	
+units.time.week	mvp	units	—	{n} нед		draft	
+units.time.month	mvp	units	—	{n} мес		draft	
+units.time.ago	mvp	units	—	{t} назад		draft	
+units.xp	mvp	units	—	{n} XP		draft	
+units.coins	mvp	units	—	{n} монет		draft	{n} плюрализуется (монета/монеты/монет)
+units.pct	mvp	units	—	{n}%		draft	
+backend.err.network	mvp	backend	—	Нет соединения с сервером. Проверь интернет.		draft	Мой текст; все backend.* — тексты сервера
+backend.err.timeout	mvp	backend	—	Сервер не ответил вовремя. Попробуй ещё раз.		draft	Мой текст
+backend.err.unauth	mvp	backend	—	Сессия истекла. Войди снова.		draft	Мой текст
+backend.err.forbidden	mvp	backend	—	Нет доступа к этому действию.		draft	Мой текст
+backend.err.notFound	mvp	backend	—	Не найдено: возможно, уже удалено.		draft	Мой текст
+backend.err.conflict	mvp	backend	—	Данные изменились. Обнови экран.		draft	Мой текст
+backend.err.rateLimit	mvp	backend	—	Слишком много запросов. Подожди минуту.		draft	Мой текст
+backend.err.server	mvp	backend	—	Ошибка сервера. Уже чиним.		draft	Мой текст
+backend.err.maintenance	mvp	backend	—	Технические работы. Вернёмся скоро.		draft	Мой текст
+backend.err.badInput	mvp	backend	—	Проверь введённые данные.		draft	Мой текст
+backend.auth.codeWrong	mvp	backend	0.x	Неверный код. Осталось попыток: {n}.		draft	Мой текст
+backend.auth.codeExpired	mvp	backend	0.x	Код истёк. Запроси новый.		draft	Мой текст
+backend.auth.codeResent	mvp	backend	0.x	Новый код отправлен.		draft	Мой текст
+backend.auth.tooMany	mvp	backend	0.x	Слишком много попыток. Подожди {t}.		draft	Мой текст
+backend.save.ok	mvp	backend	—	Прогресс сохранён.		draft	Мой текст
+backend.save.conflict	mvp	backend	—	Прогресс новее на другом устройстве. Выбери, что оставить.		draft	Мой текст
+backend.purchase.ok	mvp	backend	10.x	Оплата прошла. Товар твой.		draft	Мой текст
+backend.purchase.fail	mvp	backend	10.x	Оплата не прошла. Деньги не списаны.		draft	Мой текст
+backend.purchase.owned	mvp	backend	10.x	Уже куплено.		draft	Мой текст
+backend.tourn.full	mvp	backend	9.x	Турнир заполнен.		draft	Мой текст
+backend.tourn.ended	mvp	backend	9.x	Окно турнира закрыто.		draft	Мой текст
+backend.tourn.dup	mvp	backend	9.x	Ты уже участвуешь.		draft	Мой текст
+backend.share.linkFail	mvp	backend	14.x	Не удалось создать ссылку.		draft	Мой текст
+backend.feedback.ok	mvp	backend	15.x	Спасибо! Отзыв отправлен.		draft	Мой текст
+backend.ea.statusFail	mvp	backend	13.x	Не удалось проверить статус участника.		draft	Мой текст
+legal.updated	mvp	legal	12.3	Обновлено {date}		draft	Мой текст; пометка версии документа
+pwa.install.title	mvp	pwa	—	Установи Signal Arena		draft	Мой текст; промпт установки PWA
+pwa.install.body	mvp	pwa	—	Быстрый запуск с домашнего экрана и работа без сети.		draft	Мой текст
+pwa.install.cta	mvp	pwa	—	Установить		draft	Мой текст
+pwa.install.later	mvp	pwa	—	Позже		draft	Мой текст
+pwa.update	mvp	pwa	—	Доступна новая версия. Обновить?		draft	Мой текст; промпт service worker
+pwa.updateNow	mvp	pwa	—	Обновить		draft	Мой текст
+pwa.offline	mvp	pwa	—	Нет соединения. Показаны сохранённые данные.		draft	Мой текст; офлайн-баннер
+units.time.today	mvp	units	—	сегодня		draft	
+units.time.yesterday	mvp	units	—	вчера		draft	
+states.normal	mvp	states	4.2, 4.4	Обычный		draft	Состояние по умолчанию
+states.basic	mvp	states	12.1–12.3	Базовое		draft	Состояние по умолчанию

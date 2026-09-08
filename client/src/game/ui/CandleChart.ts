@@ -2,8 +2,9 @@
 // Слои: grid / candles / overlay(t0) / markers / mask(hidden future).
 // Направление свечи кодируется ФОРМОЙ (рост — контур, падение — заливка) + цветом.
 // Шкала фиксируется по visible+future сразу, чтобы reveal не прыгал.
+// T022 (старт): decision-маркер + горизонтальные уровни поверх свечей.
 import type Phaser from 'phaser';
-import type { Candle } from '@signal-arena/shared';
+import type { Candle, UiTone } from '@signal-arena/shared';
 import { FONT_SIZES, FONTS, UI_BG, UI_HEX, UI_TINT } from '@signal-arena/shared';
 import { t } from '../../copy.js';
 import { selectSettings } from '../../store.js';
@@ -13,6 +14,15 @@ export interface RevealOpts {
   animated: boolean;
   stepMs?: number;
   onDone?: () => void;
+  /** Живой счётчик кадров (прототип 4.10: КАДР n/m). */
+  onFrame?: (revealed: number, total: number) => void;
+}
+
+/** Горизонтальный уровень поверх графика (T022: инвалидация, риск-зоны). */
+export interface ChartLevel {
+  price: number;
+  tone: UiTone;
+  label: string;
 }
 
 export class CandleChart {
@@ -25,10 +35,16 @@ export class CandleChart {
   private readonly overlayG: Phaser.GameObjects.Graphics;
   private readonly maskG: Phaser.GameObjects.Graphics;
   private readonly priceLabels: Phaser.GameObjects.Text[] = [];
+  private readonly overlayTags: Phaser.GameObjects.Text[] = [];
   private visible: Candle[] = [];
   private future: Candle[] = [];
   private t0 = 0;
   private revealed = 0;
+  /** T022: маркер решения + уровни поверх свечей (форма/текст дублируют цвет). */
+  private decisionIndex: number | null = null;
+  private decisionLabel = '';
+  private levels: ChartLevel[] = [];
+  private revealTimer: Phaser.Time.TimerEvent | null = null;
 
   constructor(scene: Phaser.Scene, x: number, y: number, w: number, h: number) {
     this.scene = scene;
@@ -54,11 +70,28 @@ export class CandleChart {
 
   /** Данные: видимые свечи + индекс t0 + скрытое будущее (рисуется только маска). */
   setData(visible: Candle[], t0Index: number, future: Candle[]): void {
+    this.stopReveal();
     this.visible = visible;
     this.future = future;
     this.t0 = t0Index;
     this.revealed = 0;
+    this.decisionIndex = null;
+    this.decisionLabel = '';
+    this.levels = [];
     this.drawAll();
+  }
+
+  /** T022 · Маркер принятого решения: треугольник + подпись (не только цвет). */
+  setDecisionMarker(index: number, label: string): void {
+    this.decisionIndex = index;
+    this.decisionLabel = label;
+    this.drawT0();
+  }
+
+  /** T022 · Горизонтальные уровни (инвалидация, риск-зоны): линия + подпись. */
+  setLevels(levels: ChartLevel[]): void {
+    this.levels = levels;
+    this.drawT0();
   }
 
   /** Сколько свечей будущего уже раскрыто (для тестов/хука). */
@@ -139,18 +172,43 @@ export class CandleChart {
   private drawT0(): void {
     const g = this.overlayG;
     g.clear();
+    for (const tag of this.overlayTags) tag.destroy();
+    this.overlayTags.length = 0;
     const geom = this.geom();
     const x = 4 + geom.x(this.t0) + geom.slot / 2;
     g.lineStyle(1.5, UI_TINT.data, 0.9);
     g.lineBetween(x, 4, x, this.h - 4);
-    const tag = this.scene.add.text(x + 3, 6, t('arena.t0'), {
+    this.overlayTag(x + 3, 6, t('arena.t0'), 'data');
+    for (const level of this.levels) {
+      const y = 4 + geom.y(level.price);
+      g.lineStyle(1.5, UI_TINT[level.tone], 0.85);
+      g.lineBetween(4, y, this.w - 44, y);
+      // штрих начала линии — форма дублирует цвет уровня
+      g.fillStyle(UI_TINT[level.tone], 1);
+      g.fillTriangle(4, y - 4, 4, y + 4, 10, y);
+      this.overlayTag(13, y - 16, level.label, level.tone);
+    }
+    if (this.decisionIndex !== null) {
+      const dx = 4 + geom.x(this.decisionIndex);
+      const dy = this.h - 14;
+      g.fillStyle(UI_TINT.active, 1);
+      g.fillTriangle(dx - 6, dy, dx + 6, dy, dx, dy - 9);
+      g.lineStyle(1.5, UI_TINT.active, 1);
+      g.strokeTriangle(dx - 6, dy, dx + 6, dy, dx, dy - 9);
+      this.overlayTag(dx + 8, dy - 18, this.decisionLabel, 'active');
+    }
+  }
+
+  /** Подпись оверлея: создаётся заново при каждой перерисовке слоя. */
+  private overlayTag(x: number, y: number, text: string, tone: UiTone): void {
+    const tag = this.scene.add.text(x, y, text, {
       fontFamily: FONTS.mono,
       fontSize: `${FONT_SIZES.label - 1}px`,
-      color: UI_HEX.data,
+      color: UI_HEX[tone],
     });
     tag.setOrigin(0, 0);
     this.container.add(tag);
-    this.priceLabels.push(tag);
+    this.overlayTags.push(tag);
   }
 
   private drawMask(): void {
@@ -180,34 +238,59 @@ export class CandleChart {
     this.priceLabels.push(label);
   }
 
+  /** Остановить активную анимацию раскрытия (перед replay / сменой данных). */
+  private stopReveal(): void {
+    this.revealTimer?.remove(false);
+    this.revealTimer = null;
+  }
+
+  /** Сбросить раскрытие для повторного проигрывания (прототип 4.10: ▶ ПОВТОРИТЬ). */
+  resetReveal(): void {
+    this.stopReveal();
+    this.candleG.clear();
+    this.drawCandles(0, this.visible.length, this.visible, 0);
+    this.revealed = 0;
+    this.drawMask();
+  }
+
   /** T021 · Раскрытие будущего: прогрессивная дорисовка свечей + снятие маски. */
   reveal(opts: RevealOpts): void {
+    this.stopReveal();
     const reduceMotion = selectSettings().reduceMotion;
     const animated = opts.animated && !reduceMotion && this.future.length > 0;
     if (!animated) {
       this.drawCandles(0, this.future.length, this.future, this.visible.length);
       this.revealed = this.future.length;
       this.maskG.clear();
+      opts.onFrame?.(this.revealed, this.future.length);
       opts.onDone?.();
       return;
     }
-    let i = 0;
+    // докачка с текущего кадра: уже раскрытые свечи не перерисовываем
+    let i = this.revealed;
+    if (i === 0) this.maskG.clear();
+    else {
+      // маска уже снята при старте первой анимации — чистим на всякий случай
+      this.maskG.clear();
+    }
     const step = opts.stepMs ?? 90;
-    this.maskG.clear();
     const tick = (): void => {
       if (i >= this.future.length) {
+        this.revealTimer = null;
         opts.onDone?.();
         return;
       }
       this.drawCandles(i, i + 1, this.future, this.visible.length);
       this.revealed = i + 1;
       i += 1;
-      this.scene.time.delayedCall(step, tick);
+      opts.onFrame?.(this.revealed, this.future.length);
+      this.revealTimer = this.scene.time.delayedCall(step, tick);
     };
     tick();
   }
 
   destroy(): void {
+    this.stopReveal();
     this.container.destroy(true);
   }
 }

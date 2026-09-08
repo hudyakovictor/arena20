@@ -30,7 +30,7 @@
 - Phaser 4 + Vite, один WebGL-canvas, portrait-scale, game loop
 - Архитектура сцен: Boot/Preload/Shell/Router
 - Top Bar (rexUI): прогресс, ресурсы, уведомления, помощь, настройки
-- Bottom nav 5 слотов (Arena/Academy/Bestiary/Journal/More)
+- Bottom nav 5 слотов (Arena/Academy/Threats/Journal/More)
 - rexUI-база: panel, button, tabs, list, slider, checklist, modal, toast
 - Zustand-store + персист (localStorage)
 - Звук (Phaser Sound) + настройки (mute/reduce-motion)
@@ -113,7 +113,7 @@
 **Параллелизация.** Фронт.
 **Задачи.** T050, T051
 
-## Фаза 6 — Бестиарий (Bestiary) 🔴 CEO-гейт
+## Фаза 6 — Угрозы (Threats) 🔴 CEO-гейт
 
 **Цель.** Коллекция сущностей: grid (lazy thumbs), состояния, детальный экран, интеграция SVG-иконок 24×24.
 
@@ -122,7 +122,7 @@
 - Детальный экран сущности (hero art, связанные ловушки/скиллы/сценарии)
 - Интеграция иконок сущностей 24×24 (SVG→атлас)
 
-**Точка выхода.** Бестиарий лениво грузит иллюстрации только при открытии; первая сцена не тянет hero-art.
+**Точка выхода.** Угрозы лениво грузят иллюстрации только при открытии; первая сцена не тянет hero-art.
 **Проверка.** Playwright (grid→detail, lazy load), бюджет дозагрузки раздела ≤600КБ.
 **Зависимости фаз.** Фаза 1
 **Параллелизация.** Фронт; не блокируется отсутствием растра (placeholder-стратегия).

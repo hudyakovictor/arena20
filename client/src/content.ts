@@ -3,6 +3,7 @@
 // future; revealScenario() — локальное зеркало серверного reveal ПОСЛЕ фиксации.
 // Сервер станет авторитетом в T100–T106; сигнатуры уже разделены.
 import type {
+  BrowserTabId,
   Candle,
   ContentPack,
   DecisionOption,
@@ -13,7 +14,7 @@ import type {
   SkillCard,
   Verdict,
 } from '@signal-arena/shared';
-import { fixturePack, scenarioPublicSchema } from '@signal-arena/shared';
+import { createRng, fixturePack, scenarioPublicSchema, scenarioSeed } from '@signal-arena/shared';
 
 let pack: ContentPack | null = null;
 
@@ -84,6 +85,117 @@ export function decisionOf(scenario: ScenarioPublic, decisionId: string): Decisi
   const found = scenario.decisions.find((d) => d.id === decisionId);
   if (!found) throw new Error(`content: неизвестное решение ${decisionId}`);
   return found;
+}
+
+/** Давление сущностей в сценарии (прототип 4.3, зона 3): честно равно сложности. */
+export function pressureOf(scenario: ScenarioPublic): number {
+  return scenario.difficulty;
+}
+
+/** Уровень мастерства карты 0–3 по числу применений (прототип 4.6). */
+export function masteryOf(used: number): number {
+  if (used <= 0) return 0;
+  if (used < 3) return 1;
+  if (used < 8) return 2;
+  return 3;
+}
+
+/** Среднее качество применений навыка; null — навык ещё не применялся. */
+export function avgQualityOf(
+  stat: { used: number; qualitySum: number } | undefined,
+): number | null {
+  if (!stat || stat.used <= 0) return null;
+  return Math.round(stat.qualitySum / stat.used);
+}
+
+/** Заголовок главы Академии по theoryKey навыка (skill.theoryKey → academy.ch.*). */
+export function chapterTitleKeyFor(theoryKey: string): string {
+  const id = theoryKey.startsWith('academy.') ? theoryKey.slice('academy.'.length) : theoryKey;
+  return `academy.ch.${id}.title`;
+}
+
+// ---------- каталог вкладок (прототип 4.5) ----------
+
+export type CatalogLock =
+  { kind: 'coins'; cost: number } | { kind: 'level'; level: number } | { kind: 'phase' };
+
+export interface CatalogRow {
+  tabId: BrowserTabId;
+  /** Индекс вкладки в сценарии (для переключения) либо null, если вкладки нет в сценарии. */
+  scenarioIndex: number | null;
+  lock: CatalogLock | null;
+}
+
+/**
+ * Строки каталога источников: вкладки сценария (открыты) + платные/уровневые
+ * дополнения. Вкладки, которых нет в сценарии и нет в списке открываемых,
+ * не показываются: по §5 лишний источник не должен занимать внимание.
+ */
+export function tabCatalog(scenario: ScenarioPublic): CatalogRow[] {
+  const rows: CatalogRow[] = scenario.tabs.map((tab, index) => ({
+    tabId: tab.id,
+    scenarioIndex: index,
+    lock: null,
+  }));
+  const has = new Set(scenario.tabs.map((tab) => tab.id));
+  const extras: { tabId: BrowserTabId; lock: CatalogLock }[] = [
+    { tabId: 'macro', lock: { kind: 'coins', cost: 40 } },
+    { tabId: 'tokenomics', lock: { kind: 'coins', cost: 30 } },
+    { tabId: 'onchain', lock: { kind: 'level', level: 48 } },
+  ];
+  if (scenario.kind === 'pre-entry') extras.push({ tabId: 'position', lock: { kind: 'phase' } });
+  for (const extra of extras) {
+    if (!has.has(extra.tabId)) {
+      rows.push({ tabId: extra.tabId, scenarioIndex: null, lock: extra.lock });
+    }
+  }
+  return rows;
+}
+
+// ---------- стакан и метрики объёма (прототип 4.4) ----------
+
+export interface BookLevel {
+  /** Отклонение от последней видимой цены, доли (цены скрыты по §15 — только пропорции). */
+  offsetPct: number;
+  /** Относительный объём уровня 0–100. */
+  vol: number;
+}
+
+export interface OrderBook {
+  asks: BookLevel[];
+  bids: BookLevel[];
+  /** Спред в процентах. */
+  spreadPct: number;
+}
+
+/**
+ * Детерминированный стакан из seed сценария. Абсолютные цены не раскрываются
+ * (только отклонения и пропорции — правило прототипа 4.4).
+ */
+export function orderBookOf(scenarioId: string, contentVersion: string): OrderBook {
+  const rng = createRng(`${scenarioSeed(scenarioId, contentVersion)}:book`);
+  const level = (side: number): BookLevel => ({
+    offsetPct: Math.round(side * (0.05 + rng.next() * 0.45) * 100) / 100,
+    vol: 8 + Math.round(rng.next() * 30),
+  });
+  return {
+    asks: [level(1), level(1), level(1), level(1)],
+    bids: [level(-1), level(-1), level(-1), level(-1)],
+    spreadPct: Math.round((0.01 + rng.next() * 0.04) * 100) / 100,
+  };
+}
+
+/**
+ * Отклонение объёма последних 3 свечей от среднего по видимым (целые проценты,
+ * отрицательное — затухание). Возвращает null, если свечей меньше 6.
+ */
+export function breakVolumeDelta(candles: readonly Candle[]): number | null {
+  if (candles.length < 6) return null;
+  const mean = candles.reduce((sum, c) => sum + c.v, 0) / candles.length;
+  if (mean <= 0) return null;
+  const tail = candles.slice(-3);
+  const tailMean = tail.reduce((sum, c) => sum + c.v, 0) / tail.length;
+  return Math.round(((tailMean - mean) / mean) * 100);
 }
 
 /**

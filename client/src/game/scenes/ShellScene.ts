@@ -8,6 +8,7 @@ import { t } from '../../copy.js';
 import { playSound } from '../../sound.js';
 import { BOTTOM_NAV_ROUTES, ensureRouteScene } from '../router.js';
 import { anchor, makeChip, makeProgressBar, makeText } from '../ui/kit.js';
+import { makeSystemState } from '../ui/states.js';
 import { iconImage } from '../ui/icons.js';
 
 /** Прямоугольник контента между top bar и bottom nav. */
@@ -20,6 +21,8 @@ export const CONTENT_RECT = {
 
 export const TOPBAR_H = 78;
 export const BOTTOMNAV_H = 88;
+/** Вертикальная ось шапки: весь контент центрируется по ней. */
+const TOPBAR_MID = TOPBAR_H / 2;
 
 const NAV_ICONS: Record<RouteId, string> = {
   home: 'i-home',
@@ -45,9 +48,21 @@ const NAV_LABEL_KEYS: Record<RouteId, string> = {
   more: 'nav.more',
 };
 
+/** Компактный формат кредитов для шапки: 120 → «120», 12345 → «12.3K». */
+function fmtCredits(n: number): string {
+  const v = Math.max(0, Math.floor(n));
+  if (v < 10000) return String(v);
+  if (v < 1000000) {
+    const k = v / 1000;
+    return `${k >= 100 ? String(Math.round(k)) : k.toFixed(1)}K`;
+  }
+  return `${(v / 1000000).toFixed(1)}M`;
+}
+
 export class ShellScene extends Phaser.Scene {
   private topbar: Phaser.GameObjects.Container | null = null;
   private bottomnav: Phaser.GameObjects.Container | null = null;
+  private contentError: Phaser.GameObjects.Container | null = null;
   private currentContent: string | null = null;
   private unsubscribe: (() => void) | null = null;
   private fpsText: Phaser.GameObjects.Text | null = null;
@@ -84,9 +99,9 @@ export class ShellScene extends Phaser.Scene {
 
   override update(): void {
     if (this.fpsText) {
-      this.fpsText.setText(
-        `${Math.round(this.game.loop.actualFps)} FPS · ${useArenaStore.getState().route}`,
-      );
+      const fps = Math.round(this.game.loop.actualFps);
+      const route = useArenaStore.getState().route;
+      this.fpsText.setText(`${fps} FPS · ${route} · [Shell,${this.currentContent ?? '—'}]`);
     }
   }
 
@@ -114,9 +129,9 @@ export class ShellScene extends Phaser.Scene {
 
     const avatar = this.add.graphics();
     avatar.fillStyle(UI_BG.surface3, 1);
-    avatar.fillCircle(30, TOPBAR_H / 2, 17);
+    avatar.fillCircle(30, TOPBAR_MID, 17);
     avatar.lineStyle(1.5, UI_TINT.active, 0.9);
-    avatar.strokeCircle(30, TOPBAR_H / 2, 17);
+    avatar.strokeCircle(30, TOPBAR_MID, 17);
     root.add(avatar);
     const rank = makeText(this, 0, 0, String(progress.rank), {
       mono: true,
@@ -124,35 +139,36 @@ export class ShellScene extends Phaser.Scene {
       tone: 'active',
     });
     rank.setOrigin(0.5, 0.5);
-    rank.setPosition(30, TOPBAR_H / 2);
+    rank.setPosition(30, TOPBAR_MID);
     root.add(rank);
 
-    const lvl = makeText(this, 54, 12, `LVL ${progress.rank} · XP`, {
+    // Левая группа: подпись LVL/XP + значение + бар строго одной ширины (54…214).
+    const lvl = makeText(this, 54, 16, `LVL ${progress.rank} · XP`, {
       mono: true,
       size: 10,
       tone: 'muted',
     });
-    const xpText = makeText(this, 0, 12, `${progress.xp}`, {
+    const xpText = makeText(this, 0, 16, `${progress.xp}`, {
       mono: true,
       size: 10,
       tone: 'secondary',
     });
     xpText.setOrigin(1, 0);
-    xpText.setX(196);
-    const bar = makeProgressBar(this, 142, 8, 'active');
-    bar.container.setPosition(54, 40);
+    xpText.setX(214);
+    const bar = makeProgressBar(this, 160, 8, 'active');
+    bar.container.setPosition(54, 50);
     bar.setRatio((progress.xp % 500) / 500);
     root.add([lvl, xpText, bar.container]);
 
-    const credits = makeChip(this, `${progress.credits}`, 'warning');
-    credits.setPosition(208, 16);
+    const credits = makeChip(this, fmtCredits(progress.credits), 'warning');
+    credits.setPosition(224, TOPBAR_MID - 11);
     root.add(credits);
 
-    const notif = this.navIcon(292, 'i-info', () => {
+    const notif = this.navIcon(296, 'i-info', () => {
       playSound(this, 'click');
       useArenaStore.getState().setRoute('home');
     });
-    const settings = this.navIcon(340, 'i-settings', () => {
+    const settings = this.navIcon(344, 'i-settings', () => {
       playSound(this, 'click');
       useArenaStore.getState().setRoute('more');
     });
@@ -178,10 +194,11 @@ export class ShellScene extends Phaser.Scene {
     });
     root.add(back);
 
+    // Прогресс сценария: подпись + фаза + бар строго одной ширины (56…234).
     const label = makeText(
       this,
       56,
-      12,
+      16,
       `${t('shell.scenarioProgress')} · ${arena?.scenarioId ?? '—'}`,
       {
         mono: true,
@@ -190,32 +207,36 @@ export class ShellScene extends Phaser.Scene {
       },
     );
     const phaseLabel =
-      arena?.phase === 'brief'
-        ? t('arena.brief')
-        : arena?.phase === 'task'
-          ? t('arena.task')
-          : arena?.phase === 'reveal'
-            ? t('reveal.title')
-            : t('reveal.quality');
-    const right = makeText(this, 0, 12, phaseLabel, { mono: true, size: 10, tone: 'data' });
+      arena?.phase === 'menu'
+        ? t('arena.mode.title')
+        : arena?.phase === 'brief'
+          ? t('arena.brief')
+          : arena?.phase === 'task'
+            ? t('arena.task')
+            : arena?.phase === 'reveal'
+              ? t('reveal.title')
+              : t('reveal.quality');
+    const right = makeText(this, 0, 16, phaseLabel, { mono: true, size: 10, tone: 'data' });
     right.setOrigin(1, 0);
-    right.setX(250);
-    const bar = makeProgressBar(this, 194, 8, 'data');
-    bar.container.setPosition(56, 40);
+    right.setX(234);
+    const bar = makeProgressBar(this, 178, 8, 'data');
+    bar.container.setPosition(56, 50);
     const phaseFrac =
-      arena?.phase === 'brief'
-        ? 0.15
-        : arena?.phase === 'task'
-          ? 0.45
-          : arena?.phase === 'reveal'
-            ? 0.8
-            : 1;
+      arena?.phase === 'menu'
+        ? 0.05
+        : arena?.phase === 'brief'
+          ? 0.15
+          : arena?.phase === 'task'
+            ? 0.45
+            : arena?.phase === 'reveal'
+              ? 0.8
+              : 1;
     bar.setRatio(phaseFrac);
     root.add([label, right, bar.container]);
 
-    const credits = makeChip(this, `${progress.credits}`, 'warning');
-    credits.setPosition(250, 16);
-    const help = this.navIcon(296, 'i-help', () => {
+    const credits = makeChip(this, fmtCredits(progress.credits), 'warning');
+    credits.setPosition(242, TOPBAR_MID - 11);
+    const help = this.navIcon(300, 'i-help', () => {
       playSound(this, 'click');
       this.scene.get('Arena')?.events.emit('arena:help');
     });
@@ -228,10 +249,11 @@ export class ShellScene extends Phaser.Scene {
   }
 
   private navIcon(x: number, icon: string, onTap: () => void): Phaser.GameObjects.Container {
-    const c = this.add.container(x, 14);
-    const img = iconImage(this, icon, 22, 'secondary');
-    (img as unknown as { x: number; y: number }).x = 22;
-    (img as unknown as { y: number }).y = 22;
+    // Hit-зона 44×44 центрирована по оси шапки; визуал 24px по её центру.
+    const c = this.add.container(x, TOPBAR_MID - LAYOUT.touchMin / 2);
+    const img = iconImage(this, icon, 24, 'secondary');
+    (img as unknown as { x: number; y: number }).x = LAYOUT.touchMin / 2;
+    (img as unknown as { y: number }).y = LAYOUT.touchMin / 2;
     const zone = this.add.zone(0, 0, LAYOUT.touchMin, LAYOUT.touchMin).setOrigin(0, 0);
     zone.setInteractive({ useHandCursor: true });
     zone.on('pointerdown', onTap);
@@ -256,12 +278,13 @@ export class ShellScene extends Phaser.Scene {
       if (isActive) {
         const ind = this.add.graphics();
         ind.fillStyle(UI_TINT.active, 1);
-        ind.fillRect(slotW / 2 - 14, 2, 28, 3);
+        ind.fillRect(slotW / 2 - 14, 6, 28, 3);
         slot.add(ind);
       }
-      const icon = iconImage(this, NAV_ICONS[route] ?? 'i-more', 24, isActive ? 'active' : 'muted');
+      // Ритм слота (H=88): индикатор 6–9, иконка 24–48, подпись 54–67, низ 21.
+      const icon = iconImage(this, NAV_ICONS[route] ?? 'i-more', 26, isActive ? 'active' : 'muted');
       (icon as unknown as { x: number; y: number }).x = slotW / 2;
-      (icon as unknown as { y: number }).y = 30;
+      (icon as unknown as { y: number }).y = 36;
       const label = makeText(this, 0, 0, t(NAV_LABEL_KEYS[route] ?? 'nav.more'), {
         mono: true,
         size: 10,
@@ -270,7 +293,7 @@ export class ShellScene extends Phaser.Scene {
       });
       label.setOrigin(0.5, 0);
       label.setX(slotW / 2);
-      label.setY(46);
+      label.setY(54);
       const zone = this.add.zone(0, 0, slotW, BOTTOMNAV_H - 8).setOrigin(0, 0);
       zone.setInteractive({ useHandCursor: true });
       zone.on('pointerdown', () => {
@@ -295,16 +318,44 @@ export class ShellScene extends Phaser.Scene {
   }
 
   private async showRoute(route: RouteId): Promise<void> {
-    const key = await ensureRouteScene(this, route);
+    this.clearContentError();
+    let key: string;
+    try {
+      key = await ensureRouteScene(this, route);
+    } catch (err) {
+      // Ленивый чанк не загрузился (сеть/HMR): ошибка с повтором вместо чёрного экрана.
+      console.error(`shell: не удалось загрузить сцену маршрута ${route}`, err);
+      this.showContentError(route);
+      return;
+    }
     // Стейл-навигация: пока грузился чанк, маршрут мог смениться.
     if (useArenaStore.getState().route !== route) return;
     if (this.currentContent && this.currentContent !== key) {
       this.scene.stop(this.currentContent);
     }
     this.currentContent = key;
-    if (!this.scene.isActive(key)) this.scene.start(key);
+    // ВАЖНО: launch, а не start — ScenePlugin.start() останавливает вызывающую сцену,
+    // т.е. убил бы саму оболочку (топбар/навигация/подписка стора) при первой навигации.
+    if (!this.scene.isActive(key)) this.scene.launch(key);
     this.scene.bringToTop('Shell');
     this.buildBottomNav();
     this.refreshTopbar();
+  }
+
+  private clearContentError(): void {
+    this.contentError?.destroy(true);
+    this.contentError = null;
+  }
+
+  private showContentError(route: RouteId): void {
+    this.clearContentError();
+    const panel = makeSystemState(this, 'error', {
+      actionLabel: t('states.retry'),
+      onAction: () => {
+        playSound(this, 'click');
+        void this.showRoute(route);
+      },
+    });
+    this.contentError = this.add.container(CONTENT_RECT.x, CONTENT_RECT.y + 120, [panel]);
   }
 }

@@ -1,4 +1,4 @@
-// T060/T061-минимум · Бестиарий: grid сущностей → детальный экран (признак/контр-приём).
+// T060/T061-минимум · Угрозы: grid сущностей → детальный экран (признак/контр-приём).
 // Прототип 6.1–6.3. Thumb/hero — категорийные панели-заглушки (placeholder, T004/T062).
 import Phaser from 'phaser';
 import { ENTITY_CATEGORY_TINT, FONT_SIZES, LAYOUT, SPACING } from '@signal-arena/shared';

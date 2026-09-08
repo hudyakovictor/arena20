@@ -67,9 +67,11 @@ export function panelBg(
   fill: number = UI_BG.surface,
   radius: number = LAYOUT.radiusMd,
 ): RexUIRoundRectangle {
-  return rex(scene)
-    .add.roundRectangle(0, 0, w, h, radius, fill)
-    .setStrokeStyle(1, UI_TINT.secondary, 0.22);
+  // Top-left origin: фон кладётся в ручной контейнер точкой (x, y) без сдвига.
+  const bg = rex(scene).add.roundRectangle(0, 0, w, h, radius, fill);
+  bg.setOrigin(0, 0);
+  bg.setStrokeStyle(1, UI_TINT.secondary, 0.22);
+  return bg;
 }
 
 export interface LabelOpts {
@@ -87,10 +89,13 @@ export interface LabelOpts {
 
 /** rexUI label: фон + иконка + текст. */
 export function makeLabel(scene: Phaser.Scene, opts: LabelOpts): RexUILabel {
+  const padL = opts.pad?.left ?? SPACING.md;
+  const padR = opts.pad?.right ?? SPACING.md;
   const text = makeText(scene, 0, 0, opts.text, {
     size: opts.size ?? FONT_SIZES.body,
     tone: opts.tone ?? 'primary',
     mono: opts.mono,
+    ...(opts.width ? { wrapWidth: opts.width - padL - padR } : {}),
   });
   if (opts.align === 'center') text.setOrigin(0.5, 0.5);
   const bg = rex(scene).add.roundRectangle(
@@ -103,8 +108,8 @@ export function makeLabel(scene: Phaser.Scene, opts: LabelOpts): RexUILabel {
     opts.bgAlpha ?? 1,
   );
   const space: RexUISpace = {
-    left: opts.pad?.left ?? SPACING.md,
-    right: opts.pad?.right ?? SPACING.md,
+    left: padL,
+    right: padR,
     top: opts.pad?.top ?? SPACING.sm,
     bottom: opts.pad?.bottom ?? SPACING.sm,
   };
@@ -115,6 +120,8 @@ export function makeLabel(scene: Phaser.Scene, opts: LabelOpts): RexUILabel {
     text,
     space,
   });
+  // Top-left origin: setPosition(x, y) ставит левый верхний угол (как panelBg).
+  label.setOrigin(0, 0);
   label.layout();
   return label;
 }
@@ -153,6 +160,7 @@ export function makeButtons(scene: Phaser.Scene, opts: ButtonsOpts): RexUIButton
     space: { item: opts.spaceItem ?? SPACING.sm },
   });
   buttons.on('button.click', (_btn, index) => opts.onClick(index));
+  buttons.setOrigin(0, 0);
   buttons.layout();
   return buttons;
 }
@@ -229,30 +237,30 @@ export interface ProgressBar {
   setRatio: (ratio: number) => void;
 }
 
-/** Прогресс-бар: фон + заливка (Graphics не нужен — два roundRectangle). */
+/** Прогресс-бар: фон + заливка-пилюля. Начало координат — левый край по центру высоты. */
 export function makeProgressBar(
   scene: Phaser.Scene,
   w: number,
   h: number,
   tone: UiTone = 'active',
 ): ProgressBar {
-  const bg = rex(scene).add.roundRectangle(0, 0, w, h, h / 2, UI_BG.surface3);
-  const fill = rex(scene).add.roundRectangle(0, 0, w, h, h / 2, UI_TINT[tone]);
-  fill.setOrigin(0, 0.5);
-  const maskShape = scene.add.graphics();
-  const container = scene.add.container(0, 0, [bg, fill]);
-  bg.setOrigin(0, 0.5);
-  fill.setPosition(-w / 2, 0);
-  bg.setPosition(0, 0);
+  const container = scene.add.container(0, 0);
+  const g = scene.add.graphics();
+  container.add(g);
   const setRatio = (ratio: number): void => {
     const clamped = Math.max(0, Math.min(1, ratio));
-    maskShape.clear();
-    maskShape.fillStyle(PURE.white, 1);
-    maskShape.fillRect(fill.x, fill.y - h / 2, w * clamped, h);
-    const mask = maskShape.createGeometryMask();
-    fill.setMask(mask);
+    g.clear();
+    g.fillStyle(UI_BG.surface3, 1);
+    g.fillRoundedRect(0, -h / 2, w, h, h / 2);
+    if (clamped > 0) {
+      // Пилюля вместо маски: круглые оба конца, читается на любом ratio.
+      const fw = Math.max(0.5, w * clamped);
+      g.fillStyle(UI_TINT[tone], 1);
+      g.fillRoundedRect(0, -h / 2, fw, h, Math.min(h / 2, fw / 2));
+    }
   };
   setRatio(0);
+  container.setSize(w, h);
   return { container, setRatio };
 }
 
@@ -274,7 +282,7 @@ export function makeSection(
   const line = scene.add.graphics();
   line.fillStyle(UI_TINT.secondary, 0.25);
   const y = 16;
-  const rightW = right ? 90 : 0;
+  const rightW = right ? 120 : 0;
   line.fillRect(
     left.width + 8,
     y,
@@ -297,6 +305,7 @@ export function makeChip(
   dot.fillStyle(UI_TINT[tone], 1);
   dot.fillCircle(6, 11, 4);
   const label = makeText(scene, 15, 0, text, { mono: true, size: FONT_SIZES.caption, tone });
+  label.setY(Math.max(0, 11 - label.height / 2));
   const bg = rex(scene).add.roundRectangle(0, 0, label.width + 24, 22, 11, UI_BG.surface2);
   bg.setOrigin(0, 0.5);
   bg.setPosition(0, 11);
@@ -361,8 +370,15 @@ export function makeSheet(
 
 /** Тост: короткое подтверждение действия. */
 export function toast(scene: Phaser.Scene, text: string): void {
-  const label = makeLabel(scene, { text, size: FONT_SIZES.caption, mono: true, tone: 'primary' });
-  label.setPosition(LAYOUT.viewWidth / 2 - label.width / 2, LAYOUT.viewHeight - 170);
+  const label = makeLabel(scene, {
+    text,
+    width: LAYOUT.viewWidth - LAYOUT.gutter * 2,
+    size: FONT_SIZES.caption,
+    mono: true,
+    tone: 'primary',
+    align: 'center',
+  });
+  label.setPosition(LAYOUT.gutter, LAYOUT.viewHeight - 170);
   scene.tweens.add({
     targets: label,
     alpha: 0,
@@ -469,6 +485,96 @@ export function clearAnchors(): void {
 /** Обрезка строки с многоточием (для компактных карточек). */
 export function ellipsis(text: string, max: number): string {
   return text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text;
+}
+
+export interface KvCell {
+  label: string;
+  value: string;
+  valueTone?: UiTone | undefined;
+  maxChars?: number | undefined;
+}
+
+/**
+ * Сетка «метка → значение» (прототип 4.2: ФАЗА/ТАЙМФРЕЙМ/ПРАВИЛО/СЛОЖНОСТЬ;
+ * 4.6: мета карты). Возвращает контейнер с выставленным размером.
+ */
+export function makeKvGrid(
+  scene: Phaser.Scene,
+  cells: KvCell[],
+  opts: { width?: number; cols?: number; cellH?: number } = {},
+): Phaser.GameObjects.Container {
+  const width = opts.width ?? LAYOUT.viewWidth - LAYOUT.gutter * 2;
+  const cols = opts.cols ?? 2;
+  const cellH = opts.cellH ?? 52;
+  const gap = SPACING.sm;
+  const cellW = (width - gap * (cols - 1)) / cols;
+  const root = scene.add.container(0, 0);
+  cells.forEach((cell, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const x = col * (cellW + gap);
+    const y = row * (cellH + gap);
+    const bg = panelBg(scene, cellW, cellH, UI_BG.surface2, LAYOUT.radiusSm);
+    bg.setPosition(x, y);
+    bg.setOrigin(0, 0);
+    const label = makeText(scene, x + SPACING.sm, y + 7, cell.label, {
+      mono: true,
+      size: FONT_SIZES.label,
+      tone: 'muted',
+    });
+    const value = makeText(
+      scene,
+      x + SPACING.sm,
+      y + 23,
+      ellipsis(cell.value, cell.maxChars ?? 22),
+      {
+        size: FONT_SIZES.body,
+        tone: cell.valueTone ?? 'primary',
+      },
+    );
+    root.add([bg, label, value]);
+  });
+  const rows = Math.max(1, Math.ceil(cells.length / cols));
+  root.setSize(width, rows * cellH + (rows - 1) * gap);
+  return root;
+}
+
+export interface Pager {
+  container: Phaser.GameObjects.Container;
+  setStep: (index: number) => void;
+}
+
+/**
+ * Пейджер точек для многошаговых экранов (прототип 4.11–4.13).
+ * Точки — индикаторы; управление — крупной CTA-кнопкой (touch ≥44).
+ */
+export function makePager(scene: Phaser.Scene, steps: number, initial = 0): Pager {
+  const root = scene.add.container(0, 0);
+  const dots: Phaser.GameObjects.Graphics[] = [];
+  for (let i = 0; i < steps; i += 1) {
+    const g = scene.add.graphics();
+    root.add(g);
+    dots.push(g);
+  }
+  const paint = (active: number): void => {
+    let x = 0;
+    dots.forEach((g, i) => {
+      g.clear();
+      g.setPosition(x, 0);
+      const on = i === active;
+      g.fillStyle(on ? UI_TINT.active : UI_TINT.muted, on ? 1 : 0.5);
+      if (on) {
+        g.fillRoundedRect(0, 2, 26, 6, 3);
+        x += 34;
+      } else {
+        g.fillCircle(4, 5, 3);
+        x += 16;
+      }
+    });
+    root.setSize(Math.max(0, x - 8), 10);
+  };
+  paint(initial);
+  return { container: root, setStep: paint };
 }
 
 /** Вертикальный стек: раскладывает детей с шагом. Возвращает высоту. */
