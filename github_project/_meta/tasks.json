@@ -1,0 +1,2495 @@
+{
+  "generated": "2026-09-08",
+  "status": {
+    "todo": "не начато",
+    "in_progress": "в работе (агент взял задачу)",
+    "blocked": "заблокировано (стек недоступен / зависимость) — зафиксировано, секция пропущена или остановлена",
+    "done": "код готов + тест-план задачи пройден локально",
+    "review": "ожидает проверки (reviewer-agent или CEO)",
+    "approved": "принято (слито в main / подписано CEO)"
+  },
+  "phases": {
+    "0": {
+      "title": "Фундамент и конвенции (Foundation)",
+      "goal": "Репозиторий, монорепо-каркас, общие схемы, дизайн-токены, пайплайн ассетов, статус-система.",
+      "deliverables": [
+        "Каркас репозитория (client/shared/admin) + workspace + базовый CI",
+        "Zod-схемы домена (scenario/skill/entity/verdict/profile/protocol/copy)",
+        "Модуль дизайн-токенов (UI_TINT, шрифты, сетка) из UI-спека",
+        "Схема asset-manifest + Zod-валидатор веса/нейминга",
+        "Пайплайн сборки ассетов (SVG→SVGO→атлас, бюджеты в CI)",
+        "Финализированная папка github_project (эта система)"
+      ],
+      "exit": "Любой агент может склонировать репо, прочитать github_project/README.md и начать задачу без вопросов.",
+      "test": "CI зелёный: линт, типы, валидация manifest, генерация статус-лога.",
+      "deps": [],
+      "parallel": "Фаза неделима — делается первой, до неё параллельных треков нет.",
+      "ceo_gate": false
+    },
+    "1": {
+      "title": "Игровая оболочка (Game Shell)",
+      "goal": "Phaser 4 boot, единый Canvas, сцены, оболочка (top bar + bottom nav), rexUI-компоненты, Zustand, звук, PWA, системные состояния.",
+      "deliverables": [
+        "Phaser 4 + Vite, один WebGL-canvas, portrait-scale, game loop",
+        "Архитектура сцен: Boot/Preload/Shell/Router",
+        "Top Bar (rexUI): прогресс, ресурсы, уведомления, помощь, настройки",
+        "Bottom nav 5 слотов (Arena/Academy/Bestiary/Journal/More)",
+        "rexUI-база: panel, button, tabs, list, slider, checklist, modal, toast",
+        "Zustand-store + персист (localStorage)",
+        "Звук (Phaser Sound) + настройки (mute/reduce-motion)",
+        "PWA (vite-plugin-pwa): offline-shell, manifest, иконки",
+        "Системные состояния: loading/offline/empty/error"
+      ],
+      "exit": "Пустая оболочка собирается, запускается на мобильном вьюпорте, навигация между заглушками-сценами работает, PWA ставится.",
+      "test": "Vitest (store reducers), Playwright (boot→shell→nav переходы), PWA audit (manifest+sw).",
+      "deps": [
+        0
+      ],
+      "parallel": "Может идти параллельно с фазой 10 (Backend) после готовности фазы 0.",
+      "ceo_gate": true
+    },
+    "2": {
+      "title": "Свечной график (CandleChart на Graphics)",
+      "goal": "Кастомный CandleChart: сетка, свечи из OHLCV, скейлинг, камера, анимация раскрытия скрытого будущего, оверлеи.",
+      "deliverables": [
+        "CandleChart core: gridGraphics/candleGraphics/overlayGraphics/markerGraphics/maskGraphics/interactionZone",
+        "Reveal скрытого future через mask + tween",
+        "Оверлеи: risk-маркеры, decision-marker, уровни, interaction zone",
+        "Производительность: батченая перерисовка, без Text на каждую свечу",
+        "Юнит-тесты математики/скейлинга (Vitest)"
+      ],
+      "exit": "График рисует 40–120 свечей на мобильном, reveal анимируется, FPS≥60, бюджет памяти в норме.",
+      "test": "Vitest (scaling, reveal mask), Playwright (визуал reveal), perf-замер.",
+      "deps": [
+        1
+      ],
+      "parallel": "Независим от бэкенда.",
+      "ceo_gate": true
+    },
+    "3": {
+      "title": "Движок сценариев (scenario-gen + seedrandom)",
+      "goal": "Детерминированный генератор задач: модель данных, seedrandom-PRNG, scenario-gen, адаптация к ошибкам, детерминизм турниров.",
+      "deliverables": [
+        "Модель исторической ситуации + формат content-pack",
+        "Обёртка seedrandom (seed = scenarioId + contentVersion)",
+        "scenario-gen: детерминированная генерация, сложность 0–99, адаптивный выбор",
+        "Профиль личных ошибок + адаптивная выдача",
+        "Детерминизм турниров (server-fixed seed)",
+        "Тесты: детерминизм, воспроизводимость, кривая сложности"
+      ],
+      "exit": "Один seed → один воспроизводимый набор сценариев; повторный прогон даёт идентичный результат.",
+      "test": "Vitest (детерминизм по 1000 seed, совпадение повторов), проверка хэша скрытого future.",
+      "deps": [
+        0
+      ],
+      "parallel": "Shared-трек; может идти параллельно с фазой 1.",
+      "ceo_gate": false
+    },
+    "4": {
+      "title": "Игровой цикл Арены (Arena Loop)",
+      "goal": "Полный цикл задания: текст→браузер-вкладки→карты навыков→4 решения→опц. 2-й шаг→reveal→вердикт→оценка.",
+      "deliverables": [
+        "ArenaScene: текст задачи, browser-widget с вкладками, карты навыков, 4 кнопки решения, опц. 2-й шаг",
+        "Захват решения + выбор доказательств + принуждение протокола",
+        "Reveal-флоу: рыночный факт → последствие → качество 0–100",
+        "Экран вердикта (панк-таблоид copy)",
+        "Движок оценки (контекст/доказательства/действие/риск/дисциплина)",
+        "Интеграция сущностей (показ/скрытие, раскрытие после разбора)",
+        "Интеграция протоколов",
+        "Onboarding прогрессивного раскрытия",
+        "Playwright e2e полного прохождения Арены"
+      ],
+      "exit": "Игрок проходит сценарий от t0 до вердикта с оценкой; оценка не зависит от направления цены.",
+      "test": "Playwright (полный прогон), Vitest (rubric engine), e2e на детерминированном seed.",
+      "deps": [
+        1,
+        2,
+        3
+      ],
+      "parallel": "Фронт; зависит от графика (ф2) и движка сценариев (ф3).",
+      "ceo_gate": true
+    },
+    "5": {
+      "title": "Академия (Academy)",
+      "goal": "Теория, привязанная к картам навыков и сценариям; навигация skill→theory→scenarios.",
+      "deliverables": [
+        "AcademyScene: записи теории, связи со скиллами/сценариями",
+        "Навигация: карта навыка → теория → связанные тренировки"
+      ],
+      "exit": "Из карты навыка/ошибки в задании можно перейти в теорию и обратно к тренировкам.",
+      "test": "Playwright (навигация), Vitest (роутинг связей).",
+      "deps": [
+        1,
+        3
+      ],
+      "parallel": "Фронт.",
+      "ceo_gate": false
+    },
+    "6": {
+      "title": "Бестиарий (Bestiary)",
+      "goal": "Коллекция сущностей: grid (lazy thumbs), состояния, детальный экран, интеграция SVG-иконок 24×24.",
+      "deliverables": [
+        "Grid сущностей (lazy thumbs), состояния unseen/discovered/encountered/mastered",
+        "Детальный экран сущности (hero art, связанные ловушки/скиллы/сценарии)",
+        "Интеграция иконок сущностей 24×24 (SVG→атлас)"
+      ],
+      "exit": "Бестиарий лениво грузит иллюстрации только при открытии; первая сцена не тянет hero-art.",
+      "test": "Playwright (grid→detail, lazy load), бюджет дозагрузки раздела ≤600КБ.",
+      "deps": [
+        1
+      ],
+      "parallel": "Фронт; не блокируется отсутствием растра (placeholder-стратегия).",
+      "ceo_gate": true
+    },
+    "7": {
+      "title": "Журнал решений и профиль (Journal & Profile)",
+      "goal": "Персональная история решений, повторяющиеся паттерны, профиль (XP/ранг/стрик/ачивки/badge).",
+      "deliverables": [
+        "Decision Journal: история, повторяющиеся паттерны, сильные/слабые зоны, закрытые ошибки",
+        "Профиль: XP/ранг, streak («день с закрытой ошибкой»), ачивки, founder badge",
+        "Рекомендации по повтору"
+      ],
+      "exit": "Журнал заполняется после прохождений; стрик честный (за анализ, не за клик).",
+      "test": "Playwright (заполнение после прохождения), Vitest (логика стрика).",
+      "deps": [
+        4
+      ],
+      "parallel": "Фронт.",
+      "ceo_gate": false
+    },
+    "8": {
+      "title": "Турниры / PvP (async)",
+      "goal": "Асинхронные турниры на зафиксированных сервером сценариях; лидерборд; WS.",
+      "deliverables": [
+        "Список/вход/общий зафиксированный набор/лидерборд",
+        "WS realtime + асинхронная оценка + tie-break по скорости только при равенстве качества"
+      ],
+      "exit": "Все участники получают один dataset и одну точку раскрытия; победитель по качеству→протокол→доказательства→скорость.",
+      "test": "Playwright (турнир-флоу), интегра-тест WS против живого сервера.",
+      "deps": [
+        3,
+        4,
+        10
+      ],
+      "parallel": "Фронт+бэкенд вместе.",
+      "ceo_gate": false
+    },
+    "9": {
+      "title": "Маркет (косметика)",
+      "goal": "Внутренний маркетплейс косметики/тем/сезонов/авторского контента. Без pay-to-win.",
+      "deliverables": [
+        "UI маркетплейса (косметика, темы, сезонные наборы, авторский контент)",
+        "Заглушка покупки (без реальных платежей в MVP)"
+      ],
+      "exit": "Маркет показывает косметику; покупка меняет только визуал, не данные/ответы/бюджет риска.",
+      "test": "Playwright (открытие/применение косметики), проверка: покупка не влияет на сценарий.",
+      "deps": [
+        1
+      ],
+      "parallel": "Фронт.",
+      "ceo_gate": false
+    },
+    "10": {
+      "title": "Бэкенд (Fastify + SQLite + Drizzle + Zod + WS)",
+      "goal": "Сервер: схема БД, профили/прогресс, отдача сценариев/ассетов, журнал, турниры, античит, контракты API.",
+      "deliverables": [
+        "Каркас сервера (Fastify), Drizzle, SQLite, миграции, seed",
+        "Профили и персист прогресса",
+        "Отдача сценариев/ассетов + версионность контента + хэш скрытого future",
+        "Персист журнала/результатов + профиль ошибок",
+        "Турнир-сервис + WS",
+        "Античит: server-fixed seeds, защита от утечки future",
+        "Zod-валидация всех API-контрактов + OpenAPI",
+        "Тесты Vitest + Playwright против живого сервера"
+      ],
+      "exit": "Клиент может получать сценарии и сохранять прогресс с сервера; детерминизм турниров серверный.",
+      "test": "Vitest (сервисы), Playwright (живой сервер), контракт-тесты Zod.",
+      "deps": [
+        0,
+        3
+      ],
+      "parallel": "Может стартовать параллельно с фазой 1 после фазы 0.",
+      "ceo_gate": false
+    },
+    "11": {
+      "title": "Авторство контента (Content)",
+      "goal": "25–40 исторических ситуаций (MVP), 8–12 карт навыков, 6–8 сущностей, протоколы, теория Академии, панк-таблоид copy.",
+      "deliverables": [
+        "25–40 исторических ситуаций (MVP-набор)",
+        "8–12 карт навыков, 6–8 сущностей, протоколы",
+        "Записи теории Академии",
+        "Прогон copy в стиле style-tone (панк-таблоид)"
+      ],
+      "exit": "В игре доступен полный MVP-набор контента; тексты в tone-of-voice.",
+      "test": "Линт copy (нет neutral-SaaS заглушек), валидация content-pack по Zod, выборка на детерминизм.",
+      "deps": [
+        3
+      ],
+      "parallel": "Контент-трек; может идти параллельно фронту после готовности движка.",
+      "ceo_gate": true
+    },
+    "12": {
+      "title": "Полировка, QA, бюджеты, i18n, a11y",
+      "goal": "Бюджеты производительности в CI, матрица UI, i18n (RU+EN), SVG/растр QA, покрытие Vitest+Playwright.",
+      "deliverables": [
+        "Бюджеты перф. в CI (первый экран ≤250КБ, иконки ≤12КБ и т.д.)",
+        "Матрица UI 320×568…1440×900, safe areas, reduce-motion",
+        "i18n: плоские keys, RU + EN",
+        "SVG QA (16/20/24/28px, tint), растр QA",
+        "Гейт покрытия Vitest + Playwright"
+      ],
+      "exit": "Все бюджеты в CI зелёные; UI-матрица пройдена; RU+EN переключаются.",
+      "test": "CI-гейты бюджетов, Playwright на матрице устройств, проверка покрытия.",
+      "deps": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "parallel": "Финальная фаза QA; почти всё блокируется предыдущим.",
+      "ceo_gate": false
+    },
+    "13": {
+      "title": "Релиз и передача в Admin/CRM",
+      "goal": "Каркас админ-панели и CRM (план+сборка позже), подключение AI-API (план), фриз документации, чек-лист релиза.",
+      "deliverables": [
+        "Каркас админ-панели и CRM (только план на фазе; сборка — отдельной итерацией)",
+        "Подключение AI-API моделей в админке (план)",
+        "Фриз документации + чек-лист релиза"
+      ],
+      "exit": "Продукт release-ready 100%; админ/CRM спланированы как отдельная будущая задача, не часть текущей разработки через GitHub (см. admin/ADMIN_ROADMAP.md).",
+      "test": "Чек-лист релиза закрыт; админ-роадмап утверждён CEO.",
+      "deps": [
+        12
+      ],
+      "parallel": "Финал.",
+      "ceo_gate": true
+    }
+  },
+  "tracks": {
+    "foundation": "Каркас репозитория и конвенции (фаза 0).",
+    "shared": "Общие схемы, токены-манифест, движок сценариев, оценка (фазы 0,3,4-shared). Без React.",
+    "frontend": "Phaser 4 игра: shell, график, Арена, Академия, Бестиарий, Журнал, Турниры, Маркет, i18n (фазы 1,2,4–9,12).",
+    "backend": "Fastify/SQLite/Drizzle/Zod/WS сервер (фаза 10).",
+    "content": "Авторство контента и copy (фаза 11).",
+    "qa": "Тесты, бюджеты, матрица UI, i18n-гейт, релиз (фазы 0,2,3,4,10,12,13).",
+    "admin": "Админ-панель и CRM, AI-API (фаза 13, план)."
+  },
+  "tasks": [
+    {
+      "id": 0,
+      "phase": 0,
+      "slug": "repo-scaffold",
+      "title": "Каркас репозитория и монорепо",
+      "track": "foundation",
+      "deps": [],
+      "goal": "Создать структуру client/shared/admin, workspace, tsconfig base, eslint, prettier, .gitignore, скелет CI, корневой README.",
+      "acceptance": [
+        "Папки client/shared/admin существуют с README, ссылающимся на github_project",
+        "pnpm/npm workspace настроен; базовый tsconfig (strict) общий",
+        "eslint+prettier с правилами (no-react-in-game, запрет emoji/icon-font как prod-иконок)",
+        "CI: lint + typecheck + генерация статус-лога проходит на пустом каркасе",
+        "Корневой README отсылает в github_project/README.md"
+      ],
+      "test": [
+        "CI зелёный на пустом каркасе",
+        "npm run typecheck без ошибок"
+      ],
+      "ceo_gate": false,
+      "note": "Не реализовывать игру здесь — только каркас и конвенции.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "phase": 0,
+      "slug": "shared-schemas",
+      "title": "Общие Zod-схемы домена",
+      "track": "shared",
+      "deps": [
+        0
+      ],
+      "goal": "Zod-схемы: Scenario, SkillCard, Entity, Verdict, Profile, Protocol, CopyKey, AssetManifest. Единый источник типов для клиента/сервера.",
+      "acceptance": [
+        "Схемы покрывают все сущности из product-mechanics-spec и UI-спека",
+        "Из схем генерятся TS-типы (z.infer)",
+        "Версия контента и хэш скрытого future в схеме Scenario",
+        "Схемы импортируются и клиентом, и сервером без дублирования"
+      ],
+      "test": [
+        "Vitest: валидный/невалидный content-pack проходит/падает по Zod"
+      ],
+      "ceo_gate": false,
+      "note": "Обязателен strict; никаких any.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "phase": 0,
+      "slug": "design-tokens",
+      "title": "Модуль дизайн-токенов",
+      "track": "frontend",
+      "deps": [
+        0
+      ],
+      "goal": "Код-модуль токенов: UI_TINT (из UI-спека), шрифты (2 семейства woff2), сетка/спейсинговые константы, layout-константы мобильного вьюпорта.",
+      "acceptance": [
+        "UI_TINT экспортирует 10 токенов с HEX из спека",
+        "Ни одна сцена не задаёт HEX напрямую — только через токен",
+        "Константы safe-area/отступов/размеров touch-target (44×44) централизованы"
+      ],
+      "test": [
+        "Vitest: все токены присутствуют",
+        "grep: нет хардкода HEX в Scene"
+      ],
+      "ceo_gate": false,
+      "note": "Цвет — не единственный носитель статуса (см. UI-спец §9/§13).",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "phase": 0,
+      "slug": "asset-manifest",
+      "title": "Схема и валидатор asset-manifest",
+      "track": "shared",
+      "deps": [
+        0,
+        1
+      ],
+      "goal": "Zod-схема asset-manifest (id, kind, src, pack, lazy, logicalSize, sourceSize, maxBytes, category, tintable) + CI-валидатор веса/нейминга.",
+      "acceptance": [
+        "Manifest валидируется Zod в build-пайплайне",
+        "CI падает при превышении maxBytes, отсутствии файла, некорректном размере или нейминге",
+        "Поле placeholder:true разрешает отсутствие растра (placeholder-стратегия)"
+      ],
+      "test": [
+        "Vitest: валидный/невалидный manifest",
+        "CI падает на перегрузе"
+      ],
+      "ceo_gate": false,
+      "note": "Бюджеты: core UI icon source ≤12КБ, first scenario pack ≤250КБ (без Phaser runtime).",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "phase": 0,
+      "slug": "asset-pipeline",
+      "title": "Пайплайн сборки ассетов",
+      "track": "frontend",
+      "deps": [
+        0,
+        2,
+        3
+      ],
+      "goal": "Скрипт сборки: SVG→SVGO→texture-atlas/Phaser-texture; генерация manifest; бюджеты в CI.",
+      "acceptance": [
+        "Все SVG из signal_arena_skill_icons_svg.zip проходят SVGO (≤400Б/иконку, core≤12КБ)",
+        "Атлас/текстуры собираются в build; tint по semantic token",
+        "Растр (webp) лениво грузится по pack; hero-art не попадает в первый сценарий",
+        "CI проверяет бюджеты веса"
+      ],
+      "test": [
+        "Vitest: размер атласа ≤лимита",
+        "Playwright: иконки рендерятся с tint"
+      ],
+      "ceo_gate": false,
+      "note": "ИКОНКИ: знак на иконке больше плашки под ним — уменьшить знак (см. assets/ICON_NOTES.md). Запрет: emoji/icon-font как prod-иконки, PNG для обычного UI.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "phase": 0,
+      "slug": "agent-docs",
+      "title": "Финализация github_project (эта система)",
+      "track": "qa",
+      "deps": [
+        0
+      ],
+      "goal": "Довести папку github_project до читаемого на GitHub состояния: README, INDEX, CONVENTIONS, PRODUCT, TECH_STACK, MASTER_PLAN, STATUS_LOG, AGENT_PROTOCOL, REVIEW_WORKFLOW, TRACKS, assets/*, admin/*, ceo/*.",
+      "acceptance": [
+        "Любой агент по ссылке на репо понимает, с чего начать (README→INDEX)",
+        "Статус-система и правило «нет обходного пути при недоступном стеке» задокументированы",
+        "STATUS_LOG и tasks сгенерированы скриптом"
+      ],
+      "test": [
+        "grep: каждая задача из STATUS_LOG имеет файл tasks/"
+      ],
+      "ceo_gate": false,
+      "note": "Эта задача выполняется оркестратором при инициализации; далее поддерживается агентами.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "phase": 1,
+      "slug": "phaser-boot",
+      "title": "Phaser 4 boot + Vite + Canvas",
+      "track": "frontend",
+      "deps": [
+        0,
+        2
+      ],
+      "goal": "Старт Phaser 4 (^4.2.1, WebGL), Vite, один canvas, portrait Scale.FIT, game loop, базовый preload.",
+      "acceptance": [
+        "Один WebGL-canvas на весь экран; Scale менеджер portrait",
+        "Game loop работает; FPS метрика видна в dev",
+        "Phaser 4 (не 3); Canvas deprecated — используем WebGL"
+      ],
+      "test": [
+        "Playwright: canvas присутствует, игра boot'ится",
+        "Vitest: конфиг валиден"
+      ],
+      "ceo_gate": false,
+      "note": "Стек Phaser 4 обязателен. Если Phaser 4 недоступен в реестре — задача BLOCKED, не заменять на Phaser 3.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "phase": 1,
+      "slug": "scene-arch",
+      "title": "Архитектура сцен и роутер",
+      "track": "frontend",
+      "deps": [
+        10
+      ],
+      "goal": "BootScene/PreloadScene/ShellScene + router между экранами (Arena/Academy/Bestiary/Journal/More) без React.",
+      "acceptance": [
+        "Сцены загружаются лениво; ShellScene постоянна (top bar + bottom nav)",
+        "Роутинг декларативный, на Zustand-сторе, без React",
+        "Переходы между заглушками-сценами работают"
+      ],
+      "test": [
+        "Playwright: навигация Boot→Shell→заглушка сцены"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "phase": 1,
+      "slug": "topbar",
+      "title": "Top Bar (rexUI)",
+      "track": "frontend",
+      "deps": [
+        11,
+        2
+      ],
+      "goal": "Верхняя панель: прогресс (XP/ранг), ресурсы, уведомления, помощь, настройки — на rexUI.",
+      "acceptance": [
+        "Top Bar рендерится rexUI-компонентами, tint по токенам",
+        "Touch-target ≥44×44; иконки из атласа (T4)",
+        "Открывает модалки настроек/помощи"
+      ],
+      "test": [
+        "Playwright: top bar виден, модалки открываются"
+      ],
+      "ceo_gate": true,
+      "note": "CEO-гейт: визуальная проверка оболочки.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "phase": 1,
+      "slug": "bottom-nav",
+      "title": "Bottom navigation (5 слотов)",
+      "track": "frontend",
+      "deps": [
+        11,
+        2
+      ],
+      "goal": "Нижняя навигация 5 слотов (Arena/Academy/Bestiary/Journal/More) на rexUI/SVG.",
+      "acceptance": [
+        "5 слотов, active-состояние по токену active (#C8F135)",
+        "Средний слот — акцентный (Arena); touch 44×44",
+        "Переключает сцены через роутер"
+      ],
+      "test": [
+        "Playwright: переключение слотов"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "phase": 1,
+      "slug": "rexiu-base",
+      "title": "rexUI базовые компоненты",
+      "track": "frontend",
+      "deps": [
+        11
+      ],
+      "goal": "Набор переиспользуемых rexUI-компонентов: panel, button, tabs, list, slider, checklist, modal, toast.",
+      "acceptance": [
+        "Компоненты в отдельном модуле ui/, параметризуемые токенами",
+        "Tabs/List/Slider/Checklist используются далее в Арене/Академии/Бестиарии",
+        "Modal/toast переиспользуемы"
+      ],
+      "test": [
+        "Vitest: рендер компонентов в headless",
+        "Playwright: компоненты в сценах"
+      ],
+      "ceo_gate": false,
+      "note": "rexUI обязателен для игрового UI внутри сцены.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "phase": 1,
+      "slug": "zustand-store",
+      "title": "Zustand-store + персист",
+      "track": "frontend",
+      "deps": [
+        11,
+        1
+      ],
+      "goal": "Zustand-стор состояния (без React) + персист в localStorage; селекторы прогресса/настроек/сессии.",
+      "acceptance": [
+        "Стор Zustand, без React-зависимостей",
+        "Персист прогресса/настроек между сессиями",
+        "Сцены читают/пишут через селекторы"
+      ],
+      "test": [
+        "Vitest: reducers/персист",
+        "Playwright: прогресс сохраняется после релоада"
+      ],
+      "ceo_gate": false,
+      "note": "Zustand обязателен (без React).",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "phase": 1,
+      "slug": "sound",
+      "title": "Звук (Phaser Sound) + настройки",
+      "track": "frontend",
+      "deps": [
+        11,
+        15
+      ],
+      "goal": "Система звука на Phaser Sound: SFX/музыка, mute, reduce-motion, громкость из стора.",
+      "acceptance": [
+        "Phaser Sound загружает/проигрывает аудио из атласа/папки",
+        "Настройки mute/reduce-motion в сторе и применяются",
+        "Аудио не блокирует первый экран"
+      ],
+      "test": [
+        "Playwright: звук переключается настройкой"
+      ],
+      "ceo_gate": false,
+      "note": "Phaser Sound обязателен.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "phase": 1,
+      "slug": "pwa",
+      "title": "PWA (vite-plugin-pwa)",
+      "track": "frontend",
+      "deps": [
+        10
+      ],
+      "goal": "vite-plugin-pwa: offline-shell, manifest, иконки 192/512, service worker.",
+      "acceptance": [
+        "manifest валиден; SW регистрируется",
+        "Offline-shell даёт системные состояния (T18) без сети",
+        "Иконки 192/512 сгенерированы"
+      ],
+      "test": [
+        "Playwright: Lighthouse PWA, офлайн-старт"
+      ],
+      "ceo_gate": false,
+      "note": "vite-plugin-pwa обязателен.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "phase": 1,
+      "slug": "sys-states",
+      "title": "Системные состояния (loading/offline/empty/error)",
+      "track": "frontend",
+      "deps": [
+        14,
+        17
+      ],
+      "goal": "rexUI-экраны системных состояний с copy из UI-спека (панк-таблоид).",
+      "acceptance": [
+        "4 состояния: loading/offline/empty/error с tone-of-voice",
+        "Нет neutral-SaaS заглушек (Victory/Continue/P&L и т.п.)",
+        "Показываются при соответствующих условиях"
+      ],
+      "test": [
+        "Playwright: каждое состояние отображается"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "phase": 2,
+      "slug": "chart-core",
+      "title": "CandleChart core (Graphics)",
+      "track": "frontend",
+      "deps": [
+        14,
+        1
+      ],
+      "goal": "Рисовка свечей из OHLCV на Phaser Graphics: сетка, свечи, скейлинг, камера, видимый набор 40–120.",
+      "acceptance": [
+        "Слои: gridGraphics/candleGraphics/overlayGraphics/markerGraphics/interactionZone",
+        "Свечи из массива OHLCV; скейлинг по min/max; камера по t0",
+        "Без Text на каждую свечу; без tween на каждую свечу",
+        "Видимый набор 40–120 на mobile"
+      ],
+      "test": [
+        "Vitest: scaling/OHLCV→geometry",
+        "Playwright: визуал"
+      ],
+      "ceo_gate": true,
+      "note": "CEO-гейт: график — визуальная проверка. Кастомный CandleChart обязателен (НЕ lightweight-charts).",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "phase": 2,
+      "slug": "chart-reveal",
+      "title": "Reveal скрытого future",
+      "track": "frontend",
+      "deps": [
+        20
+      ],
+      "goal": "Анимация раскрытия скрытой исторической части через maskGraphics + tween после фиксации решения.",
+      "acceptance": [
+        "До решения future скрыт маской",
+        "После решения reveal анимируется (mask/tween), не перерисовывая все свечи",
+        "Хэш скрытого future совпадает с серверным (T102)"
+      ],
+      "test": [
+        "Playwright: reveal анимируется",
+        "Vitest: mask logic"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "phase": 2,
+      "slug": "chart-overlay",
+      "title": "Оверлеи графика",
+      "track": "frontend",
+      "deps": [
+        20
+      ],
+      "goal": "Оверлеи: risk-маркеры, decision-marker, уровни, interaction zone.",
+      "acceptance": [
+        "markerGraphics рисует decision-marker и risk-маркеры",
+        "Уровни (линии) рисуются Graphics, не растром",
+        "interactionZone корректно бьёт по свечам"
+      ],
+      "test": [
+        "Vitest: geometry оверлеев",
+        "Playwright: маркеры видны"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "phase": 2,
+      "slug": "chart-perf",
+      "title": "Производительность графика",
+      "track": "frontend",
+      "deps": [
+        20,
+        21,
+        22
+      ],
+      "goal": "Батченая перерисовка, стратегия redraw при hover/выборе карты (не перерисовывать все свечи), 60 FPS.",
+      "acceptance": [
+        "Hover/выбор карты не перерисовывает все свечи",
+        "FPS≥60 на среднем Android (цель ≤2.5с до интерактива)",
+        "Бюджет памяти графика в норме"
+      ],
+      "test": [
+        "Playwright: perf-замер (FPS)",
+        "Vitest: redraw strategy"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "phase": 2,
+      "slug": "chart-tests",
+      "title": "Юнит-тесты CandleChart",
+      "track": "qa",
+      "deps": [
+        20,
+        21,
+        22,
+        23
+      ],
+      "goal": "Покрыть математику/скейлинг/reveal Vitest-тестами.",
+      "acceptance": [
+        "Vitest-покрытие ядра графика ≥80%",
+        "Тесты детерминированы"
+      ],
+      "test": [
+        "vitest run chart"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "phase": 3,
+      "slug": "scenario-model",
+      "title": "Модель ситуации + content-pack",
+      "track": "shared",
+      "deps": [
+        1,
+        3
+      ],
+      "goal": "Тип исторической ситуации (контекст, вкладки-источники, скиллы, 4 решения, опц. 2-й шаг, сущность, протокол, скрытое future, правила оценки) + формат content-pack.",
+      "acceptance": [
+        "Модель покрывает §4 product-mechanics-spec",
+        "content-pack валидируется Zod (T1)",
+        "Версия датасета + хэш скрытого future в модели"
+      ],
+      "test": [
+        "Vitest: валидация content-pack"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "phase": 3,
+      "slug": "prng",
+      "title": "Обёртка seedrandom",
+      "track": "shared",
+      "deps": [
+        30
+      ],
+      "goal": "Детерминированный PRNG: seed = scenarioId + contentVersion; воспроизводимость.",
+      "acceptance": [
+        "Один seed → один поток чисел",
+        "seedrandom использован (НЕ Math.random)",
+        "Пересев при смене версии контента"
+      ],
+      "test": [
+        "Vitest: воспроизводимость по 1000 seed"
+      ],
+      "ceo_gate": false,
+      "note": "seedrandom обязателен.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "phase": 3,
+      "slug": "scenario-gen",
+      "title": "scenario-gen (детерминизм + сложность 0–99)",
+      "track": "shared",
+      "deps": [
+        31
+      ],
+      "goal": "Генератор: из seed детерминированно собирает ситуацию; кривая сложности 0–99 (меньше подсказок, больше конфликтов, вероятностные сценарии).",
+      "acceptance": [
+        "Один seed → идентичный сценарий при повторе",
+        "Сложность 0–99 меняет плотность/конфликты, не каркас",
+        "Вероятностные сценарии без единственного «идеального» действия возможны"
+      ],
+      "test": [
+        "Vitest: детерминизм + монотонность сложности"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "phase": 3,
+      "slug": "error-profile",
+      "title": "Профиль ошибок + адаптивная выдача",
+      "track": "shared",
+      "deps": [
+        32
+      ],
+      "goal": "Учёт личных повторяющихся ошибок; адаптивный выбор сценариев под слабые зоны.",
+      "acceptance": [
+        "Профиль ошибок обновляется после прохождений",
+        "Адаптивная выдача тянет сценарии по слабым зонам"
+      ],
+      "test": [
+        "Vitest: выдача смещается к слабым зонам"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "phase": 3,
+      "slug": "tournament-determinism",
+      "title": "Детерминизм турниров (server-fixed seed)",
+      "track": "shared",
+      "deps": [
+        32,
+        100
+      ],
+      "goal": "Сервер фиксирует seed турнира; клиент воспроизводит идентично; защита от утечки future.",
+      "acceptance": [
+        "Все участники получают один dataset + одну точку раскрытия",
+        "future не утекает до решения (server-side hash)"
+      ],
+      "test": [
+        "Vitest: серверный seed → клиентский replay идентичен"
+      ],
+      "ceo_gate": false,
+      "note": "Блокируется готовностью сервера (T100).",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "phase": 3,
+      "slug": "scenario-tests",
+      "title": "Тесты scenario-gen",
+      "track": "qa",
+      "deps": [
+        32,
+        33,
+        34
+      ],
+      "goal": "Тесты детерминизма, воспроизводимости, кривой сложности, адаптации.",
+      "acceptance": [
+        "Vitest-покрытие движка ≥80%"
+      ],
+      "test": [
+        "vitest run scenario"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "phase": 4,
+      "slug": "arena-scene",
+      "title": "ArenaScene (полный экран задания)",
+      "track": "frontend",
+      "deps": [
+        14,
+        20,
+        30
+      ],
+      "goal": "Экран задания: текст ситуации, browser-widget с вкладками-источниками, карты навыков, 4 кнопки решения, опц. 2-й шаг (нижняя панель).",
+      "acceptance": [
+        "Текст задачи + browser-widget (вкладки только релевантных источников)",
+        "Карты навыков применимы к ситуации",
+        "4 постоянные кнопки решения в одном месте",
+        "2-й шаг — только где он объект обучения (не в каждом кейсе)"
+      ],
+      "test": [
+        "Playwright: сборка экрана по content-pack"
+      ],
+      "ceo_gate": true,
+      "note": "CEO-гейт: Арена должна быть играбельна визуально.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "phase": 4,
+      "slug": "decision-capture",
+      "title": "Захват решения + доказательства + протокол",
+      "track": "frontend",
+      "deps": [
+        40
+      ],
+      "goal": "Захват основного решения, выбора доказательств, принуждение протокола решения.",
+      "acceptance": [
+        "4 варианта → одно решение фиксируется",
+        "Доказательства помечаются (если требует сценарий)",
+        "Протокол влияет на оценку (T044)"
+      ],
+      "test": [
+        "Playwright: фиксация решения"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "phase": 4,
+      "slug": "reveal-flow",
+      "title": "Reveal-флоу (факт→последствие→качество)",
+      "track": "frontend",
+      "deps": [
+        41,
+        21
+      ],
+      "goal": "После решения: раскрытие истории (T21) → последствие действия → оценка качества 0–100.",
+      "acceptance": [
+        "3 слоя: рыночный факт / последствие / качество",
+        "Качество не зависит от направления цены",
+        "Контролируемый исторический убыток может получить максимум"
+      ],
+      "test": [
+        "Playwright: reveal показывает 3 слоя",
+        "Vitest: качество не коррелирует с PnL"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "phase": 4,
+      "slug": "verdict",
+      "title": "Экран вердикта (панк-таблоид)",
+      "track": "frontend",
+      "deps": [
+        42
+      ],
+      "goal": "Вердикт: заголовок + атмосферная реплика + качество + кнопки [СЛЕДУЮЩАЯ ОХОТА]/[РАЗБОР].",
+      "acceptance": [
+        "Copy в tone-of-voice (style-tone)",
+        "Качество 0–100 + разбор «факт→логика→переносимое правило»",
+        "Нет нейтральных SaaS-заглушек"
+      ],
+      "test": [
+        "Playwright: вердикт отображается"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "phase": 4,
+      "slug": "scoring-engine",
+      "title": "Движок оценки",
+      "track": "shared",
+      "deps": [
+        30
+      ],
+      "goal": "Rubric: контекст/работа с доказательствами/выбор действия/управление риском/дисциплина и устойчивость к искажению.",
+      "acceptance": [
+        "Оценка 0–100 по 5 критериям",
+        "Правильное направление не компенсирует грубое нарушение риска",
+        "Несколько решений могут быть допустимыми"
+      ],
+      "test": [
+        "Vitest: rubric на эталонных сценариях"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "phase": 4,
+      "slug": "entity-integration",
+      "title": "Интеграция сущностей",
+      "track": "frontend",
+      "deps": [
+        40,
+        60
+      ],
+      "goal": "Показ/скрытие сущности; раскрытие после разбора; на продвинутом уровне — скрыта до разбора.",
+      "acceptance": [
+        "Сущность видна в задании по контенту",
+        "Раскрывается после разбора (или скрыта на продвинутом)",
+        "Не подсказывает ответ иконкой монстра"
+      ],
+      "test": [
+        "Playwright: сущность скрыта/раскрыта"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "phase": 4,
+      "slug": "protocol-integration",
+      "title": "Интеграция протоколов",
+      "track": "frontend",
+      "deps": [
+        40,
+        44
+      ],
+      "goal": "Протокол решения задаёт принцип оценки сессии; структура сценария: ситуация+условия+сущность+скиллы+протокол.",
+      "acceptance": [
+        "Протокол влияет на rubric (T044)",
+        "UI показывает активный протокол"
+      ],
+      "test": [
+        "Vitest: протокол меняет оценку",
+        "Playwright: UI протокола"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "phase": 4,
+      "slug": "onboarding",
+      "title": "Onboarding прогрессивного раскрытия",
+      "track": "frontend",
+      "deps": [
+        40,
+        45,
+        46
+      ],
+      "goal": "Последовательное раскрытие элементов в onboarding; короткий, пропускаемый; после — весь базовый UI открыт.",
+      "acceptance": [
+        "Раскрытие: текст→1 вкладка→2 вкладка→1 скилл→4 решения→разбор→2-й шаг→сущности→протоколы",
+        "Onboarding пропускаемый; профи не учит базе о свечах",
+        "После onboarding каркас не меняется между уровнями"
+      ],
+      "test": [
+        "Playwright: прогон onboarding",
+        "Vitest: порядок раскрытия"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "phase": 4,
+      "slug": "arena-e2e",
+      "title": "Playwright e2e Арены",
+      "track": "qa",
+      "deps": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "goal": "Сквозной e2e: старт сценария → решение → reveal → вердикт → запись в журнал, на детерминированном seed.",
+      "acceptance": [
+        "e2e проходит на Playwright",
+        "Детерминированный seed воспроизводим"
+      ],
+      "test": [
+        "playwright run arena"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "phase": 5,
+      "slug": "academy-scene",
+      "title": "AcademyScene (теория)",
+      "track": "frontend",
+      "deps": [
+        14,
+        30
+      ],
+      "goal": "Экран теории: записи, привязанные к картам навыков и сценариям.",
+      "acceptance": [
+        "Теория рендерится структурировано (rexUI)",
+        "Связи skill↔theory↔scenario в модели"
+      ],
+      "test": [
+        "Playwright: экран теории"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "phase": 5,
+      "slug": "academy-nav",
+      "title": "Навигация Академии",
+      "track": "frontend",
+      "deps": [
+        50,
+        40
+      ],
+      "goal": "Переходы: карта навыка → теория → связанные тренировки; ошибка → нужный разбор.",
+      "acceptance": [
+        "Из скилла/ошибки можно перейти в теорию и обратно",
+        "Пройденная теория открывает рекомендованный набор сценариев"
+      ],
+      "test": [
+        "Playwright: навигация связей"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "phase": 6,
+      "slug": "bestiary-grid",
+      "title": "Grid Бестиария (lazy)",
+      "track": "frontend",
+      "deps": [
+        14,
+        4
+      ],
+      "goal": "Сетка сущностей: lazy thumbs, состояния unseen/discovered/encountered/mastered.",
+      "acceptance": [
+        "Ленивая загрузка thumb по pack; hero-art не в первом сценарии",
+        "Состояния отображаются корректно",
+        "Бюджет дозагрузки раздела ≤600КБ"
+      ],
+      "test": [
+        "Playwright: lazy load grid",
+        "бюджет раздела"
+      ],
+      "ceo_gate": true,
+      "note": "CEO-гейт: Бестиарий — визуальная проверка.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "phase": 6,
+      "slug": "entity-detail",
+      "title": "Детальный экран сущности",
+      "track": "frontend",
+      "deps": [
+        60
+      ],
+      "goal": "Экран сущности: hero art, связанные ловушки/скиллы/сценарии, варианты.",
+      "acceptance": [
+        "Hero-art грузится лениво при открытии",
+        "Связи с ловушками/скиллами/сценариями кликабельны"
+      ],
+      "test": [
+        "Playwright: detail открывается"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "phase": 6,
+      "slug": "entity-icons",
+      "title": "Интеграция SVG-иконок сущностей 24×24",
+      "track": "frontend",
+      "deps": [
+        4,
+        60
+      ],
+      "goal": "Иконки сущностей 24×24 (SVG→атлас) в строках журнала/тегах/разборе.",
+      "acceptance": [
+        "Иконки из атласа (T4), tint по category color",
+        "Touch/видимый размер по UI-спец §3.3"
+      ],
+      "test": [
+        "Playwright: иконки рендерятся с tint"
+      ],
+      "ceo_gate": false,
+      "note": "См. ICON_NOTES: знак больше плашки — уменьшить.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "phase": 7,
+      "slug": "journal",
+      "title": "Журнал решений",
+      "track": "frontend",
+      "deps": [
+        48,
+        44
+      ],
+      "goal": "Персональная история: повторяющиеся паттерны, сильные/слабые зоны, закрытые ошибки, рекомендации.",
+      "acceptance": [
+        "Журнал заполняется после прохождений (T48)",
+        "Повторяющиеся паттерны выделяются"
+      ],
+      "test": [
+        "Playwright: журнал заполняется",
+        "Vitest: агрегация паттернов"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "phase": 7,
+      "slug": "profile",
+      "title": "Профиль (XP/ранг/стрик/ачивки)",
+      "track": "frontend",
+      "deps": [
+        15,
+        70
+      ],
+      "goal": "Профиль: XP/ранг, streak («день с закрытой ошибкой»), ачивки, founder badge.",
+      "acceptance": [
+        "XP/ранг из стора; стрик честный (за анализ, не за клик)",
+        "Ачивки и founder badge отображаются"
+      ],
+      "test": [
+        "Playwright: профиль",
+        "Vitest: логика стрика"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "phase": 7,
+      "slug": "repeat-recs",
+      "title": "Рекомендации по повтору",
+      "track": "frontend",
+      "deps": [
+        70,
+        33
+      ],
+      "goal": "Рекомендации тренировок по слабым зонам (из профиля ошибок T33).",
+      "acceptance": [
+        "Рекомендации генерятся по слабым зонам",
+        "Ведут в Арену/Академию"
+      ],
+      "test": [
+        "Playwright: рекомендации кликабельны"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "phase": 8,
+      "slug": "tournament-ui",
+      "title": "Турниры: список/вход/лидерборд",
+      "track": "frontend",
+      "deps": [
+        34,
+        42
+      ],
+      "goal": "Список турниров, вход, общий зафиксированный набор, лидерборд.",
+      "acceptance": [
+        "Все участники — один dataset + одна точка раскрытия",
+        "Лидерборд: качество→протокол→доказательства→скорость"
+      ],
+      "test": [
+        "Playwright: турнир-флоу"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 81,
+      "phase": 8,
+      "slug": "tournament-ws",
+      "title": "WS realtime + асинхронная оценка",
+      "track": "backend",
+      "deps": [
+        80,
+        104
+      ],
+      "goal": "WS обновления, асинхронная оценка, скорость — только tie-break.",
+      "acceptance": [
+        "WS доставляет обновления лидерборда",
+        "Скорость не влияет на оценку, только при равенстве качества"
+      ],
+      "test": [
+        "интегра-тест WS против сервера"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 90,
+      "phase": 9,
+      "slug": "market-ui",
+      "title": "Маркетплейс (косметика)",
+      "track": "frontend",
+      "deps": [
+        14
+      ],
+      "goal": "UI маркетплейса: косметика, темы, сезонные наборы, авторский контент.",
+      "acceptance": [
+        "Маркет показывает косметику/темы/сезоны",
+        "Покупка меняет только визуал"
+      ],
+      "test": [
+        "Playwright: открытие/применение косметики"
+      ],
+      "ceo_gate": false,
+      "note": "Запрет: покупка правильных ответов/лимита риска/преимущества.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 91,
+      "phase": 9,
+      "slug": "purchase-stub",
+      "title": "Заглушка покупки (без платежей)",
+      "track": "frontend",
+      "deps": [
+        90
+      ],
+      "goal": "Покупка косметики без реальных платежей в MVP; подтверждение без денежной ценности.",
+      "acceptance": [
+        "Покупка не влияет на данные/ответы/бюджет риска",
+        "Внутриигровая валюта без денежного выхода"
+      ],
+      "test": [
+        "Vitest: покупка не меняет сценарий"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 100,
+      "phase": 10,
+      "slug": "server-scaffold",
+      "title": "Каркас сервера (Fastify)",
+      "track": "backend",
+      "deps": [
+        0,
+        1
+      ],
+      "goal": "Fastify + Drizzle + SQLite: конфиг, миграции, seed, структура роутов/сервисов.",
+      "acceptance": [
+        "Сервер стартует; SQLite через Drizzle; миграции применяются",
+        "Zod на всех входах; структура роутов/сервисов"
+      ],
+      "test": [
+        "Vitest: boot сервера",
+        "миграции применяются"
+      ],
+      "ceo_gate": false,
+      "note": "Fastify+SQLite+Drizzle+Zod+WS обязательны (оставляем).",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 101,
+      "phase": 10,
+      "slug": "profiles",
+      "title": "Профили и персист прогресса",
+      "track": "backend",
+      "deps": [
+        100
+      ],
+      "goal": "API профилей и сохранения прогресса (XP/ранг/стрик/журнал).",
+      "acceptance": [
+        "CRUD профиля; сохранение прогресса валидируется Zod",
+        "Персист между сессиями"
+      ],
+      "test": [
+        "Playwright/API: профиль сохраняется"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "phase": 10,
+      "slug": "content-serving",
+      "title": "Отдача сценариев/ассетов + версионность + хэш future",
+      "track": "backend",
+      "deps": [
+        100,
+        30,
+        3
+      ],
+      "goal": "Отдача content-pack и ассетов; версия датасета; хэш скрытого future (до решения не раскрывается).",
+      "acceptance": [
+        "content-pack отдаётся по версии",
+        "Хэш скрытого future серверный; future не утекает до решения"
+      ],
+      "test": [
+        "Vitest: хэш future совпадает с клиентом",
+        "API-тест утечки"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 103,
+      "phase": 10,
+      "slug": "journal-persist",
+      "title": "Персист журнала/результатов + профиль ошибок",
+      "track": "backend",
+      "deps": [
+        101,
+        44
+      ],
+      "goal": "Сохранение результатов и профиля ошибок (для адаптации T33).",
+      "acceptance": [
+        "Результаты и профиль ошибок сохраняются",
+        "Валидируются Zod"
+      ],
+      "test": [
+        "API-тест сохранения"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 104,
+      "phase": 10,
+      "slug": "tournament-service",
+      "title": "Турнир-сервис + WS",
+      "track": "backend",
+      "deps": [
+        102,
+        34
+      ],
+      "goal": "Создание/вход в турнир, server-fixed seed, WS-канал, асинхронная оценка.",
+      "acceptance": [
+        "Турнир фиксирует seed серверно",
+        "WS рассылает обновления; оценка асинхронна"
+      ],
+      "test": [
+        "интегра-тест WS"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 105,
+      "phase": 10,
+      "slug": "anti-cheat",
+      "title": "Античит (server-fixed seeds, защита future)",
+      "track": "backend",
+      "deps": [
+        104,
+        102
+      ],
+      "goal": "Сервер фиксирует сценарии турниров, воспроизводимы, защищены от утечки future.",
+      "acceptance": [
+        "Сценарии турнира серверно зафиксированы и воспроизводимы",
+        "Future не утекает (проверка на стороне сервера)"
+      ],
+      "test": [
+        "API-тест: future недоступен до решения"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 106,
+      "phase": 10,
+      "slug": "api-contracts",
+      "title": "Zod-контракты API + OpenAPI",
+      "track": "backend",
+      "deps": [
+        100,
+        1
+      ],
+      "goal": "Все API-контракты валидируются Zod; генерация OpenAPI.",
+      "acceptance": [
+        "Каждый роут валидирует тело/ответ Zod",
+        "OpenAPI сгенерирован и в CI"
+      ],
+      "test": [
+        "контракт-тесты Zod",
+        "OpenAPI валиден"
+      ],
+      "ceo_gate": false,
+      "note": "Zod обязателен.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 107,
+      "phase": 10,
+      "slug": "backend-tests",
+      "title": "Тесты бэкенда (Vitest + Playwright live)",
+      "track": "qa",
+      "deps": [
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106
+      ],
+      "goal": "Покрытие сервисов Vitest + сквозные тесты против живого сервера Playwright.",
+      "acceptance": [
+        "Vitest-покрытие сервисов ≥70%",
+        "Playwright против живого сервера зелёный"
+      ],
+      "test": [
+        "vitest run server",
+        "playwright run server"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 110,
+      "phase": 11,
+      "slug": "content-scenarios",
+      "title": "Авторство: 25–40 исторических ситуаций",
+      "track": "content",
+      "deps": [
+        30,
+        44
+      ],
+      "goal": "Написать 25–40 исторических ситуаций (MVP): t0, скрытое future, вкладки, скиллы, 4 решения, опц. 2-й шаг, сущность, протокол, правила оценки.",
+      "acceptance": [
+        "25–40 ситуаций валидны по Zod content-pack",
+        "До решения нет утечки (нет точной даты/редкого события/ориг. заголовка)"
+      ],
+      "test": [
+        "Vitest: валидация набора",
+        "проверка отсутствия утечки"
+      ],
+      "ceo_gate": false,
+      "note": "Ситуации — реальные рыночные отрезки, не выдумка.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 111,
+      "phase": 11,
+      "slug": "content-skills-entities",
+      "title": "Авторство: скиллы, сущности, протоколы",
+      "track": "content",
+      "deps": [
+        30
+      ],
+      "goal": "8–12 карт навыков, 6–8 сущностей, набор протоколов решения.",
+      "acceptance": [
+        "8–12 скиллов; 6–8 сущностей (первые 8 из UI-спец §7.6)",
+        "Протоколы описаны и привязаны к rubric"
+      ],
+      "test": [
+        "Vitest: валидация по схемам"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 112,
+      "phase": 11,
+      "slug": "content-academy",
+      "title": "Авторство: теория Академии",
+      "track": "content",
+      "deps": [
+        30
+      ],
+      "goal": "Записи теории Академии, связанные со скиллами/сценариями.",
+      "acceptance": [
+        "Теория связана со скиллами/сценариями",
+        "Валидна по схеме"
+      ],
+      "test": [
+        "Vitest: валидация связей"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 113,
+      "phase": 11,
+      "slug": "copy-voice",
+      "title": "Прогон copy (панк-таблоид)",
+      "track": "content",
+      "deps": [
+        43,
+        110,
+        111,
+        112
+      ],
+      "goal": "Весь видимый текст в tone-of-voice (style-tone): заголовок+правда+неприятный вывод; шутка раскрывает механику.",
+      "acceptance": [
+        "Нет neutral-SaaS заглушек в UI",
+        "Copy проходит линт tone-of-voice",
+        "Шутка раскрывает механику, не случайный мем"
+      ],
+      "test": [
+        "линт copy"
+      ],
+      "ceo_gate": true,
+      "note": "CEO-гейт: финальная проверка голоса бренда.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 120,
+      "phase": 12,
+      "slug": "perf-budgets",
+      "title": "Бюджеты перф. в CI",
+      "track": "qa",
+      "deps": [
+        4,
+        20,
+        60
+      ],
+      "goal": "CI-гейты бюджетов: first screen ≤250КБ, core UI icon ≤12КБ, раздел ≤600КБ, ≤2.5с до интерактива.",
+      "acceptance": [
+        "Бюджеты проверяются в CI; CI падает при превышении",
+        "Phaser bundle — отдельный budget"
+      ],
+      "test": [
+        "CI: бюджеты зелёные"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 121,
+      "phase": 12,
+      "slug": "ui-matrix",
+      "title": "Матрица UI (устройства/a11y)",
+      "track": "qa",
+      "deps": [
+        12,
+        13,
+        18
+      ],
+      "goal": "320×568, 390×844, 430×932, 768×1024, 1440×900; safe areas; bottom nav/sheet/CTA; reduce-motion; offline/empty/error/loading.",
+      "acceptance": [
+        "Все разрешения пройдены Playwright",
+        "Reduce-motion и системные состояния работают"
+      ],
+      "test": [
+        "Playwright: матрица устройств"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 122,
+      "phase": 12,
+      "slug": "i18n",
+      "title": "i18n (RU + EN)",
+      "track": "frontend",
+      "deps": [
+        113
+      ],
+      "goal": "Плоские copy-keys, RU-first + EN; переключение локали.",
+      "acceptance": [
+        "Все видимые тексты — через copy-keys (нет строк в коде)",
+        "RU + EN переключаются; locale-архитектура под 10+ языков"
+      ],
+      "test": [
+        "Vitest: нет хардкода строк",
+        "Playwright: переключение RU/EN"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 123,
+      "phase": 12,
+      "slug": "asset-qa",
+      "title": "SVG/растр QA",
+      "track": "qa",
+      "deps": [
+        4,
+        62
+      ],
+      "goal": "SVG: 16/20/24/28px, tint (active/disabled/warning/danger/data/noise), тёмный/светлый фон, touch 44×44. Растр: decode, crop, lazy, placeholder, category color.",
+      "acceptance": [
+        "SVG-иконки проходят QA-матрицу",
+        "Растр: hero-art не в первом сценарии; crop/safe-area корректны"
+      ],
+      "test": [
+        "Playwright: QA-матрица иконок/растра"
+      ],
+      "ceo_gate": false,
+      "note": "См. ICON_NOTES: знак больше плашки — уменьшить.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 124,
+      "phase": 12,
+      "slug": "coverage-gate",
+      "title": "Гейт покрытия Vitest + Playwright",
+      "track": "qa",
+      "deps": [
+        24,
+        35,
+        48,
+        107,
+        120,
+        121,
+        122,
+        123
+      ],
+      "goal": "Суммарный гейт покрытия и всех e2e перед релизом.",
+      "acceptance": [
+        "Vitest≥80% ядра, Playwright e2e зелёный",
+        "Гейт блокирует релиз при падении"
+      ],
+      "test": [
+        "vitest + playwright gates"
+      ],
+      "ceo_gate": false,
+      "note": "",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 130,
+      "phase": 13,
+      "slug": "admin-scaffold",
+      "title": "Каркас админ-панели и CRM (план+сборка позже)",
+      "track": "admin",
+      "deps": [
+        101,
+        102,
+        103
+      ],
+      "goal": "Структура admin/ (панель + CRM): управление контентом, сток данных из игры; НЕ реализовывать в первую очередь — спланировать.",
+      "acceptance": [
+        "admin/ scaffold с README и ТЗ из admin/ADMIN_ROADMAP.md",
+        "CRM-модель: контент + сток данных из игры"
+      ],
+      "test": [
+        "admin/ собирается (stub)"
+      ],
+      "ceo_gate": false,
+      "note": "Админ/CRM — отдельная итерация; план обязателен сейчас.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 131,
+      "phase": 13,
+      "slug": "admin-ai-api",
+      "title": "Подключение AI-API в админке (план)",
+      "track": "admin",
+      "deps": [
+        130
+      ],
+      "goal": "В админке — подключение API AI-моделей для генерации контента; «компания из отделов и чатов».",
+      "acceptance": [
+        "ТЗ подключения AI-API (провайдеры, ключи, лимиты) задокументировано",
+        "Распределение фронт-работ между агентами через админ/чат"
+      ],
+      "test": [
+        "ТЗ утверждён CEO"
+      ],
+      "ceo_gate": false,
+      "note": "Это будущая задача: оркестрация фронт-работ через CRM/AI-API как «отделы и чаты» — отдельно от текущей агентной разработки через GitHub (см. admin/ADMIN_ROADMAP.md).",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    },
+    {
+      "id": 132,
+      "phase": 13,
+      "slug": "release-freeze",
+      "title": "Фриз документации + чек-лист релиза",
+      "track": "qa",
+      "deps": [
+        124,
+        131
+      ],
+      "goal": "Финальный чек-лист релиза; фриз docs; продукт release-ready 100%.",
+      "acceptance": [
+        "Чек-лист релиза закрыт (все фазы approved)",
+        "docs не противоречат коду"
+      ],
+      "test": [
+        "чек-лист закрыт"
+      ],
+      "ceo_gate": true,
+      "note": "CEO-гейт: финальная визуальная приёмка релиза.",
+      "status": "todo",
+      "assignee": null,
+      "updated": "2026-09-08",
+      "log": [
+        {
+          "date": "2026-09-08",
+          "agent": "init",
+          "status": "todo",
+          "note": "задача импортирована в единый реестр"
+        }
+      ]
+    }
+  ],
+  "schema_version": 2
+}
