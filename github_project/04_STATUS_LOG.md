@@ -90,13 +90,13 @@ _Теория, привязанная к картам навыков и сцен
 | T050 | [AcademyScene (теория)](./tasks/T050_academy-scene.md) | `frontend` | `todo` | — | 2026-09-08 |  |
 | T051 | [Навигация Академии](./tasks/T051_academy-nav.md) | `frontend` | `todo` | — | 2026-09-08 |  |
 
-## Фаза 6 — Бестиарий (Bestiary) 🔴CEO
+## Фаза 6 — Угрозы (Threats) 🔴CEO
 
 _Коллекция сущностей: grid (lazy thumbs), состояния, детальный экран, интеграция SVG-иконок 24×24._
 
 | ID | Задача | Трек | Статус | Исполнитель | Обновлено | Гейт |
 |---|---|---|---|---|---|---|
-| T060 | [Grid Бестиария (lazy)](./tasks/T060_bestiary-grid.md) | `frontend` | `todo` | — | 2026-09-08 | 🔴 |
+| T060 | [Grid угроз (lazy)](./tasks/T060_bestiary-grid.md) | `frontend` | `todo` | — | 2026-09-08 | 🔴 |
 | T061 | [Детальный экран сущности](./tasks/T061_entity-detail.md) | `frontend` | `todo` | — | 2026-09-08 |  |
 | T062 | [Интеграция SVG-иконок сущностей 24×24](./tasks/T062_entity-icons.md) | `frontend` | `todo` | — | 2026-09-08 |  |
 

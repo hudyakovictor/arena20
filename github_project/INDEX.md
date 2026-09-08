@@ -45,7 +45,7 @@
 | 3 | scenario-gen | T030–T035 |
 | 4 | Arena Loop | T040–T048 |
 | 5 | Academy | T050–T051 |
-| 6 | Bestiary | T060–T062 |
+| 6 | Threats | T060–T062 |
 | 7 | Journal/Profile | T070–T072 |
 | 8 | Tournaments | T080–T081 |
 | 9 | Market | T090–T091 |

@@ -89,10 +89,13 @@ export interface LabelOpts {
 
 /** rexUI label: фон + иконка + текст. */
 export function makeLabel(scene: Phaser.Scene, opts: LabelOpts): RexUILabel {
+  const padL = opts.pad?.left ?? SPACING.md;
+  const padR = opts.pad?.right ?? SPACING.md;
   const text = makeText(scene, 0, 0, opts.text, {
     size: opts.size ?? FONT_SIZES.body,
     tone: opts.tone ?? 'primary',
     mono: opts.mono,
+    ...(opts.width ? { wrapWidth: opts.width - padL - padR } : {}),
   });
   if (opts.align === 'center') text.setOrigin(0.5, 0.5);
   const bg = rex(scene).add.roundRectangle(
@@ -105,8 +108,8 @@ export function makeLabel(scene: Phaser.Scene, opts: LabelOpts): RexUILabel {
     opts.bgAlpha ?? 1,
   );
   const space: RexUISpace = {
-    left: opts.pad?.left ?? SPACING.md,
-    right: opts.pad?.right ?? SPACING.md,
+    left: padL,
+    right: padR,
     top: opts.pad?.top ?? SPACING.sm,
     bottom: opts.pad?.bottom ?? SPACING.sm,
   };
@@ -117,6 +120,8 @@ export function makeLabel(scene: Phaser.Scene, opts: LabelOpts): RexUILabel {
     text,
     space,
   });
+  // Top-left origin: setPosition(x, y) ставит левый верхний угол (как panelBg).
+  label.setOrigin(0, 0);
   label.layout();
   return label;
 }
@@ -155,6 +160,7 @@ export function makeButtons(scene: Phaser.Scene, opts: ButtonsOpts): RexUIButton
     space: { item: opts.spaceItem ?? SPACING.sm },
   });
   buttons.on('button.click', (_btn, index) => opts.onClick(index));
+  buttons.setOrigin(0, 0);
   buttons.layout();
   return buttons;
 }
@@ -231,30 +237,30 @@ export interface ProgressBar {
   setRatio: (ratio: number) => void;
 }
 
-/** Прогресс-бар: фон + заливка (Graphics не нужен — два roundRectangle). */
+/** Прогресс-бар: фон + заливка-пилюля. Начало координат — левый край по центру высоты. */
 export function makeProgressBar(
   scene: Phaser.Scene,
   w: number,
   h: number,
   tone: UiTone = 'active',
 ): ProgressBar {
-  const bg = rex(scene).add.roundRectangle(0, 0, w, h, h / 2, UI_BG.surface3);
-  const fill = rex(scene).add.roundRectangle(0, 0, w, h, h / 2, UI_TINT[tone]);
-  fill.setOrigin(0, 0.5);
-  const maskShape = scene.add.graphics();
-  const container = scene.add.container(0, 0, [bg, fill]);
-  bg.setOrigin(0, 0.5);
-  fill.setPosition(-w / 2, 0);
-  bg.setPosition(0, 0);
+  const container = scene.add.container(0, 0);
+  const g = scene.add.graphics();
+  container.add(g);
   const setRatio = (ratio: number): void => {
     const clamped = Math.max(0, Math.min(1, ratio));
-    maskShape.clear();
-    maskShape.fillStyle(PURE.white, 1);
-    maskShape.fillRect(fill.x, fill.y - h / 2, w * clamped, h);
-    const mask = maskShape.createGeometryMask();
-    fill.setMask(mask);
+    g.clear();
+    g.fillStyle(UI_BG.surface3, 1);
+    g.fillRoundedRect(0, -h / 2, w, h, h / 2);
+    if (clamped > 0) {
+      // Пилюля вместо маски: круглые оба конца, читается на любом ratio.
+      const fw = Math.max(0.5, w * clamped);
+      g.fillStyle(UI_TINT[tone], 1);
+      g.fillRoundedRect(0, -h / 2, fw, h, Math.min(h / 2, fw / 2));
+    }
   };
   setRatio(0);
+  container.setSize(w, h);
   return { container, setRatio };
 }
 
@@ -276,7 +282,7 @@ export function makeSection(
   const line = scene.add.graphics();
   line.fillStyle(UI_TINT.secondary, 0.25);
   const y = 16;
-  const rightW = right ? 90 : 0;
+  const rightW = right ? 120 : 0;
   line.fillRect(
     left.width + 8,
     y,
@@ -299,6 +305,7 @@ export function makeChip(
   dot.fillStyle(UI_TINT[tone], 1);
   dot.fillCircle(6, 11, 4);
   const label = makeText(scene, 15, 0, text, { mono: true, size: FONT_SIZES.caption, tone });
+  label.setY(Math.max(0, 11 - label.height / 2));
   const bg = rex(scene).add.roundRectangle(0, 0, label.width + 24, 22, 11, UI_BG.surface2);
   bg.setOrigin(0, 0.5);
   bg.setPosition(0, 11);
@@ -363,8 +370,15 @@ export function makeSheet(
 
 /** Тост: короткое подтверждение действия. */
 export function toast(scene: Phaser.Scene, text: string): void {
-  const label = makeLabel(scene, { text, size: FONT_SIZES.caption, mono: true, tone: 'primary' });
-  label.setPosition(LAYOUT.viewWidth / 2 - label.width / 2, LAYOUT.viewHeight - 170);
+  const label = makeLabel(scene, {
+    text,
+    width: LAYOUT.viewWidth - LAYOUT.gutter * 2,
+    size: FONT_SIZES.caption,
+    mono: true,
+    tone: 'primary',
+    align: 'center',
+  });
+  label.setPosition(LAYOUT.gutter, LAYOUT.viewHeight - 170);
   scene.tweens.add({
     targets: label,
     alpha: 0,

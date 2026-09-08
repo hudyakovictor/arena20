@@ -20,7 +20,7 @@ client/
   vite.config.ts
   src/
     main.ts            # Phaser.Game bootstrap (T010)
-    scenes/            # Boot, Preload, Shell, Arena, Academy, Bestiary, Journal, Tournament, Market
+    scenes/            # Boot, Preload, Shell, Arena, Academy, Threats, Journal, Tournament, Market
     ui/                # rexUI-компоненты: panel, button, tabs, list, slider, checklist, modal, toast (T014)
     systems/           # store (zustand), sound, pwa, assets, scenario runtime
     game/              # CandleChart (T020), client runtime scenario-gen

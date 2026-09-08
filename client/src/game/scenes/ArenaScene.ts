@@ -242,10 +242,6 @@ export default class ArenaScene extends Phaser.Scene {
     const title = makeText(this, SPACING.md, 7, t(`arena.mode.format.${format}`), {
       size: FONT_SIZES.body,
     });
-    const body = makeText(this, SPACING.md, 27, t(`arena.mode.format.${format}Body`), {
-      size: FONT_SIZES.caption,
-      tone: 'secondary',
-    });
     const btn = makeLabel(this, {
       text: t('arena.mode.choose'),
       size: FONT_SIZES.caption,
@@ -254,6 +250,12 @@ export default class ArenaScene extends Phaser.Scene {
       pad: { left: SPACING.sm, right: SPACING.sm, top: 10, bottom: 10 },
     });
     btn.setPosition(INNER_W - btn.width - SPACING.sm, 8);
+    // Две строки caption (27…53) умещаются в ряд 56px; кнопка не перекрывается.
+    const body = makeText(this, SPACING.md, 27, t(`arena.mode.format.${format}Body`), {
+      size: FONT_SIZES.caption,
+      tone: 'secondary',
+      wrapWidth: INNER_W - btn.width - SPACING.md * 2 - SPACING.sm,
+    });
     root.add([bg, title, body, btn]);
     root.setSize(INNER_W, 56);
     const zone = this.add.zone(0, 0, INNER_W, 56).setOrigin(0, 0);
@@ -1396,10 +1398,16 @@ export default class ArenaScene extends Phaser.Scene {
         tone: 'secondary',
         wrapWidth: innerW - SPACING.md * 2,
       });
-      const exitCta = makeCta(this, t('arena.exit'), () => {
-        sheet.hide();
-        useArenaStore.getState().setRoute('home');
-      });
+      const exitCta = makeCta(
+        this,
+        t('arena.exit'),
+        () => {
+          sheet.hide();
+          useArenaStore.getState().setRoute('home');
+        },
+        'active',
+        innerW - SPACING.md * 2,
+      );
       exitCta.setPosition(x, 60);
       panel.add([title, hint, exitCta]);
       return 260;

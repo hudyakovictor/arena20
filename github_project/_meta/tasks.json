@@ -33,7 +33,7 @@
         "Phaser 4 + Vite, один WebGL-canvas, portrait-scale, game loop",
         "Архитектура сцен: Boot/Preload/Shell/Router",
         "Top Bar (rexUI): прогресс, ресурсы, уведомления, помощь, настройки",
-        "Bottom nav 5 слотов (Arena/Academy/Bestiary/Journal/More)",
+        "Bottom nav 5 слотов (Arena/Academy/Threats/Journal/More)",
         "rexUI-база: panel, button, tabs, list, slider, checklist, modal, toast",
         "Zustand-store + персист (localStorage)",
         "Звук (Phaser Sound) + настройки (mute/reduce-motion)",
@@ -126,14 +126,14 @@
       "ceo_gate": false
     },
     "6": {
-      "title": "Бестиарий (Bestiary)",
+      "title": "Угрозы (Threats)",
       "goal": "Коллекция сущностей: grid (lazy thumbs), состояния, детальный экран, интеграция SVG-иконок 24×24.",
       "deliverables": [
         "Grid сущностей (lazy thumbs), состояния unseen/discovered/encountered/mastered",
         "Детальный экран сущности (hero art, связанные ловушки/скиллы/сценарии)",
         "Интеграция иконок сущностей 24×24 (SVG→атлас)"
       ],
-      "exit": "Бестиарий лениво грузит иллюстрации только при открытии; первая сцена не тянет hero-art.",
+      "exit": "Угрозы лениво грузят иллюстрации только при открытии; первая сцена не тянет hero-art.",
       "test": "Playwright (grid→detail, lazy load), бюджет дозагрузки раздела ≤600КБ.",
       "deps": [
         1
@@ -275,7 +275,7 @@
   "tracks": {
     "foundation": "Каркас репозитория и конвенции (фаза 0).",
     "shared": "Общие схемы, токены-манифест, движок сценариев, оценка (фазы 0,3,4-shared). Без React.",
-    "frontend": "Phaser 4 игра: shell, график, Арена, Академия, Бестиарий, Журнал, Турниры, Маркет, i18n (фазы 1,2,4–9,12).",
+    "frontend": "Phaser 4 игра: shell, график, Арена, Академия, Угрозы, Журнал, Турниры, Маркет, i18n (фазы 1,2,4–9,12).",
     "backend": "Fastify/SQLite/Drizzle/Zod/WS сервер (фаза 10).",
     "content": "Авторство контента и copy (фаза 11).",
     "qa": "Тесты, бюджеты, матрица UI, i18n-гейт, релиз (фазы 0,2,3,4,10,12,13).",
@@ -604,7 +604,7 @@
       "deps": [
         10
       ],
-      "goal": "BootScene/PreloadScene/ShellScene + router между экранами (Arena/Academy/Bestiary/Journal/More) без React.",
+      "goal": "BootScene/PreloadScene/ShellScene + router между экранами (Arena/Academy/Threats/Journal/More) без React.",
       "acceptance": [
         "Сцены загружаются лениво; ShellScene постоянна (top bar + bottom nav)",
         "Роутинг декларативный, на Zustand-сторе, без React",
@@ -682,7 +682,7 @@
         11,
         2
       ],
-      "goal": "Нижняя навигация 5 слотов (Arena/Academy/Bestiary/Journal/More) на rexUI/SVG.",
+      "goal": "Нижняя навигация 5 слотов (Arena/Academy/Threats/Journal/More) на rexUI/SVG.",
       "acceptance": [
         "5 слотов, active-состояние по токену active (#C8F135)",
         "Средний слот — акцентный (Arena); touch 44×44",
@@ -723,7 +723,7 @@
       "goal": "Набор переиспользуемых rexUI-компонентов: panel, button, tabs, list, slider, checklist, modal, toast.",
       "acceptance": [
         "Компоненты в отдельном модуле ui/, параметризуемые токенами",
-        "Tabs/List/Slider/Checklist используются далее в Арене/Академии/Бестиарии",
+        "Tabs/List/Slider/Checklist используются далее в Арене/Академии/Угрозах",
         "Modal/toast переиспользуемы"
       ],
       "test": [
@@ -1724,7 +1724,7 @@
       "id": 60,
       "phase": 6,
       "slug": "bestiary-grid",
-      "title": "Grid Бестиария (lazy)",
+      "title": "Grid угроз (lazy)",
       "track": "frontend",
       "deps": [
         14,
@@ -1741,7 +1741,7 @@
         "бюджет раздела"
       ],
       "ceo_gate": true,
-      "note": "CEO-гейт: Бестиарий — визуальная проверка.",
+      "note": "CEO-гейт: Угрозы — визуальная проверка.",
       "status": "todo",
       "assignee": null,
       "updated": "2026-09-08",

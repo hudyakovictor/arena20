@@ -11,7 +11,7 @@
 - **Обновлено:** 2026-09-08
 
 ## Цель
-Нижняя навигация 5 слотов (Arena/Academy/Bestiary/Journal/More) на rexUI/SVG.
+Нижняя навигация 5 слотов (Arena/Academy/Threats/Journal/More) на rexUI/SVG.
 
 ## Критерии приёмки
 - [ ] 5 слотов, active-состояние по токену active (#C8F135)
