@@ -1,6 +1,8 @@
 // Паритет копи и цепочка фолбэков (RU — первый язык MVP, T122 расширит EN).
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { COPY, t } from './copy.js';
+import { COPY, COPY_TODO, t } from './copy.js';
 
 /** Ключи среза «Арена по прототипу 4.1–4.13»: EN обязан присутствовать. */
 const ARENA_SLICE_KEYS = [
@@ -134,6 +136,24 @@ describe('copy: фолбэки и паритет среза арены', () => {
       if (!key.endsWith('.short')) continue;
       expect(COPY.ru[key]?.length ?? 99, key).toBeLessThanOrEqual(16);
       expect(COPY.en[key]?.length ?? 99, key).toBeLessThanOrEqual(16);
+    }
+  });
+});
+
+describe('copy: синхронизация с keys.tsv', () => {
+  it('copy.keys.ts актуален (node scripts/build-copy.mjs --check)', () => {
+    const script = fileURLToPath(new URL('../../scripts/build-copy.mjs', import.meta.url));
+    expect(() =>
+      execFileSync(process.execPath, [script, '--check'], { stdio: 'pipe' }),
+    ).not.toThrow();
+  });
+
+  it('todo-ключи отсутствуют в RU/EN до появления текста', () => {
+    expect(COPY_TODO.length).toBeGreaterThan(0);
+    for (const key of COPY_TODO) {
+      expect(COPY.ru[key], `RU has todo: ${key}`).toBeUndefined();
+      expect(COPY.en[key], `EN has todo: ${key}`).toBeUndefined();
+      expect(t('ru', key), `fallback: ${key}`).toBe(key);
     }
   });
 });

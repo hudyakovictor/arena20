@@ -22,6 +22,7 @@
     "test": "npm run test --workspaces --if-present",
     "test:e2e": "npm run test:e2e --workspace @signal-arena/client",
     "check:conventions": "node scripts/check-conventions.mjs",
+    "build:copy": "node scripts/build-copy.mjs",
     "plan:check": "python3 github_project/_meta/generate.py check"
   },
   "devDependencies": {

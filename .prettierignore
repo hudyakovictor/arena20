@@ -5,3 +5,4 @@ dev-dist
 github_project/
 *.min.js
 package-lock.json
+shared/src/copy.keys.ts
