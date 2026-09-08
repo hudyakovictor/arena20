@@ -1,0 +1,24 @@
+{
+  "name": "@signal-arena/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "SIGNAL ARENA shared: Zod-схемы, типы, дизайн-токены, детерминированный движок сценариев",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "seedrandom": "^3.0.5",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/seedrandom": "^3.0.8",
+    "typescript": "^5.9.2",
+    "vitest": "^5.0.0"
+  }
+}
