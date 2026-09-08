@@ -1,0 +1,31 @@
+{
+  "name": "@signal-arena/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "SIGNAL ARENA server — Fastify + SQLite(Drizzle) + Zod + WS (каркас, T100)",
+  "scripts": {
+    "dev": "tsx --watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/db/migrate.ts"
+  },
+  "dependencies": {
+    "@fastify/websocket": "^11.3.0",
+    "@signal-arena/shared": "0.1.0",
+    "better-sqlite3": "^13.0.3",
+    "drizzle-orm": "^0.45.2",
+    "fastify": "^5.12.3",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^26.5.0",
+    "drizzle-kit": "^0.31.10",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.2",
+    "vitest": "^5.0.0"
+  }
+}
