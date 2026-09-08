@@ -4,7 +4,7 @@
 
 - **Фаза:** 3 — Движок сценариев (scenario-gen + seedrandom)
 - **Трек:** `shared`
-- **Статус:** `done`
+- **Статус:** `approved`
 - **Исполнитель:** agent-arena-01
 - **Зависимости:** T001, T003
 - **CEO-гейт:** нет
@@ -33,6 +33,8 @@
 | 2026-09-08 | init | `todo` | задача импортирована в единый реестр |
 | 2026-09-08 | agent-arena-01 | `in_progress` | force: прямое назначение пользователя (vertical slice: shared+экраны phaser); deps approve позже |
 | 2026-09-08 | agent-arena-01 | `done` | vitest: fixture content-pack v0.1.0 валидируется contentPackSchema (2 сценария/8 скиллов/6 сущностей/4 протокола) |
+| 2026-09-08 | agent-arena-01 | `review` | PR #1 открыт |
+| 2026-09-08 | agent-arena-01 | `approved` | PR #1 merged в main; принято CEO |
 
 ## Команды статуса
 ```bash

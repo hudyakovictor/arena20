@@ -4,7 +4,7 @@
 
 - **Фаза:** 3 — Движок сценариев (scenario-gen + seedrandom)
 - **Трек:** `shared`
-- **Статус:** `done`
+- **Статус:** `approved`
 - **Исполнитель:** agent-arena-01
 - **Зависимости:** T030
 - **CEO-гейт:** нет
@@ -35,6 +35,8 @@
 | 2026-09-08 | init | `todo` | задача импортирована в единый реестр |
 | 2026-09-08 | agent-arena-01 | `in_progress` | force: прямое назначение пользователя (vertical slice: shared+экраны phaser); deps approve позже |
 | 2026-09-08 | agent-arena-01 | `done` | vitest prng 5/5 incl. воспроизводимость по 1000 seed |
+| 2026-09-08 | agent-arena-01 | `review` | PR #1 открыт |
+| 2026-09-08 | agent-arena-01 | `approved` | PR #1 merged в main; принято CEO |
 
 ## Команды статуса
 ```bash

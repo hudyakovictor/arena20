@@ -303,7 +303,7 @@
       ],
       "ceo_gate": false,
       "note": "Не реализовывать игру здесь — только каркас и конвенции.",
-      "status": "done",
+      "status": "approved",
       "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
@@ -324,6 +324,18 @@
           "agent": "agent-arena-01",
           "status": "done",
           "note": "typecheck/lint/format/vitest/build/conventions green локально (29 тестов); plan CI pass; полный CI — proposed файл, ждёт workflows-права"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "review",
+          "note": "PR #1 открыт"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "approved",
+          "note": "PR #1 merged в main; принято CEO"
         }
       ]
     },
@@ -348,7 +360,7 @@
       ],
       "ceo_gate": false,
       "note": "Обязателен strict; никаких any.",
-      "status": "done",
+      "status": "approved",
       "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
@@ -369,6 +381,18 @@
           "agent": "agent-arena-01",
           "status": "done",
           "note": "vitest shared/schemas.test.ts 4/4: валидный пак ok, невалидный падает, public режет future"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "review",
+          "note": "PR #1 открыт"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "approved",
+          "note": "PR #1 merged в main; принято CEO"
         }
       ]
     },
@@ -393,7 +417,7 @@
       ],
       "ceo_gate": false,
       "note": "Цвет — не единственный носитель статуса (см. UI-спец §9/§13).",
-      "status": "done",
+      "status": "approved",
       "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
@@ -414,6 +438,18 @@
           "agent": "agent-arena-01",
           "status": "done",
           "note": "vitest tokens 4/4 + check-conventions HEX-scan OK; woff2 x6 в бандле (каждый ≤24KB)"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "review",
+          "note": "PR #1 открыт"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "approved",
+          "note": "PR #1 merged в main; принято CEO"
         }
       ]
     },
@@ -1073,7 +1109,7 @@
       ],
       "ceo_gate": false,
       "note": "",
-      "status": "done",
+      "status": "approved",
       "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
@@ -1094,6 +1130,18 @@
           "agent": "agent-arena-01",
           "status": "done",
           "note": "vitest: fixture content-pack v0.1.0 валидируется contentPackSchema (2 сценария/8 скиллов/6 сущностей/4 протокола)"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "review",
+          "note": "PR #1 открыт"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "approved",
+          "note": "PR #1 merged в main; принято CEO"
         }
       ]
     },
@@ -1117,7 +1165,7 @@
       ],
       "ceo_gate": false,
       "note": "seedrandom обязателен.",
-      "status": "done",
+      "status": "approved",
       "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
@@ -1138,6 +1186,18 @@
           "agent": "agent-arena-01",
           "status": "done",
           "note": "vitest prng 5/5 incl. воспроизводимость по 1000 seed"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "review",
+          "note": "PR #1 открыт"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "approved",
+          "note": "PR #1 merged в main; принято CEO"
         }
       ]
     },
@@ -2002,7 +2062,7 @@
       ],
       "ceo_gate": false,
       "note": "Fastify+SQLite+Drizzle+Zod+WS обязательны (оставляем).",
-      "status": "done",
+      "status": "approved",
       "assignee": "agent-arena-01",
       "updated": "2026-09-08",
       "log": [
@@ -2023,6 +2083,18 @@
           "agent": "agent-arena-01",
           "status": "done",
           "note": "vitest server 3/3: /health, /api/content/version, миграции на :memory: + smoke tsx curl /health"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "review",
+          "note": "PR #1 открыт"
+        },
+        {
+          "date": "2026-09-08",
+          "agent": "agent-arena-01",
+          "status": "approved",
+          "note": "PR #1 merged в main; принято CEO"
         }
       ]
     },
