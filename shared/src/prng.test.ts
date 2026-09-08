@@ -11,6 +11,17 @@ describe('T031 PRNG determinism', () => {
     expect(seqA).toEqual(seqB);
   });
 
+  it('воспроизводимость по 1000 seed (тест-план T031)', () => {
+    for (let i = 0; i < 1000; i += 1) {
+      const seed = `signal-arena/seed-${i}`;
+      const a = createRng(seed);
+      const b = createRng(seed);
+      expect(a.next()).toBe(b.next());
+      expect(a.int(0, 99)).toBe(b.int(0, 99));
+      expect(a.pick([1, 2, 3, 4, 5])).toBe(b.pick([1, 2, 3, 4, 5]));
+    }
+  });
+
   it('разные seed дают разные последовательности', () => {
     const a = createRng('seed-a');
     const b = createRng('seed-b');
