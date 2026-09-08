@@ -1,0 +1,54 @@
+# PROPOSED workflow — перенести в .github/workflows/ci.yml ревьюером
+# с правом `workflows` (токен песочницы его не имеет, см. PR).
+# Состав: plan + lint + format + typecheck + unit + client build + e2e (chromium).
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Validate plan model
+        run: python3 github_project/_meta/generate.py check
+      - name: Install
+        run: npm ci
+      - name: Conventions
+        run: npm run check:conventions
+      - name: Lint
+        run: npm run lint
+      - name: Format check
+        run: npm run format:check
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm run test
+      - name: Build client
+        run: npm run build --workspace @signal-arena/client
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Install Playwright chromium
+        run: npx playwright install --with-deps chromium
+      - name: E2E (client shell + arena)
+        run: npm run test:e2e --workspace @signal-arena/client

@@ -1,0 +1,40 @@
+{
+  "name": "signal-arena",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "SIGNAL ARENA — игровой тренажёр качества торговых решений (Phaser 4 + Fastify + shared Zod-контракты)",
+  "workspaces": [
+    "client",
+    "server",
+    "shared",
+    "admin"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @signal-arena/client",
+    "dev:server": "npm run dev --workspace @signal-arena/server",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "npm run test --workspaces --if-present",
+    "test:e2e": "npm run test:e2e --workspace @signal-arena/client",
+    "check:conventions": "node scripts/check-conventions.mjs",
+    "plan:check": "python3 github_project/_meta/generate.py check"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.12.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.38.0"
+  },
+  "engines": {
+    "node": ">=22.12.0",
+    "npm": ">=10.0.0"
+  }
+}

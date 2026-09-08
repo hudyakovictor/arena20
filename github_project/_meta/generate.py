@@ -141,7 +141,12 @@ def task_page(task: dict[str, Any], phases: dict[int, Any]) -> str:
     tests = "\n".join(f"- {item}" for item in task["test"])
     note = f"\n> 📌 {task['note']}\n" if task.get("note") else ""
     log_rows = "\n".join(
-        f"| {row['date']} | {row['agent']} | `{row['status']}` | {str(row['note']).replace('|', '\\|')} |"
+        "| {date} | {agent} | `{status}` | {note} |".format(
+            date=row["date"],
+            agent=row["agent"],
+            status=row["status"],
+            note=str(row["note"]).replace("|", "\\|"),
+        )
         for row in task["log"]
     )
     gate = "да — требуется визуальная приёмка CEO перед `approved`" if task["ceo_gate"] else "нет"
