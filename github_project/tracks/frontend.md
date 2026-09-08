@@ -6,25 +6,25 @@ _Phaser 4 игра: shell, график, Арена, Академия, Бест�
 
 | ID | Задача | Фаза | Зависимости | Статус | Исполнитель |
 |---|---|---|---|---|---|
-| T002 | [Модуль дизайн-токенов](../tasks/T002_design-tokens.md) | 0 | T000 | `todo` | — |
+| T002 | [Модуль дизайн-токенов](../tasks/T002_design-tokens.md) | 0 | T000 | `done` | agent-arena-01 |
 | T004 | [Пайплайн сборки ассетов](../tasks/T004_asset-pipeline.md) | 0 | T000, T002, T003 | `todo` | — |
-| T010 | [Phaser 4 boot + Vite + Canvas](../tasks/T010_phaser-boot.md) | 1 | T000, T002 | `todo` | — |
-| T011 | [Архитектура сцен и роутер](../tasks/T011_scene-arch.md) | 1 | T010 | `todo` | — |
-| T012 | [Top Bar (rexUI)](../tasks/T012_topbar.md) | 1 | T011, T002 | `todo` | — |
-| T013 | [Bottom navigation (5 слотов)](../tasks/T013_bottom-nav.md) | 1 | T011, T002 | `todo` | — |
-| T014 | [rexUI базовые компоненты](../tasks/T014_rexiu-base.md) | 1 | T011 | `todo` | — |
-| T015 | [Zustand-store + персист](../tasks/T015_zustand-store.md) | 1 | T011, T001 | `todo` | — |
-| T016 | [Звук (Phaser Sound) + настройки](../tasks/T016_sound.md) | 1 | T011, T015 | `todo` | — |
-| T017 | [PWA (vite-plugin-pwa)](../tasks/T017_pwa.md) | 1 | T010 | `todo` | — |
-| T018 | [Системные состояния (loading/offline/empty/error)](../tasks/T018_sys-states.md) | 1 | T014, T017 | `todo` | — |
-| T020 | [CandleChart core (Graphics)](../tasks/T020_chart-core.md) | 2 | T014, T001 | `todo` | — |
-| T021 | [Reveal скрытого future](../tasks/T021_chart-reveal.md) | 2 | T020 | `todo` | — |
+| T010 | [Phaser 4 boot + Vite + Canvas](../tasks/T010_phaser-boot.md) | 1 | T000, T002 | `in_progress` | agent-arena-01 |
+| T011 | [Архитектура сцен и роутер](../tasks/T011_scene-arch.md) | 1 | T010 | `in_progress` | agent-arena-01 |
+| T012 | [Top Bar (rexUI)](../tasks/T012_topbar.md) | 1 | T011, T002 | `in_progress` | agent-arena-01 |
+| T013 | [Bottom navigation (5 слотов)](../tasks/T013_bottom-nav.md) | 1 | T011, T002 | `in_progress` | agent-arena-01 |
+| T014 | [rexUI базовые компоненты](../tasks/T014_rexiu-base.md) | 1 | T011 | `in_progress` | agent-arena-01 |
+| T015 | [Zustand-store + персист](../tasks/T015_zustand-store.md) | 1 | T011, T001 | `in_progress` | agent-arena-01 |
+| T016 | [Звук (Phaser Sound) + настройки](../tasks/T016_sound.md) | 1 | T011, T015 | `in_progress` | agent-arena-01 |
+| T017 | [PWA (vite-plugin-pwa)](../tasks/T017_pwa.md) | 1 | T010 | `in_progress` | agent-arena-01 |
+| T018 | [Системные состояния (loading/offline/empty/error)](../tasks/T018_sys-states.md) | 1 | T014, T017 | `in_progress` | agent-arena-01 |
+| T020 | [CandleChart core (Graphics)](../tasks/T020_chart-core.md) | 2 | T014, T001 | `in_progress` | agent-arena-01 |
+| T021 | [Reveal скрытого future](../tasks/T021_chart-reveal.md) | 2 | T020 | `in_progress` | agent-arena-01 |
 | T022 | [Оверлеи графика](../tasks/T022_chart-overlay.md) | 2 | T020 | `todo` | — |
 | T023 | [Производительность графика](../tasks/T023_chart-perf.md) | 2 | T020, T021, T022 | `todo` | — |
-| T040 | [ArenaScene (полный экран задания)](../tasks/T040_arena-scene.md) | 4 | T014, T020, T030 | `todo` | — |
-| T041 | [Захват решения + доказательства + протокол](../tasks/T041_decision-capture.md) | 4 | T040 | `todo` | — |
-| T042 | [Reveal-флоу (факт→последствие→качество)](../tasks/T042_reveal-flow.md) | 4 | T041, T021 | `todo` | — |
-| T043 | [Экран вердикта (панк-таблоид)](../tasks/T043_verdict.md) | 4 | T042 | `todo` | — |
+| T040 | [ArenaScene (полный экран задания)](../tasks/T040_arena-scene.md) | 4 | T014, T020, T030 | `in_progress` | agent-arena-01 |
+| T041 | [Захват решения + доказательства + протокол](../tasks/T041_decision-capture.md) | 4 | T040 | `in_progress` | agent-arena-01 |
+| T042 | [Reveal-флоу (факт→последствие→качество)](../tasks/T042_reveal-flow.md) | 4 | T041, T021 | `in_progress` | agent-arena-01 |
+| T043 | [Экран вердикта (панк-таблоид)](../tasks/T043_verdict.md) | 4 | T042 | `in_progress` | agent-arena-01 |
 | T045 | [Интеграция сущностей](../tasks/T045_entity-integration.md) | 4 | T040, T060 | `todo` | — |
 | T046 | [Интеграция протоколов](../tasks/T046_protocol-integration.md) | 4 | T040, T044 | `todo` | — |
 | T047 | [Onboarding прогрессивного раскрытия](../tasks/T047_onboarding.md) | 4 | T040, T045, T046 | `todo` | — |

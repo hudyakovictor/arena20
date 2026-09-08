@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node", "vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@signal-arena/shared": ["../shared/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "vite.config.ts", "playwright.config.ts", "e2e/**/*.ts"]
+}

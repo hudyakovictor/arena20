@@ -6,10 +6,10 @@ _Общие схемы, токены-манифест, движок сценар
 
 | ID | Задача | Фаза | Зависимости | Статус | Исполнитель |
 |---|---|---|---|---|---|
-| T001 | [Общие Zod-схемы домена](../tasks/T001_shared-schemas.md) | 0 | T000 | `todo` | — |
+| T001 | [Общие Zod-схемы домена](../tasks/T001_shared-schemas.md) | 0 | T000 | `done` | agent-arena-01 |
 | T003 | [Схема и валидатор asset-manifest](../tasks/T003_asset-manifest.md) | 0 | T000, T001 | `todo` | — |
-| T030 | [Модель ситуации + content-pack](../tasks/T030_scenario-model.md) | 3 | T001, T003 | `todo` | — |
-| T031 | [Обёртка seedrandom](../tasks/T031_prng.md) | 3 | T030 | `todo` | — |
+| T030 | [Модель ситуации + content-pack](../tasks/T030_scenario-model.md) | 3 | T001, T003 | `done` | agent-arena-01 |
+| T031 | [Обёртка seedrandom](../tasks/T031_prng.md) | 3 | T030 | `done` | agent-arena-01 |
 | T032 | [scenario-gen (детерминизм + сложность 0–99)](../tasks/T032_scenario-gen.md) | 3 | T031 | `todo` | — |
 | T033 | [Профиль ошибок + адаптивная выдача](../tasks/T033_error-profile.md) | 3 | T032 | `todo` | — |
 | T034 | [Детерминизм турниров (server-fixed seed)](../tasks/T034_tournament-determinism.md) | 3 | T032, T100 | `todo` | — |

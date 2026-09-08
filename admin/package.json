@@ -1,0 +1,13 @@
+{
+  "name": "@signal-arena/admin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "SIGNAL ARENA admin/CRM — только план до фазы 13 (T130/T131)",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}

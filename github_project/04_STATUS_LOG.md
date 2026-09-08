@@ -17,9 +17,9 @@ _Репозиторий, монорепо-каркас, общие схемы, �
 
 | ID | Задача | Трек | Статус | Исполнитель | Обновлено | Гейт |
 |---|---|---|---|---|---|---|
-| T000 | [Каркас репозитория и монорепо](./tasks/T000_repo-scaffold.md) | `foundation` | `todo` | — | 2026-09-08 |  |
-| T001 | [Общие Zod-схемы домена](./tasks/T001_shared-schemas.md) | `shared` | `todo` | — | 2026-09-08 |  |
-| T002 | [Модуль дизайн-токенов](./tasks/T002_design-tokens.md) | `frontend` | `todo` | — | 2026-09-08 |  |
+| T000 | [Каркас репозитория и монорепо](./tasks/T000_repo-scaffold.md) | `foundation` | `done` | agent-arena-01 | 2026-09-08 |  |
+| T001 | [Общие Zod-схемы домена](./tasks/T001_shared-schemas.md) | `shared` | `done` | agent-arena-01 | 2026-09-08 |  |
+| T002 | [Модуль дизайн-токенов](./tasks/T002_design-tokens.md) | `frontend` | `done` | agent-arena-01 | 2026-09-08 |  |
 | T003 | [Схема и валидатор asset-manifest](./tasks/T003_asset-manifest.md) | `shared` | `todo` | — | 2026-09-08 |  |
 | T004 | [Пайплайн сборки ассетов](./tasks/T004_asset-pipeline.md) | `frontend` | `todo` | — | 2026-09-08 |  |
 | T005 | [Финализация github_project (эта система)](./tasks/T005_agent-docs.md) | `qa` | `todo` | — | 2026-09-08 |  |
@@ -30,15 +30,15 @@ _Phaser 4 boot, единый Canvas, сцены, оболочка (top bar + bot
 
 | ID | Задача | Трек | Статус | Исполнитель | Обновлено | Гейт |
 |---|---|---|---|---|---|---|
-| T010 | [Phaser 4 boot + Vite + Canvas](./tasks/T010_phaser-boot.md) | `frontend` | `todo` | — | 2026-09-08 |  |
-| T011 | [Архитектура сцен и роутер](./tasks/T011_scene-arch.md) | `frontend` | `todo` | — | 2026-09-08 |  |
-| T012 | [Top Bar (rexUI)](./tasks/T012_topbar.md) | `frontend` | `todo` | — | 2026-09-08 | 🔴 |
-| T013 | [Bottom navigation (5 слотов)](./tasks/T013_bottom-nav.md) | `frontend` | `todo` | — | 2026-09-08 |  |
-| T014 | [rexUI базовые компоненты](./tasks/T014_rexiu-base.md) | `frontend` | `todo` | — | 2026-09-08 |  |
-| T015 | [Zustand-store + персист](./tasks/T015_zustand-store.md) | `frontend` | `todo` | — | 2026-09-08 |  |
-| T016 | [Звук (Phaser Sound) + настройки](./tasks/T016_sound.md) | `frontend` | `todo` | — | 2026-09-08 |  |
-| T017 | [PWA (vite-plugin-pwa)](./tasks/T017_pwa.md) | `frontend` | `todo` | — | 2026-09-08 |  |
-| T018 | [Системные состояния (loading/offline/empty/error)](./tasks/T018_sys-states.md) | `frontend` | `todo` | — | 2026-09-08 |  |
+| T010 | [Phaser 4 boot + Vite + Canvas](./tasks/T010_phaser-boot.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
+| T011 | [Архитектура сцен и роутер](./tasks/T011_scene-arch.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
+| T012 | [Top Bar (rexUI)](./tasks/T012_topbar.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 | 🔴 |
+| T013 | [Bottom navigation (5 слотов)](./tasks/T013_bottom-nav.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
+| T014 | [rexUI базовые компоненты](./tasks/T014_rexiu-base.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
+| T015 | [Zustand-store + персист](./tasks/T015_zustand-store.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
+| T016 | [Звук (Phaser Sound) + настройки](./tasks/T016_sound.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
+| T017 | [PWA (vite-plugin-pwa)](./tasks/T017_pwa.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
+| T018 | [Системные состояния (loading/offline/empty/error)](./tasks/T018_sys-states.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
 
 ## Фаза 2 — Свечной график (CandleChart на Graphics) 🔴CEO
 
@@ -46,8 +46,8 @@ _Кастомный CandleChart: сетка, свечи из OHLCV, скейли
 
 | ID | Задача | Трек | Статус | Исполнитель | Обновлено | Гейт |
 |---|---|---|---|---|---|---|
-| T020 | [CandleChart core (Graphics)](./tasks/T020_chart-core.md) | `frontend` | `todo` | — | 2026-09-08 | 🔴 |
-| T021 | [Reveal скрытого future](./tasks/T021_chart-reveal.md) | `frontend` | `todo` | — | 2026-09-08 |  |
+| T020 | [CandleChart core (Graphics)](./tasks/T020_chart-core.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 | 🔴 |
+| T021 | [Reveal скрытого future](./tasks/T021_chart-reveal.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
 | T022 | [Оверлеи графика](./tasks/T022_chart-overlay.md) | `frontend` | `todo` | — | 2026-09-08 |  |
 | T023 | [Производительность графика](./tasks/T023_chart-perf.md) | `frontend` | `todo` | — | 2026-09-08 |  |
 | T024 | [Юнит-тесты CandleChart](./tasks/T024_chart-tests.md) | `qa` | `todo` | — | 2026-09-08 |  |
@@ -58,8 +58,8 @@ _Детерминированный генератор задач: модель 
 
 | ID | Задача | Трек | Статус | Исполнитель | Обновлено | Гейт |
 |---|---|---|---|---|---|---|
-| T030 | [Модель ситуации + content-pack](./tasks/T030_scenario-model.md) | `shared` | `todo` | — | 2026-09-08 |  |
-| T031 | [Обёртка seedrandom](./tasks/T031_prng.md) | `shared` | `todo` | — | 2026-09-08 |  |
+| T030 | [Модель ситуации + content-pack](./tasks/T030_scenario-model.md) | `shared` | `done` | agent-arena-01 | 2026-09-08 |  |
+| T031 | [Обёртка seedrandom](./tasks/T031_prng.md) | `shared` | `done` | agent-arena-01 | 2026-09-08 |  |
 | T032 | [scenario-gen (детерминизм + сложность 0–99)](./tasks/T032_scenario-gen.md) | `shared` | `todo` | — | 2026-09-08 |  |
 | T033 | [Профиль ошибок + адаптивная выдача](./tasks/T033_error-profile.md) | `shared` | `todo` | — | 2026-09-08 |  |
 | T034 | [Детерминизм турниров (server-fixed seed)](./tasks/T034_tournament-determinism.md) | `shared` | `todo` | — | 2026-09-08 |  |
@@ -71,10 +71,10 @@ _Полный цикл задания: текст→браузер-вкладк�
 
 | ID | Задача | Трек | Статус | Исполнитель | Обновлено | Гейт |
 |---|---|---|---|---|---|---|
-| T040 | [ArenaScene (полный экран задания)](./tasks/T040_arena-scene.md) | `frontend` | `todo` | — | 2026-09-08 | 🔴 |
-| T041 | [Захват решения + доказательства + протокол](./tasks/T041_decision-capture.md) | `frontend` | `todo` | — | 2026-09-08 |  |
-| T042 | [Reveal-флоу (факт→последствие→качество)](./tasks/T042_reveal-flow.md) | `frontend` | `todo` | — | 2026-09-08 |  |
-| T043 | [Экран вердикта (панк-таблоид)](./tasks/T043_verdict.md) | `frontend` | `todo` | — | 2026-09-08 |  |
+| T040 | [ArenaScene (полный экран задания)](./tasks/T040_arena-scene.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 | 🔴 |
+| T041 | [Захват решения + доказательства + протокол](./tasks/T041_decision-capture.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
+| T042 | [Reveal-флоу (факт→последствие→качество)](./tasks/T042_reveal-flow.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
+| T043 | [Экран вердикта (панк-таблоид)](./tasks/T043_verdict.md) | `frontend` | `in_progress` | agent-arena-01 | 2026-09-08 |  |
 | T044 | [Движок оценки](./tasks/T044_scoring-engine.md) | `shared` | `todo` | — | 2026-09-08 |  |
 | T045 | [Интеграция сущностей](./tasks/T045_entity-integration.md) | `frontend` | `todo` | — | 2026-09-08 |  |
 | T046 | [Интеграция протоколов](./tasks/T046_protocol-integration.md) | `frontend` | `todo` | — | 2026-09-08 |  |
@@ -134,7 +134,7 @@ _Сервер: схема БД, профили/прогресс, отдача с
 
 | ID | Задача | Трек | Статус | Исполнитель | Обновлено | Гейт |
 |---|---|---|---|---|---|---|
-| T100 | [Каркас сервера (Fastify)](./tasks/T100_server-scaffold.md) | `backend` | `todo` | — | 2026-09-08 |  |
+| T100 | [Каркас сервера (Fastify)](./tasks/T100_server-scaffold.md) | `backend` | `done` | agent-arena-01 | 2026-09-08 |  |
 | T101 | [Профили и персист прогресса](./tasks/T101_profiles.md) | `backend` | `todo` | — | 2026-09-08 |  |
 | T102 | [Отдача сценариев/ассетов + версионность + хэш future](./tasks/T102_content-serving.md) | `backend` | `todo` | — | 2026-09-08 |  |
 | T103 | [Персист журнала/результатов + профиль ошибок](./tasks/T103_journal-persist.md) | `backend` | `todo` | — | 2026-09-08 |  |
@@ -178,4 +178,4 @@ _Каркас админ-панели и CRM (план+сборка позже),
 
 ## Итого
 - Задач: 67. Принято: 0 (0%).
-- В работе: 0. На ревью: 0. Заблокировано: 0.
+- В работе: 15. На ревью: 0. Заблокировано: 0.

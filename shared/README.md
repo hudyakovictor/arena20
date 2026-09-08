@@ -1,9 +1,11 @@
 # shared/ — общие схемы, типы, токены, движок сценариев
 
 Код, который используют и `client/`, и `server/` без дублирования. Единый контракт между треками.
+
 - Трек: [`github_project/tracks/shared.md`](../github_project/tracks/shared.md)
 
 ## Что здесь
+
 ```
 shared/
   src/
@@ -14,6 +16,7 @@ shared/
 ```
 
 ## Правила
+
 - **TypeScript strict**, запрет `any` в доменных схемах.
 - Любое изменение схем/токенов/движка = смена версии контента; остальные треки адаптируются.
 - Детерминизм: seed = scenarioId + contentVersion (seedrandom, НЕ Math.random).

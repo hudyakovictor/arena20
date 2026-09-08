@@ -4,8 +4,8 @@
 
 - **Фаза:** 0 — Фундамент и конвенции (Foundation)
 - **Трек:** `shared`
-- **Статус:** `todo`
-- **Исполнитель:** —
+- **Статус:** `done`
+- **Исполнитель:** agent-arena-01
 - **Зависимости:** T000
 - **CEO-гейт:** нет
 - **Обновлено:** 2026-09-08
@@ -34,6 +34,8 @@ Zod-схемы: Scenario, SkillCard, Entity, Verdict, Profile, Protocol, CopyKey
 | Дата | Агент | Статус | Заметка |
 |---|---|---|---|
 | 2026-09-08 | init | `todo` | задача импортирована в единый реестр |
+| 2026-09-08 | agent-arena-01 | `in_progress` | force: прямое назначение пользователя (vertical slice: shared+экраны phaser); deps approve позже |
+| 2026-09-08 | agent-arena-01 | `done` | vitest shared/schemas.test.ts 4/4: валидный пак ok, невалидный падает, public режет future |
 
 ## Команды статуса
 ```bash

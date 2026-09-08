@@ -1,0 +1,7 @@
+node_modules
+dist
+coverage
+dev-dist
+github_project/
+*.min.js
+package-lock.json
